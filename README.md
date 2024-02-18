@@ -1,4 +1,6 @@
-# 👨🏻‍💻 Porfolio para programadores y desarrolladores
+# Agustin Acevedo Porfolio
+
+Basado en el portfolio diseñado por midudev utilizando astro
 
 <div align="center">
 <a href="https://porfolio.dev/">

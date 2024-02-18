@@ -1,93 +1,204 @@
 ---
-import GitHub from "./icons/GitHub.astro"
-import NextJS from "./icons/NextJS.astro"
-import Tailwind from "./icons/Tailwind.astro"
-import Link from "./icons/Link.astro"
-import LinkButton from "./LinkButton.astro"
+import GitHub from "./icons/GitHub.astro";
+import Google from "./icons/Google.astro";
+import Aws from "./icons/Aws.astro";
+import Htb from "./icons/Htb.astro";
+import Coderhouse from "./icons/Coderhouse.astro";
+import Utn from "./icons/Utn.astro";
+import Coursera from "./icons/Coursera.astro";
+import Link from "./icons/Link.astro";
+import LinkButton from "./LinkButton.astro";
 
 const TAGS = {
-  NEXT: {
-    name: "Next.js",
+  GOOGLE: {
+    name: "GCP",
     class: "bg-black text-white",
-    icon: NextJS,
+    icon: Google,
   },
-  TAILWIND: {
-    name: "Tailwind CSS",
+  AMAZON: {
+    name: "AWS",
     class: "bg-[#003159] text-white",
-    icon: Tailwind,
+    icon: Aws,
   },
-}
+  HACKTHEBOX: {
+    name: "HTB",
+    class: "bg-[#2f2f2f] text-white",
+    icon: Htb,
+  },
+  CODERHOUSE: {
+    name: "Coderhouse",
+    class: "bg-[#f7f7f7] text-black",
+    icon: Coderhouse,
+  },
+  UTN: {
+    name: "UTN",
+    class: "bg-[#f7f7f7] text-black",
+    icon: Utn,
+  },
+  COURSERA: {
+    name: "UTN",
+    class: "bg-[#f7f7f7] text-black",
+    icon: Coursera,
+  },
+};
 const PROJECTS = [
   {
-    title: "SVGL - A beautiful library with SVG logos",
-    description:
-      "Biblioteca de logos SVG de las marcas más populares. +10k visitas al mes. +2K svgs descargados. Creado desde cero con Next.js, React y Tailwind CSS.",
-    link: "https://svgl.vercel.app/",
-    github: "https://github.com/pheralb/svgl",
-    image: "/projects/svgl.webp",
-    tags: [TAGS.NEXT, TAGS.TAILWIND],
+    title: "Google Cloud Essentials",
+    issuer: [TAGS.GOOGLE],
+    date: "1 Jan 2023",
+    link: "https://www.cloudskillsboost.google/public_profiles/9b7d33b5-f2b7-4736-b5df-e4537f1f7f03/badges/3091080",
+    image:
+      "https://cdn.qwiklabs.com/xRejIPM4k6VgI8%2B%2B2Nz5bFHFx8PwK0nn9oQofkJOsS4%3D",
   },
   {
-    title: "AdventJS - Retos de programación con JavaScript y TypeScript",
-    description:
-      "Plataforma gratuita con retos de programación. Más de 1 millón de visitas en un mes. +50K retos completados. Creada desde cero con Next.js, React y Tailwind CSS.",
-    link: "https://adventjs.dev",
-    image: "/projects/adventjs.webp",
-    tags: [TAGS.NEXT, TAGS.TAILWIND],
+    title: "Create and Manage Cloud Resources",
+    issuer: [TAGS.GOOGLE],
+    date: "3 Jan 2023",
+    link: "https://www.cloudskillsboost.google/public_profiles/9b7d33b5-f2b7-4736-b5df-e4537f1f7f03/badges/3098272",
+    image:
+      "https://cdn.qwiklabs.com/TbOoOcpQdNxRawSvSE3K5cbakxBmki8F%2FgjwN6yKY98%3D",
   },
-]
+  {
+    title: "Network Performance and Optimization",
+    issuer: [TAGS.GOOGLE],
+    date: "4 Jan 2023",
+    link: "https://www.cloudskillsboost.google/public_profiles/9b7d33b5-f2b7-4736-b5df-e4537f1f7f03/badges/3102799",
+    image:
+      "https://cdn.qwiklabs.com/9qikCAvRUMlQZkRAj3FqOQN00x3Jk%2BiA3QtkuhoRGvY%3D",
+  },
+  {
+    title: "Set Up and Configure a Cloud Environment in Google Cloud",
+    issuer: [TAGS.GOOGLE],
+    date: "5 Jan 2023",
+    link: "https://www.cloudskillsboost.google/public_profiles/9b7d33b5-f2b7-4736-b5df-e4537f1f7f03/badges/3103636",
+    image:
+      "https://cdn.qwiklabs.com/Z5mHEcZSfjDvSjtBRmzjgY1O5B9uT%2BJME8KqR%2FgmmyI%3D",
+  },
+  {
+    title: "Perform Foundational Infrastructure Tasks in Google Cloud",
+    issuer: [TAGS.GOOGLE],
+    date: "5 Jan 2023",
+    link: "https://www.cloudskillsboost.google/public_profiles/9b7d33b5-f2b7-4736-b5df-e4537f1f7f03/badges/3103704",
+    image:
+      "https://cdn.qwiklabs.com/SOUHCWvev6HmfC5QztXJd%2BCkSK8%2B3WGWg%2BF%2Fww%2FfqXA%3D",
+  },
+  {
+    title: "Build and Secure Networks in Google Cloud",
+    issuer: [TAGS.GOOGLE],
+    date: "7 Jan 2023",
+    link: "https://www.cloudskillsboost.google/public_profiles/9b7d33b5-f2b7-4736-b5df-e4537f1f7f03/badges/3111946",
+    image:
+      "https://cdn.qwiklabs.com/6QsPX5Wdg0eHWFed3ZKTbX2c88yVFGgaWPlYt%2BJdp4Q%3D",
+  },
+  {
+    title: "Serverless Firebase Development",
+    issuer: [TAGS.GOOGLE],
+    date: "7 Jan 2023",
+    link: "https://www.cloudskillsboost.google/public_profiles/9b7d33b5-f2b7-4736-b5df-e4537f1f7f03/badges/3112487",
+    image:
+      "https://cdn.qwiklabs.com/vi9U3TnPxXdjiaH1GwmBT2Q1GXpSJ%2FoWYVbWaxj%2FYpk%3D",
+  },
+  {
+    title: "Serverless Cloud Run Development",
+    issuer: [TAGS.GOOGLE],
+    date: "7 Jan 2023",
+    link: "https://www.cloudskillsboost.google/public_profiles/9b7d33b5-f2b7-4736-b5df-e4537f1f7f03/badges/3112739",
+    image:
+      "https://cdn.qwiklabs.com/Ai2kcbL3CEc9Yylwr2z2PabrBhBdJMvd6PLrD7AcJqo%3D",
+  },
+  {
+    title: "Baseline: Infrastructure",
+    issuer: [TAGS.GOOGLE],
+    date: "7 Jan 2023",
+    link: "https://www.cloudskillsboost.google/public_profiles/9b7d33b5-f2b7-4736-b5df-e4537f1f7f03/badges/3112920",
+    image:
+      "https://cdn.qwiklabs.com/Eg%2FSbOy66StYJSJgDWYLrHAMVb%2F28ZfyndLzHYtQPeA%3D",
+  },
+  {
+    title: "Cloud Engineering",
+    issuer: [TAGS.GOOGLE],
+    date: "7 Jan 2023",
+    link: "https://www.cloudskillsboost.google/public_profiles/9b7d33b5-f2b7-4736-b5df-e4537f1f7f03/badges/3112922",
+    image:
+      "https://cdn.qwiklabs.com/CK1Zt1Rct6URvfcD6V89kJapt5%2BrX8gcZoW6T6qpfhQ%3D",
+  },
+  {
+    title: "Build Apps & Websites with Firebase",
+    issuer: [TAGS.GOOGLE],
+    date: "7 Jan 2023",
+    link: "https://www.cloudskillsboost.google/public_profiles/9b7d33b5-f2b7-4736-b5df-e4537f1f7f03/badges/3112928",
+    image:
+      "https://cdn.qwiklabs.com/JdUu8WCGmvzBQnppDxG%2Fn1IoguiHNd0O%2FtdP3yWyv4Q%3D",
+  },
+  {
+    title: "AWS Cloud Quest: Cloud Practitioner",
+    issuer: [TAGS.AMAZON],
+    date: "16 Sep 2023",
+    link: "https://www.credly.com/badges/045e8502-1b39-4ca2-9303-11c74f827053/public_url",
+    image:
+      "https://images.credly.com/size/680x680/images/2784d0d8-327c-406f-971e-9f0e15097003/image.png",
+  },
+  {
+    title: "Academician",
+    issuer: [TAGS.HACKTHEBOX],
+    date: "13 Apr 2023",
+    link: "https://academy.hackthebox.com/achievement/badge/6db79208-da0a-11ed-acfc-bea50ffe6cb4",
+    image: "https://academy.hackthebox.com/storage/badges/academician.png",
+  },
+  {
+    title: "Data Analyst",
+    issuer: [TAGS.CODERHOUSE],
+    date: "17 Nov 2021",
+    link: "https://cutt.ly/mY31JRM",
+    image:
+      "https://api.coderhouse.com/ch-www-api/certifications/61bd5ab2bc1e0300526d2060/print?lang=es",
+  },
+];
 ---
 
 <div class="flex flex-col gap-y-16">
   {
-    PROJECTS.map(({ image, title, description, tags, link, github }) => (
-    <article class="flex flex-col space-x-0 space-y-8 group md:flex-row md:space-x-8 md:space-y-0">
-  <div class="w-full md:w-1/2">
-    <div class="relative flex flex-col items-center col-span-6 row-span-5 gap-8 transition duration-500 ease-in-out transform shadow-xl overflow-clip rounded-xl sm:rounded-xl md:group-hover:-translate-y-1 md:group-hover:shadow-2xl lg:border lg:border-gray-800 lg:hover:border-gray-700 lg:hover:bg-gray-800/50">
-      <img alt="Recién llegado vs 5 años en Nueva Zelanda" class="object-cover object-top w-full h-56 transition duration-500 sm:h-full md:scale-110 md:group-hover:scale-105" loading="lazy" src={image} />
-    </div>
-  </div>
+    PROJECTS.map(({ image, title, date, link, issuer }) => (
+      <article class="flex flex-col space-x-0 space-y-8 group md:flex-row md:space-x-8 md:space-y-0">
+        <div class="w-full md:w-1/2">
+          <div class="relative flex flex-col items-center col-span-6 row-span-5 gap-8 transition duration-500 ease-in-out transform shadow-xl overflow-clip rounded-xl sm:rounded-xl md:group-hover:-translate-y-1 md:group-hover:shadow-2xl lg:border lg:border-gray-800 lg:hover:border-gray-700 lg:hover:bg-gray-800/50">
+            <img
+              alt="Recién llegado vs 5 años en Nueva Zelanda"
+              class="object-cover object-top w-full h-56 transition duration-500 sm:h-full md:scale-110 md:group-hover:scale-105"
+              loading="lazy"
+              src={image}
+            />
+          </div>
+        </div>
 
-  <div class="w-full md:w-1/2 md:max-w-lg">
-    <h3 class="text-2xl font-bold text-gray-800 dark:text-gray-100">
-      {title}
-    </h3>
-    <div class="flex flex-wrap mt-2">
-      <ul class="flex flex-row mb-2 gap-x-2">
-          {tags.map((tag) => (
-            <li>
-              <span
-                class={`flex gap-x-2 rounded-full text-xs ${tag.class} py-1 px-2 `}
-              >
-                <tag.icon class="size-4" />
-                {tag.name}
-              </span>
-            </li>
-          ))}
-        </ul>
-
-      <div class="mt-2 text-gray-700 dark:text-gray-400">{description}</div>
-      <footer class="flex items-end justify-start mt-4 gap-x-4">
-          {github && (
-            <LinkButton href={github}>
-              <GitHub class="size-6" />
-              Code
-              
-            </LinkButton>
-          )}
-          {link && (
-            <LinkButton href={link}>
-              <Link class="size-4" />
-              Preview
-            </LinkButton>
-          )}
-        </footer>
-    </div>
-  </div>
-</article>
+        <div class="w-full md:w-1/2 md:max-w-lg">
+          <h3 class="text-2xl font-bold text-gray-800 dark:text-gray-100">
+            {title}
+          </h3>
+          <div class="flex flex-wrap mt-2">
+            <ul class="flex flex-row mb-2 gap-x-2">
+              {issuer.map((tag) => (
+                <li>
+                  <span
+                    class={`flex gap-x-2 rounded-full text-xs ${tag.class} py-1 px-2 `}
+                  >
+                    <tag.icon class="size-4" />
+                    {tag.name}
+                  </span>
+                </li>
+              ))}
+            </ul>
+            <footer class="flex items-end justify-start mt-4 gap-x-4">
+              {link && (
+                <LinkButton href={link}>
+                  <Link class="size-4" />
+                  Preview
+                </LinkButton>
+              )}
+            </footer>
+          </div>
+        </div>
+      </article>
     ))
   }
 </div>
-
-
-
