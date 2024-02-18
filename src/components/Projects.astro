@@ -6,6 +6,7 @@ import Htb from "./icons/Htb.astro";
 import Coderhouse from "./icons/Coderhouse.astro";
 import Utn from "./icons/Utn.astro";
 import Coursera from "./icons/Coursera.astro";
+import Michigan from "./icons/Michigan.astro";
 import Link from "./icons/Link.astro";
 import LinkButton from "./LinkButton.astro";
 
@@ -36,9 +37,14 @@ const TAGS = {
     icon: Utn,
   },
   COURSERA: {
-    name: "UTN",
-    class: "bg-[#f7f7f7] text-black",
+    name: "Coursera",
+    class: "bg-[#2A73A2] text-white",
     icon: Coursera,
+  },
+  MICHIGAN: {
+    name: "Michigan",
+    class: "bg-[#f7f7f7] text-black",
+    icon: Michigan,
   },
 };
 const PROJECTS = [
@@ -67,7 +73,7 @@ const PROJECTS = [
       "https://cdn.qwiklabs.com/9qikCAvRUMlQZkRAj3FqOQN00x3Jk%2BiA3QtkuhoRGvY%3D",
   },
   {
-    title: "Set Up and Configure a Cloud Environment in Google Cloud",
+    title: "Set Up and Configure a Cloud Environment",
     issuer: [TAGS.GOOGLE],
     date: "5 Jan 2023",
     link: "https://www.cloudskillsboost.google/public_profiles/9b7d33b5-f2b7-4736-b5df-e4537f1f7f03/badges/3103636",
@@ -75,7 +81,7 @@ const PROJECTS = [
       "https://cdn.qwiklabs.com/Z5mHEcZSfjDvSjtBRmzjgY1O5B9uT%2BJME8KqR%2FgmmyI%3D",
   },
   {
-    title: "Perform Foundational Infrastructure Tasks in Google Cloud",
+    title: "Perform Foundational Infrastructure Tasks",
     issuer: [TAGS.GOOGLE],
     date: "5 Jan 2023",
     link: "https://www.cloudskillsboost.google/public_profiles/9b7d33b5-f2b7-4736-b5df-e4537f1f7f03/badges/3103704",
@@ -83,7 +89,7 @@ const PROJECTS = [
       "https://cdn.qwiklabs.com/SOUHCWvev6HmfC5QztXJd%2BCkSK8%2B3WGWg%2BF%2Fww%2FfqXA%3D",
   },
   {
-    title: "Build and Secure Networks in Google Cloud",
+    title: "Build and Secure Networks",
     issuer: [TAGS.GOOGLE],
     date: "7 Jan 2023",
     link: "https://www.cloudskillsboost.google/public_profiles/9b7d33b5-f2b7-4736-b5df-e4537f1f7f03/badges/3111946",
@@ -131,6 +137,102 @@ const PROJECTS = [
       "https://cdn.qwiklabs.com/JdUu8WCGmvzBQnppDxG%2Fn1IoguiHNd0O%2FtdP3yWyv4Q%3D",
   },
   {
+    title: "Diplomatura Django Framework",
+    issuer: [TAGS.UTN],
+    date: "14 Mar 2023",
+    link: "https://media.licdn.com/dms/image/D4D2DAQF3CcWNIEk0Ig/profile-treasury-document-images_1920/1/1706689163030?e=1709164800&v=beta&t=cYJjS-kUOFw6Pl34gfQy1BR90TqAC926CAu0yi0VVMw",
+    image:
+      "https://media.licdn.com/dms/image/D4D2DAQF3CcWNIEk0Ig/profile-treasury-document-images_1920/1/1706689163030?e=1709164800&v=beta&t=cYJjS-kUOFw6Pl34gfQy1BR90TqAC926CAu0yi0VVMw",
+  },
+  {
+    title: "Django Avanzado - En Producción",
+    issuer: [TAGS.UTN],
+    date: "14 Mar 2023",
+    link: "https://media.licdn.com/dms/image/D4D2DAQGc9RgTlb12FA/profile-treasury-document-images_1920/1/1706689026768?e=1709164800&v=beta&t=xDnkU2QKp_HMwwvFSCfo5y0FJOxgh5ZCOe91R06WB5s",
+    image:
+      "https://media.licdn.com/dms/image/D4D2DAQGc9RgTlb12FA/profile-treasury-document-images_1920/1/1706689026768?e=1709164800&v=beta&t=xDnkU2QKp_HMwwvFSCfo5y0FJOxgh5ZCOe91R06WB5s",
+  },
+  {
+    title: "Django Intermedio - Diseño de Plataformas",
+    issuer: [TAGS.UTN],
+    date: "28 Dec 2022",
+    link: "https://media.licdn.com/dms/image/D4D2DAQHD37bBHkBMpQ/profile-treasury-document-images_1920/1/1706689384487?e=1709164800&v=beta&t=sET0V4xyseEjCHW-WMpeuekyJfo0DQOGT-gcvOkTEdo",
+    image:
+      "https://media.licdn.com/dms/image/D4D2DAQHD37bBHkBMpQ/profile-treasury-document-images_1920/1/1706689384487?e=1709164800&v=beta&t=sET0V4xyseEjCHW-WMpeuekyJfo0DQOGT-gcvOkTEdo",
+  },
+  {
+    title: "Django Inicial - Arquitectura",
+    issuer: [TAGS.UTN],
+    date: "11 Oct 2022",
+    link: "https://media.licdn.com/dms/image/D4D2DAQFBK51Nf97XYQ/profile-treasury-document-images_1920/1/1706689740894?e=1709164800&v=beta&t=jmhYqs0nQ5PNlKBgYBPZ-c3iL3SluhGtlhBn_hPbbbk",
+    image:
+      "https://media.licdn.com/dms/image/D4D2DAQFBK51Nf97XYQ/profile-treasury-document-images_1920/1/1706689740894?e=1709164800&v=beta&t=jmhYqs0nQ5PNlKBgYBPZ-c3iL3SluhGtlhBn_hPbbbk",
+  },
+  {
+    title: "Diplomatura Python",
+    issuer: [TAGS.UTN],
+    date: "15 Apr 2022",
+    link: "https://media.licdn.com/dms/image/D4D2DAQEyr6JabhTo-Q/profile-treasury-document-images_1920/1/1706689887273?e=1709164800&v=beta&t=Hb5_ZWqzHsevwEYPZE3jtki7uD-TGOasjpoMrnc0VyY",
+    image:
+      "https://media.licdn.com/dms/image/D4D2DAQEyr6JabhTo-Q/profile-treasury-document-images_1920/1/1706689887273?e=1709164800&v=beta&t=Hb5_ZWqzHsevwEYPZE3jtki7uD-TGOasjpoMrnc0VyY",
+  },
+  {
+    title: "Python 3 - Avanzado",
+    issuer: [TAGS.UTN],
+    date: "15 Apr 2022",
+    link: "https://media.licdn.com/dms/image/D4D2DAQEK0WzqPdE8ow/profile-treasury-document-images_1920/1/1706689914746?e=1709164800&v=beta&t=b-yt31bN7hEeetEPeNAChjJAvTMIvz8wWvGIJVursZY",
+    image:
+      "https://media.licdn.com/dms/image/D4D2DAQEK0WzqPdE8ow/profile-treasury-document-images_1920/1/1706689914746?e=1709164800&v=beta&t=b-yt31bN7hEeetEPeNAChjJAvTMIvz8wWvGIJVursZY",
+  },
+  {
+    title: "Python 3 - Intermedio",
+    issuer: [TAGS.UTN],
+    date: "16 Feb 2022",
+    link: "https://media.licdn.com/dms/image/D4D2DAQGOigc24OgSng/profile-treasury-document-images_1920/1/1706689941975?e=1709164800&v=beta&t=mCA6b7MFOTK1yW_LQGDcxy1BQ1BDWcYSXMUOpd3zGPk",
+    image:
+      "https://media.licdn.com/dms/image/D4D2DAQGOigc24OgSng/profile-treasury-document-images_1920/1/1706689941975?e=1709164800&v=beta&t=mCA6b7MFOTK1yW_LQGDcxy1BQ1BDWcYSXMUOpd3zGPk",
+  },
+  {
+    title: "Python 3 - Inicial",
+    issuer: [TAGS.UTN],
+    date: "15 Dec 2021",
+    link: "https://media.licdn.com/dms/image/D4D2DAQEbbF40J6tywg/profile-treasury-document-images_1920/1/1706689963277?e=1709164800&v=beta&t=FzWt4L2m9hRAwnQtcHGb4c7aljoso1ND0bEz338XbQA",
+    image:
+      "https://media.licdn.com/dms/image/D4D2DAQEbbF40J6tywg/profile-treasury-document-images_1920/1/1706689963277?e=1709164800&v=beta&t=FzWt4L2m9hRAwnQtcHGb4c7aljoso1ND0bEz338XbQA",
+  },
+  {
+    title: "Redes de Datos - Avanzado",
+    issuer: [TAGS.UTN],
+    date: "4 Jun 2022",
+    link: "https://media.licdn.com/dms/image/D4D2DAQF--NXbRRMVfQ/profile-treasury-document-images_1920/1/1706689772423?e=1709164800&v=beta&t=6dWNZj_mb96nt-TbZWjJZ3JozNZgSpRw3Zy1eEX4Vq0",
+    image:
+      "https://media.licdn.com/dms/image/D4D2DAQF--NXbRRMVfQ/profile-treasury-document-images_1920/1/1706689772423?e=1709164800&v=beta&t=6dWNZj_mb96nt-TbZWjJZ3JozNZgSpRw3Zy1eEX4Vq0",
+  },
+  {
+    title: "Redes de Datos - Inicial",
+    issuer: [TAGS.UTN],
+    date: "19 Oct 2021",
+    link: "https://media.licdn.com/dms/image/D4D2DAQFGpq3UPsTYUA/profile-treasury-document-images_1920/1/1706689826725?e=1709164800&v=beta&t=AGAz1PVlXp360bWkR4SK9oVysSPXH8lJ0XgVHiGD_iU",
+    image:
+      "https://media.licdn.com/dms/image/D4D2DAQFGpq3UPsTYUA/profile-treasury-document-images_1920/1/1706689826725?e=1709164800&v=beta&t=AGAz1PVlXp360bWkR4SK9oVysSPXH8lJ0XgVHiGD_iU",
+  },
+  {
+    title: "Configuration Management and the Cloud",
+    issuer: [TAGS.COURSERA, TAGS.GOOGLE],
+    date: "29 Jan 2024",
+    link: "https://coursera.org/verify/54VYBRBEZNU5",
+    image:
+      "https://s3.amazonaws.com/coursera_assets/meta_images/generated/CERTIFICATE_LANDING_PAGE/CERTIFICATE_LANDING_PAGE~54VYBRBEZNU5/CERTIFICATE_LANDING_PAGE~54VYBRBEZNU5.jpeg",
+  },
+  {
+    title: "Programming for Everybody",
+    issuer: [TAGS.COURSERA, TAGS.MICHIGAN],
+    date: "7 Mar 2021",
+    link: "https://coursera.org/verify/JABBD5CQNSGA",
+    image:
+      "https://s3.amazonaws.com/coursera_assets/meta_images/generated/CERTIFICATE_LANDING_PAGE/CERTIFICATE_LANDING_PAGE~JABBD5CQNSGA/CERTIFICATE_LANDING_PAGE~JABBD5CQNSGA.jpeg",
+  },
+  {
     title: "AWS Cloud Quest: Cloud Practitioner",
     issuer: [TAGS.AMAZON],
     date: "16 Sep 2023",
@@ -175,9 +277,9 @@ const PROJECTS = [
               <p class="text-sm text-gray-500">{date}</p>
             </div>
             <div class="flex flex-wrap justify-center">
-              <ul class="flex flex-row mb-2 gap-x-2 ">
+              <ul class="flex flex-col mb-2 gap-x-2 ">
                 {issuer.map((tag) => (
-                  <li>
+                  <li class="mb-2">
                     <span
                       class={`flex  gap-x-2 rounded-full text-xs ${tag.class} py-1 px-2 `}
                     >

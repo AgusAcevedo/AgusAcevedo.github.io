@@ -6,6 +6,7 @@ import Briefcase from "@/components/icons/Briefcase.astro";
 import CodeIcon from "@/components/icons/Code.astro";
 import Experience from "@/components/Experience.astro";
 import ProfileCheck from "@/components/icons/ProfileCheck.astro";
+import Stackicon from "@/components/icons/Stackicon.astro";
 import Projects from "@/components/Projects.astro";
 import SectionContainer from "@/components/SectionContainer.astro";
 import Hero from "@/components/Hero.astro";
@@ -17,7 +18,7 @@ import Stack from "@/components/Stack.astro";
   description="Contrata a Agustin para crear y/o administrar tu infraestructura tecnológica o crear soluciones informáticas que se ajusten a sus necesidades."
 >
   <main class="px-4">
-    <SectionContainer class="py-16 md:py-36">
+    <SectionContainer id="top" class="py-16 md:py-36">
       <Hero />
     </SectionContainer>
   </main>
@@ -32,7 +33,7 @@ import Stack from "@/components/Stack.astro";
       <Experience />
     </SectionContainer>
 
-    <SectionContainer id="proyectos">
+    <SectionContainer id="certificados">
       <h2
         class="flex items-center mb-6 text-3xl font-semibold gap-x-3 text-black/80 dark:text-white"
       >
@@ -51,11 +52,11 @@ import Stack from "@/components/Stack.astro";
       </h2>
       <AboutMe />
     </SectionContainer>
-    <SectionContainer id="Tecnologías">
+    <SectionContainer id="stack">
       <h2
         class="flex items-center mb-6 text-3xl font-semibold gap-x-8 text-black/80 dark:text-white"
       >
-        <ProfileCheck class="size-8" />
+        <Stackicon class="size-8" />
         Stack Tecnológico
       </h2>
       <Stack />

@@ -1,4 +1,7 @@
 ---
+import GitHub from "./icons/GitHub.astro";
+import LinkedIn from "./icons/LinkedIn.astro";
+
 const currentYear = new Date().getFullYear();
 ---
 
@@ -10,13 +13,37 @@ const currentYear = new Date().getFullYear();
   >
     <span class="text-sm sm:text-center text-zinc-800/90 dark:text-zinc-200/90"
       >© {currentYear}
-      Agustin Acevedo. Casi todos los derechos reservados
+      - Made by Agustin Acevedo and ☕️
     </span>
+    <div class="flex">
+      <a
+        href="https://www.linkedin.com/in/agustinezequielacevedo/"
+        target="_blank"
+        rel="noopener"
+        class="text-zinc-800/90 dark:text-zinc-200/90 hover:text-zinc-600/90"
+      >
+        <span class="sr-only">LinkedIn</span>
+        <LinkedIn />
+      </a>
+      <span
+        class="border-r border-zinc-800/90 dark:border-zinc-200/90 mx-4 h-6 self-center"
+      ></span>
+      <a
+        href="https://github.com/AgusAcevedo"
+        target="_blank"
+        rel="noopener"
+        class="text-zinc-800/90 dark:text-zinc-200/90 hover:text-zinc-600/90"
+      >
+        <span class="sr-only">GitHub</span>
+        <GitHub />
+      </a>
+    </div>
+
     <ul
       class="flex flex-wrap items-center mt-3 text-sm font-medium dark:text-white/90 sm:mt-0"
     >
       <li>
-        <a href="/#sobre-mi" class="hover:underline me-4 md:me-6">Sobre mí</a>
+        <a href="/#top" class="hover:underline me-4 md:me-6">Home</a>
       </li>
       <li>
         <a id="contacto" href="mailto:miduga@gmail.com" class="hover:underline"
