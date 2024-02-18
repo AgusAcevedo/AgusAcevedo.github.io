@@ -1,0 +1,51 @@
+---
+const personalImageAlt = "Agustin";
+import Badge from "@/components/Badge.astro";
+import LinkedInIcon from "@/components/icons/LinkedIn.astro";
+import MailIcon from "@/components/icons/Mail.astro";
+import SocialPill from "@/components/SocialPill.astro";
+import LinkedinPill from "@/components/LinkedinPill.astro";
+---
+
+<div class="flex flex-col gap-4 items-center md:flex-row">
+  <img
+    width="200"
+    height="200"
+    src="/me.png"
+    alt={personalImageAlt}
+    class="order-1 rounded-full object-cover w-64 h-full p-1 bg-white md:order-2 lg:p-2 lg:w-64 aspect-square dark:bg-yellow-500/5 ring-1 ring-white/20"
+    style="object-position: 50% 50%"
+  />
+  <div class="order-2 object-cover h-full p-1">
+    <h1
+      class="text-4xl font-bold tracking-tight text-gray-800 sm:text-5xl dark:text-white"
+    >
+      Agustin Acevedo
+    </h1>
+    <p
+      class="mt-6 text-xl text-gray-800 dark:[&>strong]:text-yellow-200 [&>strong]:text-yellow-500 [&>strong]:font-semibold dark:text-gray-300"
+    >
+      <strong>Administrador de Sistemas, Redes e Infraestructura</strong> de Buenos
+      Aires, Argentina 🇦🇷. Especializado en el gestión de infraestructuras On-Premise,
+      Cloud y Híbridas.
+    </p>
+    <nav class="flex flex-wrap gap-4 mt-8">
+      <SocialPill href="mailto:agus.acevedo2000@gmail.com">
+        <MailIcon class="size-4" />
+        Contáctame
+      </SocialPill>
+      <LinkedinPill href="https://linkedin.com/in/agustinezequielacevedo">
+        <LinkedInIcon class="size-4" />
+        LinkedIn
+      </LinkedinPill>
+      <a
+        href="https://linkedin.com/in/agustinezequielacevedo"
+        target="_blank"
+        rel="noopener"
+        class="flex items-center transition md:justify-center md:hover:scale-105"
+      >
+        <Badge>Disponible para trabajar</Badge>
+      </a>
+    </nav>
+  </div>
+</div>
