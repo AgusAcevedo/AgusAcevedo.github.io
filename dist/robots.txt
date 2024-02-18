@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://agustinacevedo.me/sitemap-index.xml
