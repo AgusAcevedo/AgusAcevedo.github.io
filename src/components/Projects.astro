@@ -321,36 +321,52 @@ const PROJECTS = [
     ))
   }
 </div>
-
-<button class="show-button">Show more</button>
-<button class="hidden hide-button">Show less</button>
+<div class="flex justify-center mt-6" id="show-more">
+  <a href="/#certificados">
+    <button class="show-button">Ver más</button>
+  </a>
+  <a href="/#certificados">
+    <button class="hidden hide-button">Ver menos</button>
+  </a>
+</div>
 
 <script>
-  // Find all buttons with the `alert` class on the page.
   const showButton = document.querySelector(".show-button");
   const hideButton = document.querySelector(".hide-button");
-  const articles = document.querySelectorAll(".magia"); // Replace with the actual class of your articles
+  const articles = document.querySelectorAll(".magia");
 
-  showButton.addEventListener("click", () => {
-    showButton.classList.add("hidden");
-    hideButton.classList.remove("hidden");
-
-    articles.forEach((article) => {
-      article.classList.remove("hidden");
-    });
-  });
-
-  hideButton.addEventListener("click", () => {
-    hideButton.classList.add("hidden");
-    showButton.classList.remove("hidden");
-
-    articles.forEach((article) => {
-      if (
-        !article.classList.contains("hidden") &&
-        !article.classList.contains("no-oculto")
-      ) {
-        article.classList.add("hidden");
+  if (showButton) {
+    showButton.addEventListener("click", () => {
+      if (showButton) {
+        showButton.classList.add("hidden");
       }
+      if (hideButton) {
+        hideButton.classList.remove("hidden");
+      }
+
+      articles.forEach((article) => {
+        article.classList.remove("hidden");
+      });
     });
-  });
+  }
+
+  if (hideButton) {
+    hideButton.addEventListener("click", () => {
+      if (hideButton) {
+        hideButton.classList.add("hidden");
+      }
+      if (showButton) {
+        showButton.classList.remove("hidden");
+      }
+
+      articles.forEach((article) => {
+        if (
+          !article.classList.contains("hidden") &&
+          !article.classList.contains("no-oculto")
+        ) {
+          article.classList.add("hidden");
+        }
+      });
+    });
+  }
 </script>
