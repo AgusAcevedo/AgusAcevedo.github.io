@@ -71,6 +71,27 @@ const { description, title } = Astro.props;
         animation-range: 0 500px;
       }
 
+      #back-to-top-btn {
+        position: fixed;
+        bottom: 2rem;
+        right: 2rem;
+        background-color: #4a5568;
+        color: white;
+        border: none;
+        border-radius: 50%;
+        padding: 1rem;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: opacity 0.3s;
+      }
+
+      #back-to-top-btn.hidden {
+        opacity: 0;
+        pointer-events: none;
+      }
+
       @keyframes blur {
         to {
           backdrop-filter: blur(20px);
@@ -111,5 +132,45 @@ const { description, title } = Astro.props;
         }
       }
     </style>
+    <button id="back-to-top-btn" class="hidden">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+        class="h-6 w-6"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M5 10l7-7m0 0l7 7m-7-7v18"></path>
+      </svg>
+    </button>
+    <script>
+      const backToTopBtn = document.getElementById("back-to-top-btn");
+
+      window.addEventListener("scroll", () => {
+        if (
+          document.body.scrollTop > 20 ||
+          document.documentElement.scrollTop > 20
+        ) {
+          if (backToTopBtn) {
+            backToTopBtn.classList.remove("hidden");
+          }
+        } else {
+          if (backToTopBtn) {
+            backToTopBtn.classList.add("hidden");
+          }
+        }
+      });
+
+      if (backToTopBtn) {
+        backToTopBtn.addEventListener("click", () => {
+          document.body.scrollTop = 0;
+          document.documentElement.scrollTop = 0;
+        });
+      }
+    </script>
   </body>
 </html>
