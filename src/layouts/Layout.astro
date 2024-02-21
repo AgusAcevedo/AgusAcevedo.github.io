@@ -79,17 +79,39 @@ const { description, title } = Astro.props;
         color: white;
         border: none;
         border-radius: 50%;
-        padding: 1rem;
+        padding: 0.7rem;
         cursor: pointer;
         display: flex;
         align-items: center;
         justify-content: center;
         transition: opacity 0.3s;
+        overflow: hidden;
       }
 
       #back-to-top-btn.hidden {
         opacity: 0;
         pointer-events: none;
+      }
+      #back-to-top-btn::before {
+        content: "";
+        position: absolute;
+        width: 0;
+        height: 0;
+        background-color: rgba(
+          255,
+          255,
+          255,
+          0.3
+        ); /* Change this to the color you want */
+        border-radius: 50%;
+        transition:
+          width 0.3s,
+          height 0.3s;
+      }
+
+      #back-to-top-btn:hover::before {
+        width: 200%;
+        height: 200%;
       }
 
       @keyframes blur {
