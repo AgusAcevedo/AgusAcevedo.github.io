@@ -276,14 +276,14 @@ const PROJECTS = [
   {
     PROJECTS.map(({ image, title, date, link, issuer, cl }) => (
       <article
-        class={`magia flex flex-col space-x-0 space-y-8 group md:flex-row md:space-x-8 md:space-y-0 ${cl}`}
+        class={`magia flex flex-row space-x-8 space-y-8 group md:space-x-8 md:space-y-0 ${cl}`}
       >
         <div class="relative flex flex-col items-center col-span-6 row-span-5 gap-5 transition duration-500 ease-in-out transform shadow-xl overflow-clip rounded-xl sm:rounded-xl md:group-hover:-translate-y-1 md:group-hover:shadow-2xl lg:border lg:border-gray-800 lg:hover:border-gray-700 lg:hover:bg-gray-800/50">
           <a href={link} class="flex flex-col h-full">
             <div>
               <img
                 alt={title}
-                class="object-contain object-top w-full h-32 transition duration-500 sm:h-full md:scale-110 md:group-hover:scale-105"
+                class="object-contain object-top w-full h-28 transition duration-500 sm:h-full md:scale-110 md:group-hover:scale-105"
                 loading="lazy"
                 src={image}
               />
