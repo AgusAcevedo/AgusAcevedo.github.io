@@ -270,11 +270,20 @@ const PROJECTS = [
     cl: "hidden",
   },
 ];
+PROJECTS.sort(
+  (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()
+);
+PROJECTS.sort(
+  (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
+);
+const sortedProjects = PROJECTS.slice().sort(
+  (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
+);
 ---
 
 <div class="grid grid-cols-3 md:grid-cols-4 gap-6 lg:grid-cols-5">
   {
-    PROJECTS.map(({ image, title, date, link, issuer, cl }) => (
+    sortedProjects.map(({ image, title, date, link, issuer, cl }) => (
       <article
         class={`magia flex flex-row space-x-8 space-y-8 group md:space-x-8 md:space-y-0 ${cl}`}
       >
