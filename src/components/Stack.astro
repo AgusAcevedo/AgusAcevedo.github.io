@@ -1,86 +1,284 @@
-<article class="grid grid-cols-3 md:grid-cols-4 gap-6 lg:grid-cols-5">
-  <div class="flex-item">
-    <h4 class="font-semibold text-xl text-yellow-400">OS</h4>
-    <ul>
-      <li>Debian</li>
-      <li>Ubuntu</li>
-      <li>CentOS</li>
-      <li>FreeBSD</li>
-      <li>Kali</li>
-    </ul>
+---
+import { useTranslations } from "../i18n";
+import type { Language } from "../i18n/languages";
+const currentLocale = (Astro.currentLocale || 'es') as Language;
+const t = useTranslations(currentLocale);
+
+const STACK_SECTIONS = [
+  {
+    title: t.stack.categories.virtualization,
+    items: ["VMware", "Proxmox VE", "Hyper-V", "OpenNebula"],
+    color: "violet",
+    lightBg: "bg-violet-100",
+    lightText: "text-violet-700",
+    lightBorder: "border-violet-300",
+    lightHoverBg: "hover:bg-violet-200",
+    lightHoverBorder: "hover:border-violet-400",
+    darkBg: "dark:bg-violet-900/30",
+    darkText: "dark:text-violet-300",
+    darkBorder: "dark:border-violet-500/50",
+    darkHoverBg: "dark:hover:bg-violet-800/40"
+  },
+  {
+    title: t.stack.categories.os,
+    items: ["Debian", "Ubuntu", "CentOS", "FreeBSD", "Windows Server", "RHEL", "SLES", "Amazon Linux", "Alpine"],
+    color: "slate",
+    lightBg: "bg-slate-100",
+    lightText: "text-slate-700",
+    lightBorder: "border-slate-300",
+    lightHoverBg: "hover:bg-slate-200",
+    lightHoverBorder: "hover:border-slate-400",
+    darkBg: "dark:bg-slate-800/40",
+    darkText: "dark:text-slate-300",
+    darkBorder: "dark:border-slate-500/50",
+    darkHoverBg: "dark:hover:bg-slate-700/50"
+  },
+  {
+    title: t.stack.categories.cloud,
+    items: ["AWS", "Google Cloud", "Azure", "Oracle Cloud", "Cloudflare"],
+    color: "sky",
+    lightBg: "bg-sky-100",
+    lightText: "text-sky-700",
+    lightBorder: "border-sky-300",
+    lightHoverBg: "hover:bg-sky-200",
+    lightHoverBorder: "hover:border-sky-400",
+    darkBg: "dark:bg-sky-900/30",
+    darkText: "dark:text-sky-300",
+    darkBorder: "dark:border-sky-500/50",
+    darkHoverBg: "dark:hover:bg-sky-800/40"
+  },
+  {
+    title: t.stack.categories.containers,
+    items: ["Docker", "Docker Swarm", "Kubernetes", "kubeadm", "minikube", "k3s"],
+    color: "blue",
+    lightBg: "bg-blue-100",
+    lightText: "text-blue-700",
+    lightBorder: "border-blue-300",
+    lightHoverBg: "hover:bg-blue-200",
+    lightHoverBorder: "hover:border-blue-400",
+    darkBg: "dark:bg-blue-900/30",
+    darkText: "dark:text-blue-300",
+    darkBorder: "dark:border-blue-500/50",
+    darkHoverBg: "dark:hover:bg-blue-800/40"
+  },
+  {
+    title: t.stack.categories.databases,
+    items: ["PostgreSQL", "MySQL", "MariaDB", "SQL Server", "Oracle DB", "MongoDB"],
+    color: "emerald",
+    lightBg: "bg-emerald-100",
+    lightText: "text-emerald-700",
+    lightBorder: "border-emerald-300",
+    lightHoverBg: "hover:bg-emerald-200",
+    lightHoverBorder: "hover:border-emerald-400",
+    darkBg: "dark:bg-emerald-900/30",
+    darkText: "dark:text-emerald-300",
+    darkBorder: "dark:border-emerald-500/50",
+    darkHoverBg: "dark:hover:bg-emerald-800/40"
+  },
+  {
+    title: t.stack.categories.monitoring,
+    items: ["Zabbix", "Grafana", "Prometheus", "ELK Stack", "Loki", "Telegraf"],
+    color: "amber",
+    lightBg: "bg-amber-100",
+    lightText: "text-amber-700",
+    lightBorder: "border-amber-300",
+    lightHoverBg: "hover:bg-amber-200",
+    lightHoverBorder: "hover:border-amber-400",
+    darkBg: "dark:bg-amber-900/30",
+    darkText: "dark:text-amber-300",
+    darkBorder: "dark:border-amber-500/50",
+    darkHoverBg: "dark:hover:bg-amber-800/40"
+  },
+  {
+    title: t.stack.categories.automation,
+    items: ["Python", "Bash", "PowerShell", "Terraform", "CloudFormation", "AWS CDK", "Ansible", "SaltStack", "Jenkins", "GitLab CI", "GitHub Actions"],
+    color: "teal",
+    lightBg: "bg-teal-100",
+    lightText: "text-teal-700",
+    lightBorder: "border-teal-300",
+    lightHoverBg: "hover:bg-teal-200",
+    lightHoverBorder: "hover:border-teal-400",
+    darkBg: "dark:bg-teal-900/30",
+    darkText: "dark:text-teal-300",
+    darkBorder: "dark:border-teal-500/50",
+    darkHoverBg: "dark:hover:bg-teal-800/40"
+  },
+  {
+    title: t.stack.categories.webservers,
+    items: ["Apache", "Nginx", "Traefik", "HAProxy","WordPress","IIS"],
+    color: "rose",
+    lightBg: "bg-rose-100",
+    lightText: "text-rose-700",
+    lightBorder: "border-rose-300",
+    lightHoverBg: "hover:bg-rose-200",
+    lightHoverBorder: "hover:border-rose-400",
+    darkBg: "dark:bg-rose-900/30",
+    darkText: "dark:text-rose-300",
+    darkBorder: "dark:border-rose-500/50",
+    darkHoverBg: "dark:hover:bg-rose-800/40"
+  },
+];
+
+// Aplanar todas las tecnologías con su categoría
+const allTechs = STACK_SECTIONS.flatMap(section => 
+  section.items.map(item => ({
+    name: item,
+    category: section.title,
+    categoryId: section.title.toLowerCase().replace(/\s+/g, '-'),
+    ...section
+  }))
+);
+---
+
+<section class="relative">
+  <!-- Filtros interactivos -->
+  <div class="mb-6 pb-5 border-b border-violet-200/40 dark:border-violet-800/30">
+    <!-- Filtros por categoría organizados en grid -->
+    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 gap-2">
+      {STACK_SECTIONS.map((section) => (
+        <button 
+          data-category={section.title.toLowerCase().replace(/\s+/g, '-')}
+          data-active="true"
+          class="category-filter filter-button px-4 py-2 rounded-lg font-medium text-sm transition-all duration-200 border-2 hover:shadow-md hover:scale-[1.02]"
+          class:list={[
+            section.lightBg,
+            section.lightText,
+            section.lightBorder,
+            section.darkBg,
+            section.darkText,
+            section.darkBorder
+          ]}
+        >
+          {section.title}
+        </button>
+      ))}
+    </div>
   </div>
-  <div class="flex-item">
-    <h4 class="font-semibold text-xl text-yellow-400">Container</h4>
-    <ul>
-      <li>Docker</li>
-      <li>Swarm</li>
-      <li>Kubernetes</li>
-    </ul>
+
+  <!-- Nube de tecnologías compacta -->
+  <div class="flex flex-wrap gap-2 justify-center md:justify-start" id="tech-cloud">
+    {allTechs.map((tech, idx) => (
+      <span 
+        class="tech-tag group relative inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-all duration-300 cursor-default hover:scale-105 hover:shadow-md border"
+        class:list={[
+          tech.lightBg,
+          tech.lightText,
+          tech.lightBorder,
+          tech.lightHoverBg,
+          tech.lightHoverBorder,
+          tech.darkBg,
+          tech.darkText,
+          tech.darkBorder,
+          tech.darkHoverBg
+        ]}
+        data-category={tech.categoryId}
+      >
+        <span class="w-1.5 h-1.5 rounded-full bg-current opacity-60"></span>
+        {tech.name}
+        
+        <!-- Tooltip con categoría -->
+        <span class="tooltip absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1 text-[10px] font-semibold bg-gray-900 text-white rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-10">
+          {tech.category}
+        </span>
+      </span>
+    ))}
   </div>
-  <div class="flex-item">
-    <h4 class="font-semibold text-xl text-yellow-400">DB</h4>
-    <ul>
-      <li>Postgres</li>
-      <li>MySQL</li>
-      <li>MongoDB</li>
-      <li>Redis</li>
-    </ul>
-  </div>
-  <div class="flex-item">
-    <h4 class="font-semibold text-xl text-yellow-400">Scripting</h4>
-    <ul>
-      <li>Python</li>
-      <li>Bash</li>
-    </ul>
-  </div>
-  <div class="flex-item">
-    <h4 class="font-semibold text-xl text-yellow-400">Clouds</h4>
-    <ul>
-      <li>AWS</li>
-      <li>Google Cloud</li>
-      <li>Azure</li>
-      <li>Open Nebula</li>
-    </ul>
-  </div>
-  <div class="flex-item">
-    <h4 class="font-semibold text-xl text-yellow-400">IAT</h4>
-    <ul>
-      <li>SaltStack</li>
-      <li>Ansible</li>
-      <li>Terraform</li>
-      <li>Puppet</li>
-    </ul>
-  </div>
-  <div class="flex-item">
-    <h4 class="font-semibold text-xl text-yellow-400">Monitoring</h4>
-    <ul>
-      <li>Grafana</li>
-      <li>Prometheus</li>
-      <li>Loki</li>
-      <li>InfluxDB</li>
-      <li>Telegraf</li>
-      <li>cAdvisor</li>
-    </ul>
-  </div>
-  <div class="flex-item">
-    <h4 class="font-semibold text-xl text-yellow-400">CI/CD</h4>
-    <ul>
-      <li>Jenkins</li>
-      <li>GitLab-CI</li>
-      <li>GitHub Actions</li>
-    </ul>
-  </div>
-</article>
+</section>
+
+<script>
+  function initStackFilters() {
+    const categoryButtons = document.querySelectorAll('.category-filter') as NodeListOf<HTMLButtonElement>;
+    const techTags = document.querySelectorAll('.tech-tag') as NodeListOf<HTMLElement>;
+
+    function updateButtonState(button: HTMLButtonElement, isActive: boolean) {
+      button.dataset.active = isActive.toString();
+      
+      if (isActive) {
+        button.style.opacity = '1';
+        button.style.filter = 'grayscale(0)';
+      } else {
+        button.style.opacity = '0.5';
+        button.style.filter = 'grayscale(1)';
+      }
+    }
+
+    function updateTechVisibility() {
+      const activeCategories = new Set<string>();
+      
+      categoryButtons.forEach(button => {
+        if (button.dataset.active === 'true') {
+          activeCategories.add(button.dataset.category!);
+        }
+      });
+
+      // Solo animar los items que CAMBIAN de estado
+      techTags.forEach(tag => {
+        const category = tag.dataset.category!;
+        const shouldShow = activeCategories.size === 0 ? false : activeCategories.has(category);
+        const isCurrentlyVisible = tag.style.display !== 'none';
+        
+        // Solo animar si hay un cambio de estado
+        if (shouldShow && !isCurrentlyVisible) {
+          // Mostrar con animación
+          tag.style.display = 'inline-flex';
+          tag.style.opacity = '0';
+          tag.style.transform = 'scale(0.85)';
+          // Delay para que el navegador registre el estado inicial
+          setTimeout(() => {
+            tag.style.opacity = '1';
+            tag.style.transform = 'scale(1)';
+          }, 20);
+        } else if (!shouldShow && isCurrentlyVisible) {
+          // Ocultar con animación
+          tag.style.opacity = '0';
+          tag.style.transform = 'scale(0.85)';
+          setTimeout(() => {
+            tag.style.display = 'none';
+          }, 200);
+        }
+        // Si no hay cambio de estado, no hacer nada
+      });
+    }
+
+    // Manejar botones individuales
+    categoryButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        const isActive = button.dataset.active === 'true';
+        updateButtonState(button, !isActive);
+        updateTechVisibility();
+      });
+    });
+  }
+
+  // Run on page load and after transitions
+  document.addEventListener('astro:page-load', initStackFilters);
+</script>
 
 <style>
-  .flex-container {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
+  .tech-tag {
+    transition: opacity 0.25s ease-out, transform 0.25s ease-out;
   }
-  .flex-item {
-    flex: 1 0 21%; /* Or whatever percentage you want */
-    margin: 10px;
-    box-sizing: border-box;
+
+  .tooltip::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 4px solid transparent;
+    border-top-color: #111827;
+  }
+
+  .filter-button {
+    cursor: pointer;
+    user-select: none;
+  }
+
+  .filter-button:active {
+    transform: scale(0.98);
+  }
+
+  .category-filter {
+    transition: opacity 0.3s ease, filter 0.3s ease, transform 0.2s ease;
   }
 </style>

@@ -1,56 +1,101 @@
 ---
+import { useTranslations } from "../i18n";
+import type { Language } from "../i18n/languages";
 import GitHub from "./icons/GitHub.astro";
 import LinkedIn from "./icons/LinkedIn.astro";
+import Mail from "./icons/Mail.astro";
 
+const currentLocale = (Astro.currentLocale || 'es') as Language;
+const t = useTranslations(currentLocale);
 const currentYear = new Date().getFullYear();
+
+// Datos personales centralizados
+const p = t.personal;
+const isEn = currentLocale === 'en';
+
+const footerLinks = [
+  { href: isEn ? '/en/#about' : '/#sobre-mi', label: t.nav.about },
+  { href: isEn ? '/en/#experience' : '/#experiencia', label: t.nav.experience },
+  { href: isEn ? '/en/#education' : '/#educacion', label: t.nav.education },
+  { href: isEn ? '/en/#certifications' : '/#certificados', label: t.nav.projects },
+  { href: isEn ? '/en/#stack' : '/#stack', label: t.nav.stack },
+  { href: isEn ? '/en/#blog' : '/#blog', label: t.nav.blog },
+  { href: isEn ? '/en/#projects' : '/#proyectos', label: t.nav.myProjects },
+];
 ---
 
-<footer
-  class="rounded-lg shadow m-4 bg-black/5 dark:bg-black/20 backdrop-blur-lg w-full mx-auto container lg:max-w-4xl md:max-w-2xl flex items-center justify-center"
->
-  <div
-    class="p-4 w-full max-w-screen-xl mx-auto md:flex items-center md:justify-between"
-  >
-    <span
-      class="text-sm items-center flex justify-center sm:text-center text-zinc-800/90 dark:text-zinc-200/90"
-      >© {currentYear}
-      - Made by Agustin Acevedo and ☕️
-    </span>
-    <div class="flex justify-center mb-4 mt-3">
-      <a
-        href="https://www.linkedin.com/in/agustinezequielacevedo/"
-        target="_blank"
-        rel="noopener"
-        class="text-zinc-800/90 dark:text-zinc-200/90 hover:text-zinc-600/90"
-      >
-        <span class="sr-only">LinkedIn</span>
-        <LinkedIn />
-      </a>
-      <span
-        class="border-r border-zinc-800/90 dark:border-zinc-200/90 mx-4 h-6 self-center"
-      ></span>
-      <a
-        href="https://github.com/AgusAcevedo"
-        target="_blank"
-        rel="noopener"
-        class="text-zinc-800/90 dark:text-zinc-200/90 hover:text-zinc-600/90"
-      >
-        <span class="sr-only">GitHub</span>
-        <GitHub />
-      </a>
+<footer class="mt-20 border-t border-gray-200 dark:border-gray-800">
+  <div class="container mx-auto px-4 py-12 lg:max-w-4xl md:max-w-2xl">
+    <div class="grid gap-8 md:grid-cols-3">
+      <!-- Branding -->
+      <div class="space-y-4 text-center md:text-left">
+        <h3 class="text-lg font-bold text-gray-900 dark:text-white">{p.name}</h3>
+        <p class="text-sm text-gray-600 dark:text-gray-400">{p.jobTitle}</p>
+        <p class="text-sm text-gray-500 dark:text-gray-500">📍 {p.location}</p>
+      </div>
+
+      <!-- Navigation -->
+      <div class="space-y-4 text-center md:text-left">
+        <h4 class="text-sm font-semibold text-gray-900 dark:text-white uppercase tracking-wider">
+          {isEn ? 'Navigation' : 'Navegación'}
+        </h4>
+        <ul class="grid grid-cols-2 gap-x-4 gap-y-2">
+          {footerLinks.map((link) => (
+            <li>
+              <a 
+                href={link.href} 
+                class="text-sm text-gray-600 dark:text-gray-400 hover:text-violet-600 dark:hover:text-violet-400 transition"
+              >
+                {link.label}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <!-- Social -->
+      <div class="space-y-4 text-center md:text-left">
+        <h4 class="text-sm font-semibold text-gray-900 dark:text-white uppercase tracking-wider">
+          {isEn ? 'Connect' : 'Contacto'}
+        </h4>
+        <div class="flex gap-4 justify-center md:justify-start">
+          <a
+            href={p.linkedin}
+            target="_blank"
+            rel="noopener"
+            class="flex items-center justify-center size-10 rounded-lg bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-violet-100 dark:hover:bg-violet-900/40 hover:text-violet-600 dark:hover:text-violet-400 transition"
+            aria-label="LinkedIn"
+          >
+            <LinkedIn class="size-5" />
+          </a>
+          <a
+            href={p.github}
+            target="_blank"
+            rel="noopener"
+            class="flex items-center justify-center size-10 rounded-lg bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-violet-100 dark:hover:bg-violet-900/40 hover:text-violet-600 dark:hover:text-violet-400 transition"
+            aria-label="GitHub"
+          >
+            <GitHub class="size-5" />
+          </a>
+          <a
+            href={`mailto:${p.email}`}
+            class="flex items-center justify-center size-10 rounded-lg bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-violet-100 dark:hover:bg-violet-900/40 hover:text-violet-600 dark:hover:text-violet-400 transition"
+            aria-label="Email"
+          >
+            <Mail class="size-5" />
+          </a>
+        </div>
+      </div>
     </div>
 
-    <ul
-      class="flex justify-center flex-wrap items-center mt-4 text-sm font-medium dark:text-white/90 sm:mt-0"
-    >
-      <li>
-        <a href="/#top" class="hover:underline me-4 md:me-6">Home</a>
-      </li>
-      <li>
-        <a id="contacto" href="mailto:agus.acevedo2000@gmail.com" class="hover:underline"
-          >Contacto</a
-        >
-      </li>
-    </ul>
+    <!-- Bottom bar -->
+    <div class="mt-10 pt-6 border-t border-gray-200 dark:border-gray-800 flex flex-col sm:flex-row items-center justify-between gap-4">
+      <p class="text-sm text-gray-500 dark:text-gray-500">
+        © {currentYear} {p.name}.
+      </p>
+      <p class="text-sm text-gray-500 dark:text-gray-500">
+        {t.footer.madeWith} ☕️ & 💜
+      </p>
+    </div>
   </div>
 </footer>

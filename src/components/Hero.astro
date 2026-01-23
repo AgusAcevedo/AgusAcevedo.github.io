@@ -1,6 +1,12 @@
 ---
-const personalImageAlt = "Agustin";
-import Badge from "@/components/Badge.astro";
+import { useTranslations } from "../i18n";
+import type { Language } from "../i18n/languages";
+const currentLocale = (Astro.currentLocale || 'es') as Language;
+const t = useTranslations(currentLocale);
+
+// Datos personales centralizados
+const p = t.personal;
+
 import LinkedInIcon from "@/components/icons/LinkedIn.astro";
 import MailIcon from "@/components/icons/Mail.astro";
 import SocialPill from "@/components/SocialPill.astro";
@@ -12,43 +18,41 @@ import DownloadPill from "@/components/DownloadPill.astro";
   <img
     width="200"
     height="200"
-    src="/me.png"
-    alt={personalImageAlt}
-    class="order-1 rounded-full object-cover w-64 h-full p-1 bg-white md:order-2 lg:p-2 lg:w-64 aspect-square dark:bg-yellow-500/5 ring-1 ring-white/20"
+    src={p.profileImage}
+    alt={p.firstName}
+    class="order-1 rounded-full object-cover w-64 h-full p-1 bg-white md:order-2 lg:p-2 lg:w-64 aspect-square dark:bg-violet-500/5 ring-1 ring-white/20"
     style="object-position: 50% 50%"
   />
   <div class="order-2 object-cover h-full p-1">
     <h1
       class="text-4xl font-bold tracking-tight text-gray-800 sm:text-5xl dark:text-white md:hidden text-center"
     >
-      Agustin Acevedo
+      {p.name}
     </h1>
     <h1
       class="hidden md:flex text-4xl font-bold tracking-tight text-gray-800 sm:text-5xl dark:text-white"
     >
-      Agustin Acevedo
+      {p.name}
     </h1>
     <p
-      class="text-center sm:text-left mt-6 text-xl text-gray-800 dark:[&>strong]:text-yellow-200 [&>strong]:text-yellow-500 [&>strong]:font-semibold dark:text-gray-300"
+      class="text-center sm:text-left mt-6 text-xl text-gray-800 dark:[&>strong]:text-violet-200 [&>strong]:text-violet-600 [&>strong]:font-semibold dark:text-gray-300"
+      set:html={t.hero.description}
     >
-      <strong>Administrador de Sistemas, Redes e Infraestructura</strong> de Buenos
-      Aires, Argentina 🇦🇷. Especializado en el gestión de infraestructuras On-Premise,
-      Cloud y Híbridas.
     </p>
     <nav class="flex flex-wrap justify-center md:justify-normal gap-4 mt-8">
-      <SocialPill href="mailto:agus.acevedo2000@gmail.com">
+      <SocialPill href={`mailto:${p.email}`}>
         <MailIcon class="size-4" />
-        Contáctame
+        {t.hero.contact}
       </SocialPill>
 
-      <DownloadPill>CV</DownloadPill>
+      <DownloadPill>{t.hero.cv}</DownloadPill>
 
-      <LinkedinPill href="https://linkedin.com/in/agustinezequielacevedo">
+      <LinkedinPill href={p.linkedin}>
         <LinkedInIcon class="size-4" />
         LinkedIn
       </LinkedinPill>
       <a
-        href="https://linkedin.com/in/agustinezequielacevedo"
+        href={p.linkedin}
         target="_blank"
         rel="noopener"
         class="flex items-center transition md:justify-center md:hover:scale-105"

@@ -1,4 +1,7 @@
 ---
+import { Image } from 'astro:assets';
+import { useTranslations } from "../i18n";
+import type { Language } from "../i18n/languages";
 import Google from "./icons/Google.astro";
 import Aws from "./icons/Aws.astro";
 import Htb from "./icons/Htb.astro";
@@ -6,6 +9,9 @@ import Coderhouse from "./icons/Coderhouse.astro";
 import Utn from "./icons/Utn.astro";
 import Coursera from "./icons/Coursera.astro";
 import Michigan from "./icons/Michigan.astro";
+
+const currentLocale = (Astro.currentLocale || 'es') as Language;
+const t = useTranslations(currentLocale);
 
 const TAGS = {
   GOOGLE: {
@@ -52,6 +58,8 @@ const PROJECTS = [
     link: "https://www.cloudskillsboost.google/public_profiles/9b7d33b5-f2b7-4736-b5df-e4537f1f7f03/badges/3091080",
     image: "/webp_certs/GoogleCloudEssentials.webp",
     cl: "no-oculto",
+    featured: true,
+    categories: ["Cloud"],
   },
   {
     title: "Create and Manage Cloud Resources",
@@ -60,6 +68,7 @@ const PROJECTS = [
     link: "https://www.cloudskillsboost.google/public_profiles/9b7d33b5-f2b7-4736-b5df-e4537f1f7f03/badges/3098272",
     image: "/webp_certs/CreateandManageCloudResources.webp",
     cl: "no-oculto",
+    categories: ["Cloud"],
   },
   {
     title: "Network Performance and Optimization",
@@ -68,6 +77,7 @@ const PROJECTS = [
     link: "https://www.cloudskillsboost.google/public_profiles/9b7d33b5-f2b7-4736-b5df-e4537f1f7f03/badges/3102799",
     image: "/webp_certs/NetworkPerformanceOptimization.webp",
     cl: "no-oculto",
+    categories: ["Redes", "Cloud"],
   },
   {
     title: "Set Up and Configure a Cloud Environment",
@@ -76,6 +86,7 @@ const PROJECTS = [
     link: "https://www.cloudskillsboost.google/public_profiles/9b7d33b5-f2b7-4736-b5df-e4537f1f7f03/badges/3103636",
     image: "/webp_certs/SetupAndConfigureACloudEnviroment.webp",
     cl: "no-oculto",
+    categories: ["Cloud"],
   },
   {
     title: "Perform Foundational Infrastructure Tasks",
@@ -84,6 +95,7 @@ const PROJECTS = [
     link: "https://www.cloudskillsboost.google/public_profiles/9b7d33b5-f2b7-4736-b5df-e4537f1f7f03/badges/3103704",
     image: "/webp_certs/PerformInfraestructureTasks.webp",
     cl: "no-oculto",
+    categories: ["Cloud"],
   },
   {
     title: "Build and Secure Networks",
@@ -92,6 +104,7 @@ const PROJECTS = [
     link: "https://www.cloudskillsboost.google/public_profiles/9b7d33b5-f2b7-4736-b5df-e4537f1f7f03/badges/3111946",
     image: "/webp_certs/BuildAndSecureNetworks.webp",
     cl: "no-oculto",
+    categories: ["Redes", "Cloud"],
   },
   {
     title: "Serverless Firebase Development",
@@ -100,6 +113,7 @@ const PROJECTS = [
     link: "https://www.cloudskillsboost.google/public_profiles/9b7d33b5-f2b7-4736-b5df-e4537f1f7f03/badges/3112487",
     image: "/webp_certs/ServerlessFirebaseDevelopment.webp",
     cl: "hidden",
+    categories: ["Cloud", "Backend"],
   },
   {
     title: "Serverless Cloud Run Development",
@@ -108,6 +122,7 @@ const PROJECTS = [
     link: "https://www.cloudskillsboost.google/public_profiles/9b7d33b5-f2b7-4736-b5df-e4537f1f7f03/badges/3112739",
     image: "/webp_certs/ServerlessCloudRun.webp",
     cl: "hidden",
+    categories: ["Cloud", "Backend"],
   },
   {
     title: "Baseline: Infrastructure",
@@ -116,6 +131,7 @@ const PROJECTS = [
     link: "https://www.cloudskillsboost.google/public_profiles/9b7d33b5-f2b7-4736-b5df-e4537f1f7f03/badges/3112920",
     image: "/webp_certs/BaselineInfraestructure.webp",
     cl: "hidden",
+    categories: ["Cloud"],
   },
   {
     title: "Cloud Engineering",
@@ -124,6 +140,8 @@ const PROJECTS = [
     link: "https://www.cloudskillsboost.google/public_profiles/9b7d33b5-f2b7-4736-b5df-e4537f1f7f03/badges/3112922",
     image: "/webp_certs/CloudEng.webp",
     cl: "no-oculto",
+    featured: true,
+    categories: ["Cloud"],
   },
   {
     title: "Build Apps & Websites with Firebase",
@@ -132,6 +150,7 @@ const PROJECTS = [
     link: "https://www.cloudskillsboost.google/public_profiles/9b7d33b5-f2b7-4736-b5df-e4537f1f7f03/badges/3112928",
     image: "/webp_certs/BuildAppsAndWebsites.webp",
     cl: "hidden",
+    categories: ["Cloud", "Backend"],
   },
   {
     title: "Diplomatura Web full stack con React JS",
@@ -140,6 +159,8 @@ const PROJECTS = [
     link: "/webp_certs/FullStack.webp",
     image: "/webp_certs/FullStack.webp",
     cl: "no-oculto",
+    featured: true,
+    categories: ["Otros", "Backend"],
   },
   {
     title: "Experto Universitario en Ethical Hacking",
@@ -148,6 +169,8 @@ const PROJECTS = [
     link: "/webp_certs/EthicalHacking.webp",
     image: "/webp_certs/EthicalHacking.webp",
     cl: "no-oculto",
+    featured: true,
+    categories: ["Seguridad"],
   },
   {
     title: "Diplomatura Django Framework",
@@ -156,6 +179,7 @@ const PROJECTS = [
     link: "/webp_certs/DiplomaturaDjango.webp",
     image: "/webp_certs/DiplomaturaDjango.webp",
     cl: "no-oculto",
+    categories: ["Backend", "Python"],
   },
   {
     title: "Django Avanzado - En Producción",
@@ -164,6 +188,7 @@ const PROJECTS = [
     link: "/webp_certs/DjangoAvanzado.webp",
     image: "/webp_certs/DjangoAvanzado.webp",
     cl: "hidden",
+    categories: ["Backend", "Python"],
   },
   {
     title: "Django Intermedio - Diseño de Plataformas",
@@ -172,6 +197,7 @@ const PROJECTS = [
     link: "/webp_certs/DjangoIntermedio.webp",
     image: "/webp_certs/DjangoIntermedio.webp",
     cl: "hidden",
+    categories: ["Backend", "Python"],
   },
   {
     title: "Django Inicial - Arquitectura",
@@ -180,6 +206,7 @@ const PROJECTS = [
     link: "/webp_certs/DjangoInicial.webp",
     image: "/webp_certs/DjangoInicial.webp",
     cl: "hidden",
+    categories: ["Backend", "Python"],
   },
   {
     title: "Diplomatura Python",
@@ -188,6 +215,8 @@ const PROJECTS = [
     link: "/webp_certs/DiploPython.webp",
     image: "/webp_certs/DiploPython.webp",
     cl: "no-oculto",
+    featured: true,
+    categories: ["Python", "Backend"],
   },
   {
     title: "Python 3 - Avanzado",
@@ -196,6 +225,7 @@ const PROJECTS = [
     link: "/webp_certs/PythonAvanzado.webp",
     image: "/webp_certs/PythonAvanzado.webp",
     cl: "hidden",
+    categories: ["Python"],
   },
   {
     title: "Python 3 - Intermedio",
@@ -204,6 +234,7 @@ const PROJECTS = [
     link: "/webp_certs/PythonIntermedio.webp",
     image: "/webp_certs/PythonIntermedio.webp",
     cl: "hidden",
+    categories: ["Python"],
   },
   {
     title: "Python 3 - Inicial",
@@ -212,6 +243,7 @@ const PROJECTS = [
     link: "/webp_certs/PythonInicial.webp",
     image: "/webp_certs/PythonInicial.webp",
     cl: "hidden",
+    categories: ["Python"],
   },
   {
     title: "Redes de Datos - Avanzado",
@@ -220,6 +252,8 @@ const PROJECTS = [
     link: "/webp_certs/RedesAvanzado.webp",
     image: "/webp_certs/RedesAvanzado.webp",
     cl: "no-oculto",
+    featured: true,
+    categories: ["Redes"],
   },
   {
     title: "Redes de Datos - Inicial",
@@ -228,22 +262,26 @@ const PROJECTS = [
     link: "/webp_certs/RedesInicial.webp",
     image: "/webp_certs/RedesInicial.webp",
     cl: "hidden",
+    categories: ["Redes"],
   },
   {
     title: "Configuration Management and the Cloud",
-    issuer: [TAGS.COURSERA, TAGS.GOOGLE],
+    issuer: [TAGS.GOOGLE, TAGS.COURSERA],
     date: "29 Jan 2024",
     link: "https://coursera.org/verify/54VYBRBEZNU5",
     image: "/webp_certs/GoogleCoursera1.webp",
     cl: "no-oculto",
+    featured: true,
+    categories: ["Cloud", "Python"],
   },
   {
     title: "Programming for Everybody",
-    issuer: [TAGS.COURSERA, TAGS.MICHIGAN],
+    issuer: [TAGS.MICHIGAN, TAGS.COURSERA],
     date: "7 Mar 2021",
     link: "https://coursera.org/verify/JABBD5CQNSGA",
     image: "/webp_certs/MichiganCoursera.webp",
     cl: "hidden",
+    categories: ["Python"],
   },
   {
     title: "AWS Cloud Quest: Cloud Practitioner",
@@ -252,6 +290,8 @@ const PROJECTS = [
     link: "https://www.credly.com/badges/045e8502-1b39-4ca2-9303-11c74f827053/public_url",
     image: "/webp_certs/image.webp",
     cl: "no-oculto",
+    featured: true,
+    categories: ["Cloud"],
   },
   {
     title: "Academician",
@@ -260,6 +300,7 @@ const PROJECTS = [
     link: "https://academy.hackthebox.com/achievement/badge/6db79208-da0a-11ed-acfc-bea50ffe6cb4",
     image: "/webp_certs/academician.webp",
     cl: "no-oculto",
+    categories: ["Seguridad"],
   },
   {
     title: "Data Analyst",
@@ -268,6 +309,7 @@ const PROJECTS = [
     link: "https://cutt.ly/mY31JRM",
     image: "/webp_certs/coderhouse.webp",
     cl: "hidden",
+    categories: ["Otros"],
   },
 ];
 PROJECTS.sort(
@@ -279,130 +321,529 @@ PROJECTS.sort(
 const sortedProjects = PROJECTS.slice().sort(
   (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
 );
+
+const FILTERS = [
+  { id: "featured", label: t.projects.filters.featured },
+  { id: "Cloud", label: t.projects.filters.cloud },
+  { id: "Backend", label: t.projects.filters.backend },
+  { id: "Python", label: t.projects.filters.python },
+  { id: "Redes", label: t.projects.filters.networks },
+  { id: "Seguridad", label: t.projects.filters.security },
+  { id: "Otros", label: t.projects.filters.other },
+  { id: "all", label: t.projects.filters.all },
+];
 ---
 
-<div class="grid grid-cols-3 md:grid-cols-4 gap-6 lg:grid-cols-5">
-  {
-    sortedProjects.map(({ image, title, date, link, issuer, cl }) => (
-      <article
-        class={`magia flex flex-row space-x-8 space-y-8 group md:space-x-8 md:space-y-0 ${cl}`}
+<!-- Filtros: botones en desktop, select en móvil -->
+<div class="mb-6">
+  <!-- Select para móvil -->
+  <div class="block sm:hidden">
+    <select
+      id="filter-select"
+      class="w-full px-4 py-3 rounded-xl text-sm text-gray-800 dark:text-white bg-white dark:bg-gray-900/40 border border-gray-300 dark:border-violet-900/30 focus:border-violet-500/60 focus:outline-none focus:ring-2 focus:ring-violet-500/20 transition"
+    >
+      {FILTERS.map((f) => (
+        <option value={f.id} selected={f.id === "featured"}>{f.label}</option>
+      ))}
+    </select>
+  </div>
+  
+  <!-- Botones para desktop -->
+  <div class="hidden sm:flex flex-wrap gap-2 bg-white/80 dark:bg-gray-900/40 border border-gray-200 dark:border-violet-900/30 rounded-2xl p-2" role="group" aria-label={t.projects.filterByCategory}>
+    {FILTERS.map((f) => (
+      <button
+        class="filter-btn inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm text-gray-700 dark:text-gray-300 border border-transparent hover:text-gray-900 dark:hover:text-white hover:border-violet-500/60 hover:bg-violet-500/5 transition focus:outline-none focus-visible:ring-2 focus-visible:ring-violet-500 focus-visible:ring-offset-2"
+        data-filter={f.id}
+        aria-label={`${t.projects.filterBy} ${f.label}`}
+        aria-pressed="false"
       >
-        <div class="relative flex flex-col items-center col-span-6 row-span-5 gap-5 transition duration-500 ease-in-out transform shadow-xl overflow-clip rounded-xl sm:rounded-xl md:group-hover:-translate-y-1 md:group-hover:shadow-2xl lg:border lg:border-gray-800 lg:hover:border-gray-700 lg:hover:bg-gray-800/50">
-          <a href={link} class="flex flex-col h-full">
+        {f.label}
+      </button>
+    ))}
+  </div>
+</div>
+
+<!-- Modal detalle certificado -->
+<div id="cert-modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm hidden items-center justify-center z-50 p-4" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+  <div class="max-w-3xl w-full bg-white dark:bg-gray-950/95 border border-gray-200 dark:border-violet-700/40 rounded-2xl shadow-2xl overflow-hidden">
+    <div class="flex justify-between items-center px-6 py-4 border-b border-gray-200 dark:border-white/10">
+      <div>
+        <h3 id="modal-title" class="text-xl font-semibold text-gray-900 dark:text-white"></h3>
+        <p id="modal-date" class="text-sm text-gray-600 dark:text-gray-400 mt-1"></p>
+      </div>
+      <button id="modal-close" class="text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white text-3xl leading-none focus:outline-none focus-visible:ring-2 focus-visible:ring-violet-500 rounded-lg p-1" aria-label="Close modal">×</button>
+    </div>
+    <div class="p-6 space-y-6">
+      <!-- Imagen grande -->
+      <div class="bg-gray-100 dark:bg-black/30 rounded-xl p-4">
+        <img id="modal-image" alt="cert" class="w-full h-auto max-h-[60vh] object-contain" loading="lazy" />
+      </div>
+      
+      <!-- Separador -->
+      <div class="border-t border-gray-200 dark:border-violet-700/30"></div>
+      
+      <!-- Pills y botón -->
+      <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div id="modal-issuers-list" class="flex flex-wrap gap-2 justify-center sm:justify-start"></div>
+        <a id="modal-link" href="#" target="_blank" rel="noopener" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-violet-600 text-white hover:bg-violet-500 transition font-medium whitespace-nowrap">
+          {t.projects.viewCertificate} ↗
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="cert-grid-wrapper" class="hidden relative transition-[height] duration-300 ease-out">
+  <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-x-6 gap-y-4" id="cert-grid">
+  {
+    sortedProjects.map(({ image, title, date, link, issuer, cl, featured, categories }) => (
+      <article
+        class={`magia group ${cl}`}
+        data-categories={categories?.join(',') || ""}
+        data-featured={featured ? "true" : "false"}
+      >
+        <div class="relative flex flex-col items-center w-full transition duration-500 ease-in-out transform overflow-clip rounded-xl sm:rounded-xl md:group-hover:-translate-y-1 border border-violet-100/80 hover:border-violet-400/70 dark:border-violet-800/40 dark:hover:border-violet-500/70 bg-white hover:bg-violet-50 dark:bg-gray-900/40 dark:hover:bg-violet-500/5 h-[240px] sm:h-[280px]">
+          <button type="button" class="flex flex-col h-full text-left modal-open" data-link={link} data-title={title} data-date={date} data-image={image} data-issuer={issuer.map((t)=>t.name).join(', ')}>
+            <div class="hidden modal-issuers-data">
+              {issuer.map((tag) => (
+                <span class={`inline-flex items-center gap-2 rounded-full text-xs py-1 px-3 ${tag.class}`}>
+                  <tag.icon class="size-4" />
+                  {tag.name}
+                </span>
+              ))}
+            </div>
             <div>
-              <img
+              <Image
                 alt={title}
-                class="object-contain object-top w-full h-28 transition duration-500 sm:h-full md:scale-110 md:group-hover:scale-105"
+                class="object-contain object-top w-full aspect-[4/3] h-24 sm:h-32 md:h-36 transition duration-500 md:scale-110 md:group-hover:scale-105"
                 loading="lazy"
                 src={image}
+                width={400}
+                height={300}
+                format="webp"
               />
             </div>
-            <div class="flex flex-col items-center p-4 flex-grow">
-              <h3 class="text-sm font-bold text-center">{title}</h3>
-              <p class="text-sm text-gray-500">{date}</p>
+            <div class="flex flex-col items-center pt-6 px-2 flex-grow">
+              <h3 class="text-sm font-bold text-center leading-snug min-h-[36px] text-gray-800 dark:text-white">{title}</h3>
+              <p class="text-sm text-gray-500 dark:text-gray-400">{date}</p>
             </div>
-            <div class="flex flex-wrap justify-center">
-              <ul class="flex flex-col mb-2 gap-x-2 ">
-                {issuer.map((tag) => (
-                  <li class="mb-2">
-                    <span
-                      class={`flex  gap-x-2 rounded-full text-xs ${tag.class} py-1 px-2 `}
-                    >
-                      <tag.icon class="size-4 " />
-                      {tag.name}
-                    </span>
-                  </li>
-                ))}
+            <div class="flex justify-center">
+              <ul class="flex items-center gap-2 mb-2">
+                {(() => {
+                  const first = issuer[0];
+                  const rest = issuer.slice(1);
+                  return (
+                    <>
+                      <li>
+                        <span class={`inline-flex items-center gap-2 rounded-full text-xs h-8 px-3 ${first.class}`}>
+                          <first.icon class="size-4" />
+                          {first.name}
+                        </span>
+                      </li>
+                      {rest.length > 0 && (
+                        <li class="relative group/extra">
+                          <span
+                            title={rest.map((t) => t.name).join(', ')}
+                            class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-violet-100 dark:bg-violet-600/20 text-violet-700 dark:text-violet-300 border border-violet-300 dark:border-violet-600/40 text-xs font-semibold"
+                            aria-label={`+${rest.length} emisores`}
+                          >
+                            +{rest.length}
+                          </span>
+                          <div class="pointer-events-none absolute left-1/2 -translate-x-1/2 bottom-full mb-2 hidden group-hover/extra:block z-20">
+                            <div class="rounded-md border border-violet-700/40 bg-gray-900/95 p-2 shadow-xl">
+                              <ul class="flex flex-col gap-1 text-xs text-gray-200">
+                                {rest.map((t) => (
+                                  <li>
+                                    <span class={`inline-flex items-center gap-2 rounded-full h-6 px-2 ${t.class}`}>
+                                      <t.icon class="size-3.5" />
+                                      {t.name}
+                                    </span>
+                                  </li>
+                                ))}
+                              </ul>
+                            </div>
+                          </div>
+                        </li>
+                      )}
+                    </>
+                  );
+                })()}
               </ul>
             </div>
-          </a>
+          </button>
         </div>
       </article>
     ))
   }
+  </div>
 </div>
-<div class="flex justify-center mt-6" id="show-more">
-  <a href="/#certificados">
-    <button
-      class="text-gray-800 dark:text-white inline-flex items-center show-button transition duration-500 ease-in-out transform hover:-translate-y-1 hover:scale-110 bg-transparent font-semibold py-2 px-4 rounded"
-    >
-      <svg
-        {...Astro.props}
-        stroke="currentColor"
-        class="fill-current w-6 h-6 mr-2"
-        viewBox="0 0 24 24"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        <path
-          d="M5.70711 9.71069C5.31658 10.1012 5.31658 10.7344 5.70711 11.1249L10.5993 16.0123C11.3805 16.7927 12.6463 16.7924 13.4271 16.0117L18.3174 11.1213C18.708 10.7308 18.708 10.0976 18.3174 9.70708C17.9269 9.31655 17.2937 9.31655 16.9032 9.70708L12.7176 13.8927C12.3271 14.2833 11.6939 14.2832 11.3034 13.8927L7.12132 9.71069C6.7308 9.32016 6.09763 9.32016 5.70711 9.71069Z"
-          fill="#currentColor"></path>
-      </svg>
-      <span>Ver más</span></button
-    >
-  </a>
 
-  <a href="/#certificados">
-    <button
-      class="hidden hide-button text-gray-800 dark:text-white inline-flex items-center show-button transition duration-500 ease-in-out transform hover:-translate-y-1 hover:scale-110 bg-transparent font-semibold py-2 px-4 rounded"
-    >
-      <svg
-        {...Astro.props}
-        stroke="currentColor"
-        class="fill-current w-6 h-6 mr-2"
-        viewBox="0 0 24 24"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        <path
-          d="M18.2929 15.2893C18.6834 14.8988 18.6834 14.2656 18.2929 13.8751L13.4007 8.98766C12.6195 8.20726 11.3537 8.20757 10.5729 8.98835L5.68257 13.8787C5.29205 14.2692 5.29205 14.9024 5.68257 15.2929C6.0731 15.6835 6.70626 15.6835 7.09679 15.2929L11.2824 11.1073C11.673 10.7168 12.3061 10.7168 12.6966 11.1073L16.8787 15.2893C17.2692 15.6798 17.9024 15.6798 18.2929 15.2893Z"
-          fill="#currentColor"></path>
-      </svg>
-      <span>Ver menos</span></button
-    >
-
-    <button
-      class="hidden hide-button transition duration-500 ease-in-out transform hover:-translate-y-1 hover:scale-110"
-      >Ver menos</button
-    >
-  </a>
+<!-- Skeleton Loader - shown while JS initializes -->
+<div id="carousel-skeleton" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-x-6 gap-y-4 animate-pulse" aria-hidden="true" aria-label="Loading certifications...">
+  {[1,2,3,4,5,6,7,8].map(() => (
+    <div class="rounded-xl border border-violet-100/80 dark:border-violet-800/40 bg-white dark:bg-gray-900/40 h-[240px] sm:h-[280px]">
+      <div class="bg-gray-200 dark:bg-gray-700 h-24 sm:h-32 md:h-36 rounded-t-xl"></div>
+      <div class="p-4 space-y-3">
+        <div class="bg-gray-200 dark:bg-gray-700 h-4 rounded w-3/4 mx-auto"></div>
+        <div class="bg-gray-200 dark:bg-gray-700 h-3 rounded w-1/2 mx-auto"></div>
+        <div class="bg-gray-200 dark:bg-gray-700 h-6 rounded-full w-24 mx-auto"></div>
+      </div>
+    </div>
+  ))}
 </div>
+
+<!-- Carousel Container -->
+<div class="relative" role="region" aria-label="Certifications carousel">
+  <!-- Carousel Wrapper con scroll snap y padding para sombras -->
+  <div id="carousel-container" class="overflow-x-hidden overflow-y-visible scroll-smooth py-4 -my-4 px-4 sm:px-0">
+    <div id="carousel-track" class="flex transition-transform duration-500 ease-out" role="list" aria-live="polite">
+      <!-- Las páginas se crearán dinámicamente aquí -->
+    </div>
+  </div>
+</div>
+
+<!-- Pagination controls -->
+<nav class="flex items-center justify-center gap-4 mt-6" id="pagination-controls" aria-label="Carousel pagination">
+  <!-- Móvil: botón prev, dots, botón next -->
+  <button id="prev-page-mobile" class="sm:hidden px-4 py-2 rounded-lg font-semibold border transition disabled:opacity-30 disabled:cursor-not-allowed bg-violet-100 text-violet-700 border-violet-200 hover:bg-violet-200 dark:bg-violet-600/20 dark:text-white dark:border-violet-600/40 dark:hover:bg-violet-600/30 focus:outline-none focus-visible:ring-2 focus-visible:ring-violet-500" aria-label="Previous page">&lt;</button>
+  <div id="page-dots-mobile" class="flex sm:hidden gap-2" role="tablist" aria-label="Page indicators"></div>
+  <button id="next-page-mobile" class="sm:hidden px-4 py-2 rounded-lg font-semibold border transition disabled:opacity-30 disabled:cursor-not-allowed bg-violet-100 text-violet-700 border-violet-200 hover:bg-violet-200 dark:bg-violet-600/20 dark:text-white dark:border-violet-600/40 dark:hover:bg-violet-600/30 focus:outline-none focus-visible:ring-2 focus-visible:ring-violet-500" aria-label="Next page">&gt;</button>
+  
+  <!-- Desktop: botón prev, dots, botón next -->
+  <button id="prev-page" class="hidden sm:block px-3 py-2 rounded-lg font-semibold border transition disabled:opacity-30 disabled:cursor-not-allowed bg-violet-100 text-violet-700 border-violet-200 hover:bg-violet-200 dark:bg-violet-600/20 dark:text-white dark:border-violet-600/40 dark:hover:bg-violet-600/30 focus:outline-none focus-visible:ring-2 focus-visible:ring-violet-500" aria-label="Previous page">&lt;</button>
+  <div id="page-dots" class="hidden sm:flex gap-2" role="tablist" aria-label="Page indicators"></div>
+  <button id="next-page" class="hidden sm:block px-3 py-2 rounded-lg font-semibold border transition disabled:opacity-30 disabled:cursor-not-allowed bg-violet-100 text-violet-700 border-violet-200 hover:bg-violet-200 dark:bg-violet-600/20 dark:text-white dark:border-violet-600/40 dark:hover:bg-violet-600/30 focus:outline-none focus-visible:ring-2 focus-visible:ring-violet-500" aria-label="Next page">&gt;</button>
+</nav>
 
 <script>
-  const showButton = document.querySelector(".show-button");
-  const hideButton = document.querySelector(".hide-button");
-  const articles = document.querySelectorAll(".magia");
+  const articles = document.querySelectorAll<HTMLElement>(".magia");
+  
+  const filterButtons = document.querySelectorAll<HTMLElement>(".filter-btn");
+  const modal = document.getElementById("cert-modal");
+  const modalTitle = document.getElementById("modal-title");
+  const modalDate = document.getElementById("modal-date");
+  const modalImage = document.getElementById("modal-image") as HTMLImageElement | null;
+  const modalLink = document.getElementById("modal-link") as HTMLAnchorElement | null;
+  const modalClose = document.getElementById("modal-close");
+  const modalIssuersList = document.getElementById("modal-issuers-list");
+  const modalOpeners = document.querySelectorAll<HTMLElement>(".modal-open");
+  const prevPageBtn = document.getElementById("prev-page") as HTMLButtonElement | null;
+  const nextPageBtn = document.getElementById("next-page") as HTMLButtonElement | null;
+  const prevPageBtnMobile = document.getElementById("prev-page-mobile") as HTMLButtonElement | null;
+  const nextPageBtnMobile = document.getElementById("next-page-mobile") as HTMLButtonElement | null;
+  const pageDots = document.getElementById("page-dots");
+  const pageDotsMobile = document.getElementById("page-dots-mobile");
+  const carouselTrack = document.getElementById("carousel-track")!;
+  const carouselContainer = document.getElementById("carousel-container")!;
+  
+  let currentPage = 0;
+  let itemsPerPage = 8;
+  let filteredArticles: HTMLElement[] = [];
+  let touchStartX = 0;
 
-  if (showButton) {
-    showButton.addEventListener("click", () => {
-      if (showButton) {
-        showButton.classList.add("hidden");
-      }
-      if (hideButton) {
-        hideButton.classList.remove("hidden");
-      }
+  // Update items per page based on screen size
+  function updateItemsPerPage() {
+    const width = window.innerWidth;
+    if (width < 640) {
+      itemsPerPage = 4;
+    } else if (width < 1024) {
+      itemsPerPage = 6;
+    } else if (width < 1280) {
+      itemsPerPage = 6;
+    } else {
+      itemsPerPage = 8;
+    }
+  }
 
-      articles.forEach((article) => {
-        article.classList.remove("hidden");
+  function createCarouselPages() {
+    updateItemsPerPage();
+    const totalPages = Math.ceil(filteredArticles.length / itemsPerPage);
+    
+    carouselTrack.innerHTML = '';
+    
+    // Crear cada página del carrusel
+    for (let page = 0; page < totalPages; page++) {
+      const pageDiv = document.createElement('div');
+      pageDiv.className = 'min-w-full px-1';
+      
+      const gridDiv = document.createElement('div');
+      gridDiv.className = 'grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 py-2';
+      
+      const start = page * itemsPerPage;
+      const end = start + itemsPerPage;
+      const pageArticles = filteredArticles.slice(start, end);
+      
+      pageArticles.forEach(article => {
+        // Clonar profundamente el artículo
+        const clonedArticle = article.cloneNode(true) as HTMLElement;
+        // Asegurar que el artículo sea visible y no tenga clases de oculto
+        clonedArticle.classList.remove('hidden');
+        clonedArticle.style.display = '';
+        gridDiv.appendChild(clonedArticle);
+      });
+      
+      pageDiv.appendChild(gridDiv);
+      carouselTrack.appendChild(pageDiv);
+    }
+    
+    // Re-attach modal event listeners to cloned elements
+    attachModalListeners();
+    
+    // Initialize dots (create them once)
+    initializeDots(totalPages);
+    
+    // Update pagination controls
+    updatePaginationControls(totalPages);
+    
+    // Reset to first page
+    goToPage(0);
+  }
+  
+  function attachModalListeners() {
+    const clonedOpeners = carouselTrack.querySelectorAll<HTMLElement>(".modal-open");
+    clonedOpeners.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        openModal({
+          title: btn.dataset.title || '',
+          date: btn.dataset.date || '',
+          image: btn.dataset.image || '',
+          link: btn.dataset.link || '',
+        });
       });
     });
   }
 
-  if (hideButton) {
-    hideButton.addEventListener("click", () => {
-      if (hideButton) {
-        hideButton.classList.add("hidden");
-      }
-      if (showButton) {
-        showButton.classList.remove("hidden");
-      }
+  function goToPage(pageIndex: number) {
+    const totalPages = Math.ceil(filteredArticles.length / itemsPerPage);
+    currentPage = Math.max(0, Math.min(pageIndex, totalPages - 1));
+    
+    const offset = -currentPage * 100;
+    carouselTrack.style.transform = `translateX(${offset}%)`;
+    
+    updatePaginationControls(totalPages);
+  }
 
-      articles.forEach((article) => {
-        if (
-          !article.classList.contains("hidden") &&
-          !article.classList.contains("no-oculto")
-        ) {
-          article.classList.add("hidden");
+  function initializeDots(totalPages: number) {
+    // Create dots only once
+    [pageDots, pageDotsMobile].forEach(dotsContainer => {
+      if (!dotsContainer) return;
+      dotsContainer.innerHTML = "";
+      for (let i = 0; i < totalPages; i++) {
+        const dot = document.createElement("button");
+        dot.className = "size-2 rounded-full bg-gray-300 dark:bg-gray-600 transition-all duration-300";
+        dot.setAttribute('aria-label', `Go to page ${i + 1}`);
+        dot.addEventListener("click", () => goToPage(i));
+        dotsContainer.appendChild(dot);
+      }
+    });
+  }
+
+  function updatePaginationControls(totalPages: number) {
+    // Update buttons state
+    if (prevPageBtn) prevPageBtn.disabled = currentPage === 0;
+    if (nextPageBtn) nextPageBtn.disabled = currentPage === totalPages - 1;
+    if (prevPageBtnMobile) prevPageBtnMobile.disabled = currentPage === 0;
+    if (nextPageBtnMobile) nextPageBtnMobile.disabled = currentPage === totalPages - 1;
+    
+    // Update dots - only toggle classes, don't recreate
+    [pageDots, pageDotsMobile].forEach(dotsContainer => {
+      if (!dotsContainer) return;
+      const dots = dotsContainer.querySelectorAll('button');
+      dots.forEach((dot, index) => {
+        if (index === currentPage) {
+          dot.classList.add('bg-violet-600', 'dark:bg-violet-400', 'w-6');
+          dot.classList.remove('bg-gray-300', 'dark:bg-gray-600');
+        } else {
+          dot.classList.remove('bg-violet-600', 'dark:bg-violet-400', 'w-6');
+          dot.classList.add('bg-gray-300', 'dark:bg-gray-600');
         }
       });
     });
+    
+    // Show/hide pagination controls
+    const paginationControls = document.getElementById("pagination-controls");
+    if (paginationControls) {
+      paginationControls.style.display = totalPages <= 1 ? "none" : "flex";
+    }
   }
+
+  // Función compartida para aplicar filtro
+  function applyFilter(filterId: string) {
+    
+    // Update button styles (desktop)
+    filterButtons.forEach((b) => b.classList.remove("border-violet-400", "border-violet-500", "text-violet-700", "dark:text-white", "bg-violet-500/10", "shadow-[0_0_0_1px_rgba(124,58,237,0.4)]"));
+    const activeBtn = Array.from(filterButtons).find(b => b.dataset.filter === filterId);
+    if (activeBtn) {
+      activeBtn.classList.add("border-violet-500", "text-violet-700", "dark:text-white", "bg-violet-500/10", "shadow-[0_0_0_1px_rgba(124,58,237,0.4)]");
+    }
+    
+    // Update select value (mobile)
+    const filterSelect = document.getElementById("filter-select") as HTMLSelectElement | null;
+    if (filterSelect) {
+      filterSelect.value = filterId;
+    }
+    
+    // Apply filter
+    filteredArticles = Array.from(articles).filter((article) => {
+      const cats = article.dataset.categories || "";
+      const isFeatured = article.dataset.featured === "true";
+      if (filterId === "featured") return isFeatured;
+      if (filterId === "all") return true;
+      return cats.includes(filterId);
+    });
+    
+    createCarouselPages();
+  }
+
+  // Filtros por botones (desktop)
+  filterButtons.forEach((btn) => {
+    btn.addEventListener("click", () => {
+      applyFilter(btn.dataset.filter || '');
+    });
+  });
+
+  // Filtro por select (móvil)
+  const filterSelect = document.getElementById("filter-select") as HTMLSelectElement | null;
+  if (filterSelect) {
+    filterSelect.addEventListener("change", (e) => {
+      applyFilter((e.target as HTMLSelectElement).value);
+    });
+  }
+  
+  // Navegación
+  if (prevPageBtn) {
+    prevPageBtn.addEventListener("click", () => goToPage(currentPage - 1));
+  }
+  if (nextPageBtn) {
+    nextPageBtn.addEventListener("click", () => goToPage(currentPage + 1));
+  }
+  if (prevPageBtnMobile) {
+    prevPageBtnMobile.addEventListener("click", () => goToPage(currentPage - 1));
+  }
+  if (nextPageBtnMobile) {
+    nextPageBtnMobile.addEventListener("click", () => goToPage(currentPage + 1));
+  }
+  
+  // Swipe functionality
+  carouselContainer.addEventListener("touchstart", (e) => {
+    touchStartX = e.changedTouches[0].clientX;
+  }, { passive: true });
+  
+  carouselContainer.addEventListener("touchend", (e) => {
+    const touchEndX = e.changedTouches[0].clientX;
+    const diff = touchStartX - touchEndX;
+    
+    if (Math.abs(diff) > 50) {
+      if (diff > 0) {
+        goToPage(currentPage + 1);
+      } else {
+        goToPage(currentPage - 1);
+      }
+    }
+  }, { passive: true });
+
+  // Modal
+  interface ModalData {
+    title: string;
+    date: string;
+    image: string;
+    link: string;
+    issuer?: string;
+    issuerJson?: string;
+  }
+  
+  const openModal = (data: ModalData) => {
+    if (modalTitle) modalTitle.textContent = data.title;
+    if (modalDate) modalDate.textContent = data.date;
+    if (modalIssuersList) {
+      modalIssuersList.innerHTML = "";
+      
+      // Find the button in carousel that was clicked and get its hidden issuers
+      const btn = Array.from(carouselTrack.querySelectorAll<HTMLElement>('.modal-open')).find(
+        b => b.dataset.title === data.title
+      );
+      
+      if (btn) {
+        const hiddenContainer = btn.querySelector('.modal-issuers-data');
+        if (hiddenContainer) {
+          // Clone all issuer badges from hidden container
+          const badges = hiddenContainer.querySelectorAll('span');
+          badges.forEach(badge => {
+            const clonedBadge = badge.cloneNode(true);
+            modalIssuersList.appendChild(clonedBadge);
+          });
+        }
+      }
+    }
+    if (modalImage) modalImage.src = data.image;
+    if (modalLink) modalLink.href = data.link;
+    if (modal) {
+      modal.classList.remove("hidden");
+      modal.classList.add("flex");
+    }
+  };
+
+  modalOpeners.forEach((btn) => {
+    btn.addEventListener("click", () => {
+      openModal({
+        title: btn.dataset.title || '',
+        date: btn.dataset.date || '',
+        image: btn.dataset.image || '',
+        link: btn.dataset.link || '',
+        issuer: btn.dataset.issuer || '',
+        issuerJson: btn.dataset.issuerJson || '',
+      });
+    });
+  });
+
+  const closeModal = () => {
+    if (modal) {
+      modal.classList.add("hidden");
+      modal.classList.remove("flex");
+    }
+  };
+  if (modalClose) modalClose.addEventListener("click", closeModal);
+  if (modal) modal.addEventListener("click", (e) => {
+    if (e.target === modal) closeModal();
+  });
+
+  // Handle window resize
+  let resizeTimeout: ReturnType<typeof setTimeout>;
+  window.addEventListener("resize", () => {
+    clearTimeout(resizeTimeout);
+    resizeTimeout = setTimeout(() => {
+      const oldItemsPerPage = itemsPerPage;
+      updateItemsPerPage();
+      if (oldItemsPerPage !== itemsPerPage) {
+        createCarouselPages();
+      }
+    }, 150);
+  });
+  
+  // Hide skeleton loader and initialize
+  const skeleton = document.getElementById('carousel-skeleton');
+  if (skeleton) {
+    skeleton.remove();
+  }
+  
+  const firstFilter = document.querySelector<HTMLElement>('.filter-btn[data-filter="featured"]');
+  if (firstFilter) firstFilter.click();
+
 </script>
+
+<style>
+.animate-card-in {
+  animation: cardIn 500ms ease-out;
+}
+
+@keyframes cardIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+</style>

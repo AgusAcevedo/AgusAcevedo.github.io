@@ -1,0 +1,99 @@
+---
+import type { Language } from "../i18n/languages";
+
+const currentLocale = (Astro.currentLocale || 'es') as Language;
+
+// Define available languages - add more here as needed
+const languages = [
+  { code: 'es', label: 'ES', name: 'Español', href: '/' },
+  { code: 'en', label: 'EN', name: 'English', href: '/en/' },
+  // { code: 'pt', label: 'PT', name: 'Português', href: '/pt/' },
+];
+
+const currentLang = languages.find(l => l.code === currentLocale) || languages[0];
+---
+
+<div class="lang-toggle-wrapper relative">
+  <button
+    class="lang-toggle-btn flex items-center justify-center gap-1 size-8 rounded-md text-sm font-semibold text-gray-700 dark:text-gray-200 hover:text-violet-600 dark:hover:text-violet-400 hover:scale-110 transition focus:outline-none focus-visible:ring-2 focus-visible:ring-violet-500"
+    aria-label="Change language"
+    aria-haspopup="true"
+    aria-expanded="false"
+  >
+    <svg class="size-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129"/>
+    </svg>
+    <span class="hidden sm:inline">{currentLang.label}</span>
+  </button>
+  <div
+    class="lang-menu absolute hidden top-8 right-0 text-sm p-1 min-w-[7rem] rounded-md border border-gray-200 bg-white/95 dark:bg-gray-900/95 dark:border-gray-600 shadow-[0_3px_10px_rgb(0,0,0,0.2)] backdrop-blur-md z-50"
+  >
+    <ul>
+      {
+        languages.map((lang) => (
+          <li>
+            <a
+              href={lang.href}
+              data-astro-reload
+              class:list={[
+                "lang-menu-option flex items-center gap-2 px-3 py-1.5 cursor-pointer text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-sm transition",
+                { "!text-violet-600 dark:!text-violet-400 font-semibold": lang.code === currentLocale }
+              ]}
+            >
+              <span class="font-semibold">{lang.label}</span>
+              <span class="text-gray-500 dark:text-gray-400">{lang.name}</span>
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</div>
+
+<style>
+  .lang-menu.open {
+    display: block;
+    animation: scale-up-center 0.15s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+  }
+
+  @keyframes scale-up-center {
+    from {
+      transform: scale(0.8);
+      opacity: 0;
+    }
+    to {
+      transform: scale(1);
+      opacity: 1;
+    }
+  }
+</style>
+
+<script>
+  function initLangToggle() {
+    // Close all menus when clicking outside
+    document.addEventListener("click", () => {
+      document.querySelectorAll(".lang-menu").forEach((menu) => {
+        menu.classList.remove("open");
+      });
+    });
+
+    // Setup all toggle buttons
+    document.querySelectorAll(".lang-toggle-btn").forEach((btn) => {
+      btn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        const wrapper = btn.closest(".lang-toggle-wrapper");
+        const menu = wrapper?.querySelector(".lang-menu");
+        
+        // Close other menus first (including theme menus)
+        document.querySelectorAll(".lang-menu, .themes-menu").forEach((m) => {
+          if (m !== menu) m.classList.remove("open");
+        });
+        
+        menu?.classList.toggle("open");
+      });
+    });
+  }
+
+  // Run on initial load and after page transitions
+  document.addEventListener("astro:page-load", initLangToggle);
+</script>

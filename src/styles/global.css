@@ -1,0 +1,52 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+:root {
+  --color-bg-light: #f6f3ff;
+  --color-bg-dark: #18122b;
+  --color-primary: #7c3aed; /* violet-600 */
+  --color-primary-light: #c4b5fd; /* violet-300 */
+  --color-primary-dark: #a78bfa; /* violet-400 */
+  --color-text-light: #18122b;
+  --color-text-dark: #f6f3ff;
+  --color-card-light: #fff;
+  --color-card-dark: #232136;
+}
+
+/* Smooth scroll with offset for fixed header */
+html {
+  scroll-behavior: smooth;
+  overflow-x: hidden;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+/* Scroll margin for anchor links (accounts for fixed header) */
+section[id],
+[id]:target {
+  scroll-margin-top: 6rem;
+}
+
+/* Focus indicators for keyboard navigation */
+:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+/* Remove focus outline on mouse click, keep for keyboard */
+:focus:not(:focus-visible) {
+  outline: none;
+}
+
+body {
+  background: var(--color-bg-light);
+  color: var(--color-text-light);
+}
+
+dark body {
+  background: var(--color-bg-dark);
+  color: var(--color-text-dark);
+}

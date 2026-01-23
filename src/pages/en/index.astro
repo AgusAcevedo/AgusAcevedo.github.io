@@ -1,6 +1,6 @@
 ---
-import { useTranslations } from "../i18n";
-import type { Language } from "../i18n/languages";
+import { useTranslations } from "../../i18n";
+import type { Language } from "../../i18n/languages";
 import Layout from "@/layouts/Layout.astro";
 
 import AboutMe from "@/components/AboutMe.astro";
@@ -20,7 +20,7 @@ import SectionContainer from "@/components/SectionContainer.astro";
 import Hero from "@/components/Hero.astro";
 import Stack from "@/components/Stack.astro";
 
-const currentLocale = (Astro.currentLocale || 'es') as Language;
+const currentLocale = (Astro.currentLocale || 'en') as Language;
 const t = useTranslations(currentLocale);
 ---
 
@@ -34,7 +34,7 @@ const t = useTranslations(currentLocale);
     </SectionContainer>
   </main>
   <div class="space-y-24">
-    <SectionContainer id="sobre-mi">
+    <SectionContainer id="about">
       <h2
         class="titulo-main flex items-center mb-6 text-3xl font-semibold gap-x-3 text-black/80 dark:text-white"
       >
@@ -44,7 +44,7 @@ const t = useTranslations(currentLocale);
       <AboutMe />
     </SectionContainer>
 
-    <SectionContainer id="experiencia">
+    <SectionContainer id="experience">
       <h2
         class="titulo-main flex items-center mb-6 text-3xl font-semibold gap-x-3 text-black/80 dark:text-white"
       >
@@ -54,7 +54,7 @@ const t = useTranslations(currentLocale);
       <Experience />
     </SectionContainer>
 
-    <SectionContainer id="educacion">
+    <SectionContainer id="education">
       <h2
         class="titulo-main flex items-center mb-6 text-3xl font-semibold gap-x-3 text-black/80 dark:text-white"
       >
@@ -64,7 +64,7 @@ const t = useTranslations(currentLocale);
       <Education />
     </SectionContainer>
 
-    <SectionContainer id="certificados">
+    <SectionContainer id="certifications">
       <h2
         class="titulo-main flex items-center mb-6 text-3xl font-semibold gap-x-3 text-black/80 dark:text-white"
       >
@@ -84,7 +84,7 @@ const t = useTranslations(currentLocale);
       <Stack />
     </SectionContainer>
 
-    <SectionContainer id="proyectos">
+    <SectionContainer id="projects">
       <h2
         class="titulo-main flex items-center mb-6 text-3xl font-semibold gap-x-3 text-black/80 dark:text-white"
       >

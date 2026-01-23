@@ -1,40 +1,64 @@
 ---
 import ThemeToggle from "./ThemeToggle.astro";
+import LanguageToggle from "./LanguageToggle.astro";
+import { useTranslations } from "../i18n";
+import type { Language } from "../i18n/languages";
 
+const currentLocale = (Astro.currentLocale || 'es') as Language;
+const t = useTranslations(currentLocale);
+
+// IDs en español para ES, en inglés para EN
+const isEn = currentLocale === 'en';
 const navItems = [
   {
-    title: "Experiencia",
-    label: "experiencia",
-    url: "/#experiencia",
+    title: t.nav.about,
+    label: isEn ? 'about' : 'sobre-mi',
+    url: isEn ? '/en/#about' : '/#sobre-mi',
   },
   {
-    title: "Certificados",
-    label: "certificados",
-    url: "/#certificados",
+    title: t.nav.experience,
+    label: isEn ? 'experience' : 'experiencia',
+    url: isEn ? '/en/#experience' : '/#experiencia',
   },
   {
-    title: "Perfil",
-    label: "sobre-mi",
-    url: "/#sobre-mi",
+    title: t.nav.education,
+    label: isEn ? 'education' : 'educacion',
+    url: isEn ? '/en/#education' : '/#educacion',
   },
   {
-    title: "Stack",
-    label: "stack",
-    url: "/#stack",
+    title: t.nav.projects,
+    label: isEn ? 'certifications' : 'certificados',
+    url: isEn ? '/en/#certifications' : '/#certificados',
+  },
+  {
+    title: t.nav.stack,
+    label: 'stack',
+    url: isEn ? '/en/#stack' : '/#stack',
+  },
+  {
+    title: t.nav.myProjects,
+    label: isEn ? 'projects' : 'proyectos',
+    url: isEn ? '/en/#projects' : '/#proyectos',
+  },
+  {
+    title: t.nav.blog,
+    label: 'blog',
+    url: isEn ? '/en/#blog' : '/#blog',
   },
 ];
 ---
 
 <header
-  class="fixed top-0 z-10 flex items-center justify-center w-full mx-auto mt-2"
+  class="fixed top-0 z-50 flex items-center justify-center w-full mx-auto mt-2"
 >
+  <!-- Desktop Navigation -->
   <nav
-    class="flex px-3 text-sm font-medium rounded-full text-gray-600 dark:text-gray-200 justify-center items-center"
+    class="hidden md:flex px-3 text-sm font-medium rounded-full text-gray-600 dark:text-gray-200 justify-center items-center nav-desktop"
   >
     {
       navItems.map((link) => (
         <a
-          class="relative block px-2 py-2 transition hover:text-yellow-500 dark:hover:text-yellow-400"
+          class="nav-link relative block px-2 py-2 transition hover:text-violet-600 dark:hover:text-violet-400"
           aria-label={link.label}
           href={link.url}
         >
@@ -42,23 +66,96 @@ const navItems = [
         </a>
       ))
     }
-    <ThemeToggle />
+    <div class="flex items-center gap-1 ml-1 border-l border-gray-300 dark:border-gray-600 pl-2">
+      <ThemeToggle />
+      <LanguageToggle />
+    </div>
   </nav>
+
+  <!-- Mobile Navigation -->
+  <div class="md:hidden flex items-center gap-2">
+    <nav class="nav-mobile flex items-center gap-1 px-2 py-1 rounded-full">
+      <ThemeToggle />
+      <LanguageToggle />
+      <button
+        id="mobile-menu-btn"
+        class="flex items-center justify-center size-9 rounded-full text-gray-600 dark:text-gray-200 hover:bg-gray-200/50 dark:hover:bg-gray-700/50 transition focus:outline-none focus-visible:ring-2 focus-visible:ring-violet-500"
+        aria-label="Toggle menu"
+        aria-expanded="false"
+      >
+        <svg id="menu-icon" class="size-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+        </svg>
+        <svg id="close-icon" class="size-5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+        </svg>
+      </button>
+    </nav>
+  </div>
 </header>
+
+<!-- Mobile Menu Overlay -->
+<div
+  id="mobile-menu"
+  class="fixed inset-0 z-40 hidden md:hidden"
+>
+  <div class="absolute inset-0 bg-black/50 backdrop-blur-sm" id="mobile-menu-backdrop"></div>
+  <nav class="absolute top-16 left-4 right-4 bg-white dark:bg-gray-900 rounded-2xl shadow-xl border border-gray-200 dark:border-gray-700 p-4 space-y-1">
+    {
+      navItems.map((link) => (
+        <a
+          class="mobile-nav-link block px-4 py-3 rounded-xl text-gray-700 dark:text-gray-200 hover:bg-violet-50 dark:hover:bg-violet-900/20 hover:text-violet-600 dark:hover:text-violet-400 transition font-medium"
+          aria-label={link.label}
+          href={link.url}
+        >
+          {link.title}
+        </a>
+      ))
+    }
+  </nav>
+</div>
 
 <script>
   document.addEventListener("astro:page-load", () => {
     const sections = document.querySelectorAll("section");
-    const navItems = document.querySelectorAll("header nav a");
+    const navLinks = document.querySelectorAll("header .nav-link");
+    const mobileMenuBtn = document.getElementById("mobile-menu-btn");
+    const mobileMenu = document.getElementById("mobile-menu");
+    const mobileMenuBackdrop = document.getElementById("mobile-menu-backdrop");
+    const menuIcon = document.getElementById("menu-icon");
+    const closeIcon = document.getElementById("close-icon");
+    const mobileNavLinks = document.querySelectorAll(".mobile-nav-link");
 
+    // Mobile menu toggle
+    function toggleMobileMenu() {
+      const isOpen = mobileMenu?.classList.contains("hidden");
+      mobileMenu?.classList.toggle("hidden", !isOpen);
+      menuIcon?.classList.toggle("hidden", isOpen);
+      closeIcon?.classList.toggle("hidden", !isOpen);
+      mobileMenuBtn?.setAttribute("aria-expanded", isOpen ? "true" : "false");
+      document.body.style.overflow = isOpen ? "hidden" : "";
+    }
+
+    mobileMenuBtn?.addEventListener("click", toggleMobileMenu);
+    mobileMenuBackdrop?.addEventListener("click", toggleMobileMenu);
+    
+    mobileNavLinks.forEach((link) => {
+      link.addEventListener("click", () => {
+        if (!mobileMenu?.classList.contains("hidden")) {
+          toggleMobileMenu();
+        }
+      });
+    });
+
+    // Active section highlighting
     const callback = (entries: any[]) => {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
-          navItems.forEach((item) => {
+          navLinks.forEach((item) => {
             if (item.getAttribute("aria-label") == entry.target.id) {
-              item.classList.add("text-yellow-500");
+              item.classList.add("text-violet-600", "dark:text-violet-400");
             } else {
-              item.classList.remove("text-yellow-500");
+              item.classList.remove("text-violet-600", "dark:text-violet-400");
             }
           });
         }
@@ -89,7 +186,7 @@ const navItems = [
 </script>
 
 <style>
-  nav {
+  .nav-desktop, .nav-mobile {
     animation: nav-shadow 1s linear both;
     animation-timeline: scroll();
     animation-range: 0 100px;
@@ -97,7 +194,32 @@ const navItems = [
 
   @keyframes nav-shadow {
     to {
-      @apply shadow-lg ring-1 backdrop-blur bg-gray-300/60 dark:bg-gray-800/60 ring-white/10;
+      box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+      --tw-ring-offset-shadow: var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);
+      --tw-ring-shadow: var(--tw-ring-inset) 0 0 0 calc(1px + var(--tw-ring-offset-width)) rgba(255, 255, 255, 0.1);
+      box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      background-color: rgba(209, 213, 219, 0.6);
+    }
+  }
+  
+  :global(.dark) .nav-desktop,
+  :global(.dark) .nav-mobile {
+    animation: nav-shadow-dark 1s linear both;
+    animation-timeline: scroll();
+    animation-range: 0 100px;
+  }
+
+  @keyframes nav-shadow-dark {
+    to {
+      box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+      --tw-ring-offset-shadow: var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);
+      --tw-ring-shadow: var(--tw-ring-inset) 0 0 0 calc(1px + var(--tw-ring-offset-width)) rgba(255, 255, 255, 0.1);
+      box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      background-color: rgba(31, 41, 55, 0.6);
     }
   }
 </style>
