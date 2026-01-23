@@ -18,10 +18,13 @@
 html {
   scroll-behavior: smooth;
   overflow-x: hidden;
+  overflow-y: auto;
 }
 
 body {
   overflow-x: hidden;
+  overflow-y: auto;
+  position: relative;
 }
 
 /* Scroll margin for anchor links (accounts for fixed header) */
