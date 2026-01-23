@@ -58,7 +58,6 @@ const PROJECTS = [
     link: "https://www.cloudskillsboost.google/public_profiles/9b7d33b5-f2b7-4736-b5df-e4537f1f7f03/badges/3091080",
     image: "/webp_certs/GoogleCloudEssentials.webp",
     cl: "no-oculto",
-    featured: true,
     categories: ["Cloud"],
   },
   {
@@ -96,6 +95,7 @@ const PROJECTS = [
     image: "/webp_certs/PerformInfraestructureTasks.webp",
     cl: "no-oculto",
     categories: ["Cloud"],
+    featured: true,
   },
   {
     title: "Build and Secure Networks",
@@ -540,6 +540,9 @@ const FILTERS = [
   let itemsPerPage = 8;
   let filteredArticles: HTMLElement[] = [];
   let touchStartX = 0;
+  let touchStartY = 0;
+  let touchEndX = 0;
+  let touchEndY = 0;
 
   // Update items per page based on screen size
   function updateItemsPerPage() {
@@ -724,22 +727,29 @@ const FILTERS = [
     nextPageBtnMobile.addEventListener("click", () => goToPage(currentPage + 1));
   }
   
-  // Swipe functionality
+  // Swipe functionality - only handle horizontal swipes
   carouselContainer.addEventListener("touchstart", (e) => {
     touchStartX = e.changedTouches[0].clientX;
+    touchStartY = e.changedTouches[0].clientY;
   }, { passive: true });
   
   carouselContainer.addEventListener("touchend", (e) => {
-    const touchEndX = e.changedTouches[0].clientX;
-    const diff = touchStartX - touchEndX;
+    touchEndX = e.changedTouches[0].clientX;
+    touchEndY = e.changedTouches[0].clientY;
     
-    if (Math.abs(diff) > 50) {
-      if (diff > 0) {
+    const diffX = touchStartX - touchEndX;
+    const diffY = touchStartY - touchEndY;
+    
+    // Only trigger carousel navigation if it's a horizontal swipe
+    // (horizontal movement is greater than vertical movement)
+    if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > 50) {
+      if (diffX > 0) {
         goToPage(currentPage + 1);
       } else {
         goToPage(currentPage - 1);
       }
     }
+    // If vertical movement is greater, let the browser handle it as scroll
   }, { passive: true });
 
   // Modal
