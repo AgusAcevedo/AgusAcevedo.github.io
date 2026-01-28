@@ -22,6 +22,8 @@ import DownloadPill from "@/components/DownloadPill.astro";
     alt={p.firstName}
     class="order-1 rounded-full object-cover w-64 h-full p-1 bg-white md:order-2 lg:p-2 lg:w-64 aspect-square dark:bg-violet-500/5 ring-1 ring-white/20"
     style="object-position: 50% 50%"
+    fetchpriority="high"
+    loading="eager"
   />
   <div class="order-2 object-cover h-full p-1">
     <h1

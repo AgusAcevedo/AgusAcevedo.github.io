@@ -338,9 +338,11 @@ const FILTERS = [
 <div class="mb-6">
   <!-- Select para móvil -->
   <div class="block sm:hidden">
+    <label for="filter-select" class="sr-only">{t.projects.filterByCategory}</label>
     <select
       id="filter-select"
       class="w-full px-4 py-3 rounded-xl text-sm text-gray-800 dark:text-white bg-white dark:bg-gray-900/40 border border-gray-300 dark:border-violet-900/30 focus:border-violet-500/60 focus:outline-none focus:ring-2 focus:ring-violet-500/20 transition"
+      aria-label="{t.projects.filterByCategory}"
     >
       {FILTERS.map((f) => (
         <option value={f.id} selected={f.id === "featured"}>{f.label}</option>

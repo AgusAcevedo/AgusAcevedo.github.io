@@ -18,7 +18,7 @@ export const es = {
     github: 'https://github.com/AgusAcevedo',
     twitter: '', // Opcional: 'https://twitter.com/usuario'
     // Imágenes
-    profileImage: '/me.png',
+    profileImage: 'agus.webp', //'/me.png',
     ogImage: '/agus.webp',
     favicon: '/favicon.svg',
     // Educación
