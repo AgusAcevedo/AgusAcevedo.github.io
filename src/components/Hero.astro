@@ -26,16 +26,16 @@ import DownloadPill from "@/components/DownloadPill.astro";
     loading="eager"
   />
   <div class="order-2 object-cover h-full p-1">
-    <h1
+    <div
       class="text-4xl font-bold tracking-tight text-gray-800 sm:text-5xl dark:text-white md:hidden text-center"
     >
       {p.name}
-    </h1>
-    <h1
+    </div>
+    <div
       class="hidden md:flex text-4xl font-bold tracking-tight text-gray-800 sm:text-5xl dark:text-white"
     >
       {p.name}
-    </h1>
+    </div>
     <p
       class="text-center sm:text-left mt-6 text-xl text-gray-800 dark:[&>strong]:text-violet-200 [&>strong]:text-violet-600 [&>strong]:font-semibold dark:text-gray-300"
       set:html={t.hero.description}
