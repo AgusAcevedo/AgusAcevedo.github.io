@@ -28,6 +28,9 @@ const t = useTranslations(currentLocale);
   title={t.seo.title}
   description={t.seo.description}
 >
+  <!-- Hidden H1 for SEO (shown to search engines, not visually displayed) -->
+  <h1 class="sr-only">{t.personal.name} - {t.personal.jobTitle} | Professional Portfolio</h1>
+  
   <main class="px-4">
     <SectionContainer id="top" class="py-16 md:py-36">
       <Hero />

@@ -16,6 +16,7 @@ Esta guía técnica te ayudará a personalizar y mantener tu portfolio.
   - [Blog](#blog)
 - [Personalización Avanzada](#personalización-avanzada)
 - [Internacionalización (i18n)](#internacionalización-i18n)
+- [SEO y Posicionamiento](#seo-y-posicionamiento)
 - [Comandos](#comandos)
 
 ---
@@ -566,7 +567,122 @@ myProjects: {
 
 ---
 
-## 🚀 Comandos
+## � SEO y Posicionamiento
+
+El sitio está completamente optimizado para SEO. Aquí está todo lo que necesitas saber:
+
+### ✅ SEO Implementado
+
+El portfolio incluye:
+- ✅ Meta tags completos (title, description, keywords)
+- ✅ Open Graph para redes sociales (Facebook, Twitter)
+- ✅ Schema.org structured data (Person, WebSite)
+- ✅ Sitemap XML multi-idioma con hreflang
+- ✅ robots.txt configurado
+- ✅ Canonical URLs
+- ✅ Tags de geolocalización (Buenos Aires, Argentina)
+- ✅ H1 semántico (oculto visualmente, visible para buscadores)
+- ✅ Headers de seguridad (_headers)
+
+### 📝 Configuración SEO
+
+**Archivo principal:** `src/i18n/translations/es.ts` (y `en.ts`)
+
+```typescript
+seo: {
+  title: 'Tu Nombre | Tu Puesto',
+  description: 'Descripción de 150-160 caracteres optimizada para buscadores',
+  keywords: 'keyword1, keyword2, keyword3, ...',
+  ogTitle: 'Título para redes sociales',
+  ogDescription: 'Descripción para cuando se comparte en redes',
+}
+```
+
+**Tips para mejorar SEO:**
+
+1. **Title**: Máximo 60 caracteres, incluye tu nombre y puesto
+2. **Description**: 150-160 caracteres, natural y descriptivo
+3. **Keywords**: 10-15 keywords relevantes, separadas por comas
+4. **OG Tags**: Pueden ser diferentes del title/description normal
+
+### 🚀 Hacer que tu sitio aparezca en Google
+
+**Lee la guía completa:** [`SEO_GUIDE.md`](./SEO_GUIDE.md)
+
+**Pasos rápidos:**
+
+1. **Google Search Console** (OBLIGATORIO):
+   - Ve a: https://search.google.com/search-console
+   - Agrega tu sitio
+   - Verifica propiedad (descarga archivo HTML y ponlo en `public/`)
+   - Envía sitemap: `https://tudominio.com/sitemap-index.xml`
+
+2. **Solicita indexación manual:**
+   - En Search Console → "Inspección de URLs"
+   - Ingresa tu URL y solicita indexación
+   - Hazlo para ambas versiones (ES y EN)
+
+3. **Agrega backlinks:**
+   - LinkedIn: Agrega URL en tu perfil
+   - GitHub: Agrega en perfil y repos importantes
+   - Dev.to: Agrega en perfil
+   - Comparte en redes sociales
+
+**Tiempo esperado:** 2-7 días para aparecer en Google
+
+### 🛠️ Herramientas de Verificación
+
+Antes de deployar, verifica:
+
+- **Schema Validator**: https://validator.schema.org/
+- **Rich Results Test**: https://search.google.com/test/rich-results
+- **Mobile-Friendly Test**: https://search.google.com/test/mobile-friendly
+- **PageSpeed Insights**: https://pagespeed.web.dev/
+
+### 📊 Google Analytics (Opcional)
+
+Para trackear visitas, agrega en `src/layouts/Layout.astro` (antes de `</head>`):
+
+```astro
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+<script is:inline>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-XXXXXXXXXX');
+</script>
+```
+
+Obtén tu ID en: https://analytics.google.com/
+
+### 🔧 Configuración Avanzada
+
+**Cambiar URLs del sitio:**
+
+Edita `astro.config.mjs`:
+
+```javascript
+export default defineConfig({
+  site: 'https://tudominio.com/', // 👈 Tu URL
+  // ...
+})
+```
+
+Y en `src/i18n/translations/es.ts`:
+
+```typescript
+personal: {
+  siteUrl: 'https://tudominio.com/', // 👈 Debe coincidir
+  // ...
+}
+```
+
+**IMPORTANTE:** Ambas URLs deben ser **exactamente iguales** o el SEO fallará.
+
+---
+
+## �🚀 Comandos
 
 ### Desarrollo
 

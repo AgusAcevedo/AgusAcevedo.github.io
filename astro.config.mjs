@@ -13,7 +13,7 @@ export default defineConfig({
           allow: '/',
         },
       ],
-      sitemap: 'https://agustinacevedo.me/sitemap-index.xml',
+      sitemap: 'https://agusacevedo.com.ar/sitemap-index.xml',
     }),
     sitemap({
       i18n: {
@@ -23,12 +23,15 @@ export default defineConfig({
           en: 'en-US',
         },
       },
+      changefreq: 'weekly',
+      priority: 1.0,
+      lastmod: new Date(),
     }),
   ],
   vite: {
     plugins: [tailwindcss()]
   },
-  site: 'https://agustinacevedo.me/',
+  site: 'https://agusacevedo.com.ar/',
   i18n: {
     locales: ['es', 'en'],
     defaultLocale: 'es',
