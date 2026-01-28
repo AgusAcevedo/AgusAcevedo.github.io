@@ -291,8 +291,8 @@ export const es = {
   // SEO
   seo: {
     title: 'Agustin Ezequiel Acevedo | Cloud Engineer',
-    description: 'Ingeniero en Sistemas especializado en DevOps, Cloud Computing y administración de infraestructura. Más de 3 años de experiencia automatizando procesos y gestionando sistemas en la nube.',
-    keywords: 'DevOps, SysAdmin, Cloud Computing, AWS, GCP, Kubernetes, Docker, CI/CD, Terraform, Ansible, Linux, Ingeniero de Sistemas',
+    description: 'Cloud & Platform Engineer especializado en DevOps, automatización y administración de infraestructura. +3 años de experiencia.',
+    keywords: 'DevOps, SysAdmin, Cloud Computing, AWS, GCP, Kubernetes, Docker, CI/CD, Terraform, Ansible, Linux, Cloud Engineer, Platform Engineer',
     ogTitle: 'Agustin Ezequiel Acevedo - Cloud Engineer',
     ogDescription: 'Portfolio profesional de Agustin Ezequiel Acevedo. Especializado en DevOps, automatización de infraestructura y Cloud Computing.',
   },
