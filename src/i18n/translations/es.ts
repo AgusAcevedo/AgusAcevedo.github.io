@@ -19,7 +19,7 @@ export const es = {
     twitter: '', // Opcional: 'https://twitter.com/usuario'
     // Imágenes
     profileImage: '/agus.webp', //'/me.png',
-    ogImage: '/android-chrome-512x512.png', // Imagen para compartir en redes y buscadores
+    ogImage: '/og.png', // Imagen para compartir en redes y buscadores
     favicon: '/favicon.svg',
     // Educación
     university: 'UADE',
