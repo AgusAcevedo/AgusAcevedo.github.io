@@ -21,7 +21,7 @@ export const en = {
     twitter: '', // Optional: 'https://twitter.com/username'
     // Images
     profileImage: '/agus.webp', //'/me.png',
-    ogImage: '/agus.webp',
+    ogImage: '/android-chrome-512x512.png', // Social share image and search engines
     favicon: '/favicon.svg',
     // Education
     university: 'UADE',
