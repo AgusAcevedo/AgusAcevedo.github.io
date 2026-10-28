@@ -6,17 +6,27 @@ const currentLocale = (Astro.currentLocale || 'es') as Language;
 const t = useTranslations(currentLocale);
 
 const projectsData = t.myProjects.items;
+const isEn = currentLocale === 'en';
+// Descriptions are repository-authored rich text. Render the supported paragraph
+// and emphasis structure as escaped Astro values instead of injecting HTML.
+const descriptionParagraphs = (description: string) =>
+  Array.from(description.matchAll(/<p(?: class="mt-4")?>(.*?)<\/p>/gs), ([, paragraph]) =>
+    paragraph.split(/(<strong>.*?<\/strong>)/gs).map((part) => ({
+      strong: part.startsWith('<strong>') && part.endsWith('</strong>'),
+      text: part.startsWith('<strong>') && part.endsWith('</strong>') ? part.slice(8, -9) : part,
+    }))
+  );
 ---
 
-<div class="space-y-8">
+<div id="projects-region" class="space-y-8" role="region" aria-label={t.myProjects.title} aria-roledescription={isEn ? "carousel" : "carrusel"} data-locale={currentLocale}>
   <!-- Carousel Container -->
   <div class="relative">
     <!-- Carousel Track -->
     <div class="overflow-hidden px-4 sm:px-0">
-      <div id="projects-carousel" class="flex transition-transform duration-500 ease-out">
+      <div id="projects-carousel" class="flex transition-transform duration-500 ease-out motion-reduce:transition-none">
         {projectsData.map((project, index) => (
           <article
-            class="project-card flex-shrink-0 w-full md:w-1/2 lg:w-1/3 px-3 cursor-pointer"
+            class="project-card flex-shrink-0 w-full md:w-1/2 lg:w-1/3 px-3"
             data-project-id={project.id}
             data-index={index}
           >
@@ -33,7 +43,7 @@ const projectsData = t.myProjects.items;
               )}
               
               <div class="p-6 space-y-4">
-                <h3 class="text-xl font-bold text-gray-800 dark:text-white leading-tight group-hover:text-violet-600 dark:group-hover:text-violet-400 transition-colors">
+                <h3 id={`project-card-title-${project.id}`} class="text-xl font-bold text-gray-800 dark:text-white leading-tight group-hover:text-violet-600 dark:group-hover:text-violet-400 transition-colors">
                   {project.title}
                 </h3>
 
@@ -52,6 +62,16 @@ const projectsData = t.myProjects.items;
                 )}
               </div>
 
+              <button
+                type="button"
+                data-project-dialog={`project-modal-${project.id}`}
+                aria-labelledby={`project-card-title-${project.id}`}
+                aria-controls={`project-modal-${project.id}`}
+                aria-haspopup="dialog"
+                class="absolute inset-0 z-10 w-full h-full rounded-2xl cursor-pointer focus-visible:outline-2 focus-visible:outline-violet-500 focus-visible:outline-offset-[-2px]"
+              >
+                <span class="sr-only">{project.title}</span>
+              </button>
               <!-- Decorative gradient -->
               <div class="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-violet-500/5 to-transparent rounded-full blur-2xl -z-10 group-hover:from-violet-500/10 transition-all" />
             </div>
@@ -61,397 +81,182 @@ const projectsData = t.myProjects.items;
     </div>
 
     <!-- Navigation Controls -->
-    <nav class="flex items-center justify-center gap-4 mt-6" aria-label="Projects carousel pagination">
+    <nav class="flex items-center justify-center gap-4 mt-6" aria-label={isEn ? "Project pagination" : "Paginación de proyectos"}>
       <button
         id="projects-prev"
         class="px-4 py-2 rounded-lg font-semibold border transition disabled:opacity-30 disabled:cursor-not-allowed bg-violet-100 text-violet-700 border-violet-200 hover:bg-violet-200 dark:bg-violet-600/20 dark:text-white dark:border-violet-600/40 dark:hover:bg-violet-600/30 focus:outline-none focus-visible:ring-2 focus-visible:ring-violet-500"
-        aria-label="Previous projects"
+        aria-label={isEn ? "Previous projects" : "Proyectos anteriores"} aria-controls="projects-carousel"
       >
         &lt;
       </button>
-      <div id="projects-dots" class="flex justify-center gap-2">
+      <div id="projects-dots" class="flex justify-center gap-1" role="group" aria-label={isEn ? "Choose project position" : "Elegir posición de proyectos"}>
         <!-- Dots will be generated dynamically -->
       </div>
       <button
         id="projects-next"
         class="px-4 py-2 rounded-lg font-semibold border transition disabled:opacity-30 disabled:cursor-not-allowed bg-violet-100 text-violet-700 border-violet-200 hover:bg-violet-200 dark:bg-violet-600/20 dark:text-white dark:border-violet-600/40 dark:hover:bg-violet-600/30 focus:outline-none focus-visible:ring-2 focus-visible:ring-violet-500"
-        aria-label="Next projects"
+        aria-label={isEn ? "Next projects" : "Proyectos siguientes"} aria-controls="projects-carousel"
       >
         &gt;
       </button>
     </nav>
   </div>
+  <p id="projects-status" class="sr-only" aria-live="polite" aria-atomic="true"></p>
 </div>
 
-<!-- Modal -->
-<div
-  id="project-modal"
-  class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-black/70 backdrop-blur-sm"
-  role="dialog"
-  aria-modal="true"
->
-  <div
-    class="relative w-full max-w-4xl max-h-[90vh] overflow-y-auto rounded-2xl bg-white dark:bg-gray-900 shadow-2xl"
-    id="modal-content"
+<!-- Render content once; opening a project never injects HTML from JavaScript. -->
+{projectsData.map((project) => (
+  <dialog
+    id={`project-modal-${project.id}`}
+    class="project-dialog m-auto w-[calc(100%_-_2rem)] max-w-4xl max-h-[90dvh] overflow-y-auto rounded-2xl bg-white dark:bg-gray-900 text-gray-800 dark:text-white p-0 shadow-2xl"
+    aria-labelledby={`project-modal-title-${project.id}`}
   >
-    <button
-      id="close-modal"
-      class="absolute top-4 right-4 z-10 flex items-center justify-center size-10 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
-      aria-label={t.myProjects.modal.close}
-    >
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        width="24"
-        height="24"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        stroke-width="2"
-        stroke-linecap="round"
-        stroke-linejoin="round"
+    <div class="relative p-6 sm:p-8">
+      <button
+        type="button"
+        data-dialog-close
+        class="absolute top-4 right-4 z-10 flex items-center justify-center size-10 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
+        aria-label={t.myProjects.modal.close}
       >
-        <path d="M18 6l-12 12"></path>
-        <path d="M6 6l12 12"></path>
-      </svg>
-    </button>
-
-    <div id="modal-body" class="p-8">
-      <!-- Content will be injected here -->
+        <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M18 6l-12 12"></path><path d="M6 6l12 12"></path>
+        </svg>
+      </button>
+      {project.image && <img src={project.image} alt="" loading="lazy" class="w-full aspect-video object-cover rounded-xl mb-6" />}
+      <h2 id={`project-modal-title-${project.id}`} tabindex="-1" data-dialog-initial-focus class="text-3xl font-bold text-gray-800 dark:text-white mb-4 pr-8">{project.title}</h2>
+      <div class="flex flex-wrap gap-2 mb-6">
+        {project.tags.map((tag: string) => <span class="text-xs px-3 py-1 rounded-full bg-violet-100 dark:bg-violet-900/40 text-violet-600 dark:text-violet-400">{tag}</span>)}
+      </div>
+      <div class="prose prose-gray dark:prose-invert max-w-none text-gray-600 dark:text-gray-400 space-y-4">
+        {descriptionParagraphs(project.description).map((paragraph) => <p>{paragraph.map((part) => part.strong ? <strong>{part.text}</strong> : part.text)}</p>)}
+      </div>
+      {(project.github || project.demo) && <div class="flex flex-wrap gap-4 mt-6">
+        {project.github && <a href={project.github} target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">{t.myProjects.modal.repository} ↗</a>}
+        {project.demo && <a href={project.demo} target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-violet-600 hover:bg-violet-700 text-white transition-colors">{t.myProjects.modal.demo} ↗</a>}
+      </div>}
     </div>
-  </div>
-</div>
+  </dialog>
+))}
 
 <style>
-  .project-card {
-    opacity: 0;
-    animation: fadeInUp 0.5s ease-out forwards;
-  }
-
+  .project-card { animation: fadeInUp 0.5s ease-out both; }
   .project-card:nth-child(1) { animation-delay: 0.1s; }
   .project-card:nth-child(2) { animation-delay: 0.2s; }
   .project-card:nth-child(3) { animation-delay: 0.3s; }
-
-  @keyframes fadeInUp {
-    to {
-      opacity: 1;
-    }
-  }
-
-  .project-dot.active {
-    background-color: rgb(139 92 246);
-    width: 1.5rem;
-  }
-
-  #project-modal {
-    animation: fadeIn 0.2s ease-out;
-  }
-
-  #modal-content {
-    animation: slideUp 0.3s ease-out;
-  }
-
-  @keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
-  }
-
-  @keyframes slideUp {
-    from {
-      opacity: 0;
-      transform: translateY(20px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
+  @keyframes fadeInUp { from { opacity: 0; } to { opacity: 1; } }
+  .project-dialog::backdrop { background: rgb(0 0 0 / 0.7); backdrop-filter: blur(4px); }
+  @media (prefers-reduced-motion: reduce) {
+    .project-card { animation: none; }
+    .project-card img { transition: none; transform: none; }
   }
 </style>
 
-<script is:inline>
-  document.addEventListener('DOMContentLoaded', () => {
+<script>
+  import { bindDialog } from "../scripts/dialog";
+
+  function initProjects() {
+    const region = document.getElementById("projects-region");
+    const carousel = document.getElementById("projects-carousel");
+    const dotsContainer = document.getElementById("projects-dots");
+    const prevBtn = document.getElementById("projects-prev") as HTMLButtonElement | null;
+    const nextBtn = document.getElementById("projects-next") as HTMLButtonElement | null;
+    const status = document.getElementById("projects-status");
+    if (!region || !carousel || !dotsContainer) return;
+    const isEn = region.dataset.locale === "en";
+    const cards = Array.from(carousel.querySelectorAll<HTMLElement>(".project-card"));
     let currentSlide = 0;
-    const carousel = document.getElementById('projects-carousel');
-    const dotsContainer = document.getElementById('projects-dots');
-    const prevBtn = document.getElementById('projects-prev');
-    const nextBtn = document.getElementById('projects-next');
-    const projectCards = document.querySelectorAll('.project-card');
-    const totalProjects = projectCards.length;
-
-    // Determine items per view based on screen size
-    function getItemsPerView() {
-      if (window.innerWidth >= 1024) return 3; // lg
-      if (window.innerWidth >= 768) return 2;  // md
-      return 1; // mobile
-    }
-
+    let activeCard: HTMLElement | null = null;
+    const getItemsPerView = () => window.innerWidth >= 1024 ? 3 : window.innerWidth >= 768 ? 2 : 1;
     let itemsPerView = getItemsPerView();
-    
-    // Calculate max slides (positions where we can stop)
-    // For 4 projects with 3 visible: maxSlide = 4 - 3 = 1 (positions 0 and 1)
-    const getMaxSlide = () => Math.max(0, totalProjects - itemsPerView);
-    
-    // Generate dots based on number of possible positions
-    function generateDots() {
-      if (!dotsContainer) return;
-      dotsContainer.innerHTML = '';
-      const maxSlide = getMaxSlide();
-      const numDots = maxSlide + 1; // +1 because we include position 0
-      
-      for (let i = 0; i <= maxSlide; i++) {
-        const dot = document.createElement('button');
-        dot.className = 'size-2 rounded-full bg-gray-300 dark:bg-gray-600 transition-all duration-300';
-        dot.setAttribute('aria-label', `Go to slide ${i + 1}`);
-        dot.addEventListener('click', () => {
-          currentSlide = i;
-          updateCarousel();
-          // Reset auto-advance
-          if (autoAdvance) {
-            clearInterval(autoAdvance);
-            startAutoAdvance();
-          }
-        });
-        dotsContainer.appendChild(dot);
-      }
-    }
+    const getMaxSlide = () => Math.max(0, cards.length - itemsPerView);
 
     function updateCarousel() {
-      if (!carousel) return;
-      
-      // Move by the width percentage of one item
-      // On lg: each item is 33.333% wide, so we move by 33.333% per slide
-      // On md: each item is 50% wide, so we move by 50% per slide
-      // On mobile: each item is 100% wide, so we move by 100% per slide
-      const itemWidthPercentage = 100 / itemsPerView;
-      const translateX = -(currentSlide * itemWidthPercentage);
-      carousel.style.transform = `translateX(${translateX}%)`;
-      
-      // Update dots
-      if (dotsContainer) {
-        const dots = dotsContainer.querySelectorAll('button');
-        dots.forEach((dot, index) => {
-          if (index === currentSlide) {
-            dot.classList.add('bg-violet-600', 'dark:bg-violet-400', 'w-6');
-            dot.classList.remove('bg-gray-300', 'dark:bg-gray-600');
-          } else {
-            dot.classList.remove('bg-violet-600', 'dark:bg-violet-400', 'w-6');
-            dot.classList.add('bg-gray-300', 'dark:bg-gray-600');
-          }
-        });
-      }
-
-      // Update button states
-      const maxSlide = getMaxSlide();
+      if (!carousel || !dotsContainer) return;
+      carousel.style.transform = `translateX(-${currentSlide * (100 / itemsPerView)}%)`;
+      cards.forEach((card, index) => {
+        const visible = index >= currentSlide && index < currentSlide + itemsPerView;
+        card.inert = !visible;
+        card.setAttribute("aria-hidden", String(!visible));
+      });
+      dotsContainer.querySelectorAll<HTMLButtonElement>("button").forEach((dot, index) => {
+        const active = index === currentSlide;
+        dot.setAttribute("aria-pressed", String(active));
+        const marker = dot.firstElementChild as HTMLElement;
+        marker.classList.toggle("w-6", active);
+        marker.classList.toggle("bg-violet-600", active);
+        marker.classList.toggle("dark:bg-violet-400", active);
+        marker.classList.toggle("bg-gray-300", !active);
+        marker.classList.toggle("dark:bg-gray-600", !active);
+      });
       if (prevBtn) prevBtn.disabled = currentSlide === 0;
-      if (nextBtn) nextBtn.disabled = currentSlide >= maxSlide;
+      if (nextBtn) nextBtn.disabled = currentSlide >= getMaxSlide();
+      if (status) status.textContent = isEn
+        ? `Projects ${currentSlide + 1}–${Math.min(currentSlide + itemsPerView, cards.length)} of ${cards.length}`
+        : `Proyectos ${currentSlide + 1}–${Math.min(currentSlide + itemsPerView, cards.length)} de ${cards.length}`;
     }
 
-    function nextSlide() {
-      const maxSlide = getMaxSlide();
-      if (currentSlide < maxSlide) {
-        currentSlide++;
-        updateCarousel();
+    function goToSlide(index: number) {
+      const focusWasInCarousel = carousel?.contains(document.activeElement);
+      currentSlide = Math.max(0, Math.min(index, getMaxSlide()));
+      updateCarousel();
+      if (focusWasInCarousel && document.activeElement?.closest("[inert]")) {
+        cards[currentSlide]?.querySelector<HTMLButtonElement>("[data-project-dialog]")?.focus({ preventScroll: true });
       }
     }
 
-    function prevSlide() {
-      if (currentSlide > 0) {
-        currentSlide--;
-        updateCarousel();
-      }
-    }
-    
-    // Auto-advance functionality
-    let autoAdvance;
-    function startAutoAdvance() {
-      const maxSlide = getMaxSlide();
-      if (maxSlide > 0) {
-        autoAdvance = setInterval(() => {
-          if (currentSlide < maxSlide) {
-            nextSlide();
-          } else {
-            currentSlide = 0;
-            updateCarousel();
-          }
-        }, 5000);
+    function generateDots() {
+      if (!dotsContainer) return;
+      dotsContainer.replaceChildren();
+      for (let index = 0; index <= getMaxSlide(); index++) {
+        const dot = document.createElement("button");
+        dot.type = "button";
+        dot.className = "flex items-center justify-center min-w-6 h-6 rounded-full";
+        dot.setAttribute("aria-label", isEn ? `Show projects from ${index + 1}` : `Mostrar proyectos desde el ${index + 1}`);
+        dot.setAttribute("aria-controls", "projects-carousel");
+        const marker = document.createElement("span");
+        marker.className = "block size-2 rounded-full transition-all duration-300 motion-reduce:transition-none";
+        dot.append(marker);
+        dot.addEventListener("click", () => goToSlide(index));
+        dotsContainer.append(dot);
       }
     }
 
-    // Initialize
+    region.querySelectorAll<HTMLButtonElement>("[data-project-dialog]").forEach((button) => {
+      const dialog = document.getElementById(button.dataset.projectDialog || "");
+      if (!(dialog instanceof HTMLDialogElement)) return;
+      const controller = bindDialog(dialog);
+      button.addEventListener("click", () => {
+        activeCard = button.closest<HTMLElement>(".project-card");
+        controller.open(button);
+      });
+      dialog.addEventListener("close", () => { activeCard = null; });
+    });
+    prevBtn?.addEventListener("click", () => goToSlide(currentSlide - 1));
+    nextBtn?.addEventListener("click", () => goToSlide(currentSlide + 1));
+
+    let touchStartX = 0;
+    let touchStartY = 0;
+    carousel.addEventListener("touchstart", (event) => {
+      touchStartX = event.changedTouches[0].clientX;
+      touchStartY = event.changedTouches[0].clientY;
+    }, { passive: true });
+    carousel.addEventListener("touchend", (event) => {
+      const diffX = touchStartX - event.changedTouches[0].clientX;
+      const diffY = touchStartY - event.changedTouches[0].clientY;
+      if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > 50) goToSlide(currentSlide + (diffX > 0 ? 1 : -1));
+    }, { passive: true });
+    window.addEventListener("resize", () => {
+      const newItemsPerView = getItemsPerView();
+      if (newItemsPerView === itemsPerView) return;
+      const focusedIndex = cards.findIndex(card => card.contains(document.activeElement) || card === activeCard);
+      itemsPerView = newItemsPerView;
+      currentSlide = Math.min(focusedIndex >= 0 ? focusedIndex : currentSlide, getMaxSlide());
+      generateDots();
+      updateCarousel();
+    });
     generateDots();
     updateCarousel();
-    startAutoAdvance();
-
-    // Navigation buttons
-    prevBtn?.addEventListener('click', () => {
-      prevSlide();
-      if (autoAdvance) {
-        clearInterval(autoAdvance);
-        startAutoAdvance();
-      }
-    });
-
-    nextBtn?.addEventListener('click', () => {
-      nextSlide();
-      if (autoAdvance) {
-        clearInterval(autoAdvance);
-        startAutoAdvance();
-      }
-    });
-    // Touch/swipe support
-    let touchStartX = 0;
-    let touchEndX = 0;
-
-    carousel?.addEventListener('touchstart', (e) => {
-      touchStartX = e.changedTouches[0].screenX;
-    });
-
-    carousel?.addEventListener('touchend', (e) => {
-      touchEndX = e.changedTouches[0].screenX;
-      const diff = touchStartX - touchEndX;
-      
-      if (Math.abs(diff) > 50) {
-        if (diff > 0) {
-          nextSlide();
-        } else {
-          prevSlide();
-        }
-        
-        if (autoAdvance) {
-          clearInterval(autoAdvance);
-          startAutoAdvance();
-        }
-      }
-    });
-
-    // Handle window resize
-    window.addEventListener('resize', () => {
-      const newItemsPerView = getItemsPerView();
-      if (newItemsPerView !== itemsPerView) {
-        itemsPerView = newItemsPerView;
-        currentSlide = Math.min(currentSlide, getMaxSlide());
-        generateDots();
-        updateCarousel();
-      }
-    });
-  });
-</script>
-
-<script define:vars={{ projectsData, currentLocale }}>
-  const modal = document.getElementById('project-modal');
-  const modalBody = document.getElementById('modal-body');
-  const closeBtn = document.getElementById('close-modal');
-  const projectCards = document.querySelectorAll('.project-card');
-
-  // Translations
-  const translations = {
-    es: {
-      technologies: 'Tecnologías',
-      repository: 'Ver repositorio',
-      demo: 'Ver demo',
-      close: 'Cerrar'
-    },
-    en: {
-      technologies: 'Technologies',
-      repository: 'View repository',
-      demo: 'View demo',
-      close: 'Close'
-    }
-  };
-
-  const t = translations[currentLocale] || translations.es;
-
-  function openModal(projectId) {
-    const project = projectsData.find(p => p.id === projectId);
-    if (!project) return;
-
-    const tagsHTML = project.tags
-      ? `<div class="flex flex-wrap gap-2 mb-6">
-          ${project.tags.map(tag => 
-            `<span class="text-xs px-3 py-1 rounded-full bg-violet-100 dark:bg-violet-900/40 text-violet-600 dark:text-violet-400">${tag}</span>`
-          ).join('')}
-         </div>`
-      : '';
-
-    const imageHTML = project.image
-      ? `<img 
-          src="${project.image}" 
-          alt="${project.title}"
-          class="w-full aspect-video object-cover rounded-xl mb-6"
-         />`
-      : '';
-
-    const linksHTML = `
-      <div class="flex flex-wrap gap-4 mt-6">
-        ${project.github ? `
-          <a
-            href="${project.github}"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
-            </svg>
-            ${t.repository}
-          </a>
-        ` : ''}
-        ${project.demo ? `
-          <a
-            href="${project.demo}"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-violet-600 hover:bg-violet-700 dark:bg-violet-500 dark:hover:bg-violet-600 text-white transition-colors"
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
-              <polyline points="15 3 21 3 21 9"></polyline>
-              <line x1="10" y1="14" x2="21" y2="3"></line>
-            </svg>
-            ${t.demo}
-          </a>
-        ` : ''}
-      </div>
-    `;
-
-    modalBody.innerHTML = `
-      ${imageHTML}
-      <h2 class="text-3xl font-bold text-gray-800 dark:text-white mb-4">${project.title}</h2>
-      ${tagsHTML}
-      <div class="prose prose-gray dark:prose-invert max-w-none text-gray-600 dark:text-gray-400">
-        ${project.description}
-      </div>
-      ${linksHTML}
-    `;
-
-    modal.classList.remove('hidden');
-    modal.classList.add('flex');
-    document.body.style.overflow = 'hidden';
   }
 
-  function closeModal() {
-    modal.classList.add('hidden');
-    modal.classList.remove('flex');
-    document.body.style.overflow = '';
-  }
-
-  projectCards.forEach(card => {
-    card.addEventListener('click', () => {
-      const projectId = card.getAttribute('data-project-id');
-      openModal(projectId);
-    });
-  });
-
-  closeBtn.addEventListener('click', closeModal);
-  
-  modal.addEventListener('click', (e) => {
-    if (e.target === modal) {
-      closeModal();
-    }
-  });
-
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && !modal.classList.contains('hidden')) {
-      closeModal();
-    }
-  });
+  initProjects();
 </script>

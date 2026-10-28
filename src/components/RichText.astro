@@ -1,0 +1,10 @@
+---
+interface Props { text: string }
+const { text } = Astro.props;
+// Only emphasis is supported. Every text segment is escaped by Astro rather
+// than treating translations (or future content sources) as executable HTML.
+const segments = text.split(/(<strong>[\s\S]*?<\/strong>)/g);
+---
+{segments.map((segment) => segment.startsWith('<strong>') && segment.endsWith('</strong>')
+  ? <strong>{segment.slice(8, -9)}</strong>
+  : segment)}

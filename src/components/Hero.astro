@@ -12,6 +12,7 @@ import MailIcon from "@/components/icons/Mail.astro";
 import SocialPill from "@/components/SocialPill.astro";
 import LinkedinPill from "@/components/LinkedinPill.astro";
 import DownloadPill from "@/components/DownloadPill.astro";
+import RichText from "./RichText.astro";
 ---
 
 <div class="flex flex-col gap-4 items-center md:flex-row">
@@ -19,29 +20,23 @@ import DownloadPill from "@/components/DownloadPill.astro";
     width="200"
     height="200"
     src={p.profileImage}
-    alt={p.firstName}
+    alt={p.name}
     class="order-1 rounded-full object-cover w-64 h-full p-1 bg-white md:order-2 lg:p-2 lg:w-64 aspect-square dark:bg-violet-500/5 ring-1 ring-white/20"
-    style="object-position: 50% 50%"
     fetchpriority="high"
     loading="eager"
   />
   <div class="order-2 object-cover h-full p-1">
-    <div
-      class="text-4xl font-bold tracking-tight text-gray-800 sm:text-5xl dark:text-white md:hidden text-center"
+    <h1
+      class="text-4xl font-bold tracking-tight text-gray-800 sm:text-5xl dark:text-white text-center md:text-left"
     >
       {p.name}
-    </div>
-    <div
-      class="hidden md:flex text-4xl font-bold tracking-tight text-gray-800 sm:text-5xl dark:text-white"
-    >
-      {p.name}
-    </div>
+    </h1>
     <p
       class="text-center sm:text-left mt-6 text-xl text-gray-800 dark:[&>strong]:text-violet-200 [&>strong]:text-violet-600 [&>strong]:font-semibold dark:text-gray-300"
-      set:html={t.hero.description}
     >
+      <RichText text={t.hero.description} />
     </p>
-    <nav class="flex flex-wrap justify-center md:justify-normal gap-4 mt-8">
+    <nav aria-label={currentLocale === 'es' ? 'Contacto y currículum' : 'Contact and resume'} class="flex flex-wrap justify-center md:justify-normal gap-4 mt-8">
       <SocialPill href={`mailto:${p.email}`}>
         <MailIcon class="size-4" />
         {t.hero.contact}

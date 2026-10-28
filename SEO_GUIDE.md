@@ -11,29 +11,21 @@ Esta guía te ayudará a hacer que tu portfolio aparezca en Google y otros busca
   - `astro.config.mjs` - URL del sitio corregida
   - Sitemap ahora apunta al dominio correcto
 
-### 2. **Sitemap Mejorado** ✅
-- **Agregado:** `changefreq: 'weekly'`, `priority: 1.0`, `lastmod: new Date()`
-- **Ubicación:** `https://agusacevedo.com.ar/sitemap-index.xml`
-- **Idiomas:** Correctamente configurado para ES/EN con hreflang
+### 2. Sitemap e idiomas
+- Ubicación: `https://agusacevedo.com.ar/sitemap-index.xml`.
+- Rutas ES/EN con alternates correctos. No se inventa `lastmod` en cada build.
+- Las URLs canónicas y Open Graph se construyen con `new URL()`.
 
-### 3. **Meta Tags Geo** ✅
-- **Agregado:** Tags de geolocalización (Buenos Aires, Argentina)
-- **Beneficio:** Mejor ranking en búsquedas locales
-- **Archivo:** `src/components/SEO.astro`
+### 3. Encabezado principal
+- Un único H1 visible en `Hero.astro` y un único `main` en `Layout.astro`.
+- Mantener la jerarquía de secciones H2/H3 al agregar contenido.
 
-### 4. **H1 Semántico** ✅
-- **Agregado:** H1 oculto visualmente pero visible para buscadores
-- **Ubicación:** `index.astro` (ES) y `en/index.astro` (EN)
-- **Contenido:** "{Nombre} - {Puesto} | Portfolio Profesional"
-
-### 5. **Headers de Seguridad** ✅
-- **Creado:** `public/_headers` para GitHub Pages
-- **Incluye:** X-Frame-Options, CSP, Cache-Control optimizado
-- **Beneficio:** Mejor ranking SEO (Google premia sitios seguros)
-
-### 6. **Archivo de Verificación** ✅
-- **Creado:** `public/google-site-verification.html`
-- **Uso:** Para verificar propiedad en Google Search Console
+### 4. Seguridad y verificación
+- Astro genera una CSP efectiva en el HTML y una política de referrer.
+- GitHub Pages ignora `public/_headers`; la configuración de HTTP requiere
+  Cloudflare u otro hosting compatible. Ver [SECURITY.md](SECURITY.md).
+- Search Console utiliza el meta tag de verificación configurado en `SEO.astro`.
+- No se garantiza una posición en buscadores por agregar metadatos o cabeceras.
 
 ---
 
@@ -51,7 +43,7 @@ Esta guía te ayudará a hacer que tu portfolio aparezca en Google y otros busca
 # Google te dará un archivo como: google1234567890abcdef.html
 # Descárgalo y ponlo en: public/google1234567890abcdef.html
 # Luego build y deploy
-npm run build
+pnpm build
 git add public/google1234567890abcdef.html
 git commit -m "Add Google Search Console verification"
 git push
@@ -335,7 +327,7 @@ Antes de considerar el SEO "completo", verifica:
 
 1. **HOY:**
    ```bash
-   npm run build
+   pnpm build
    git add .
    git commit -m "feat: optimize SEO - fix URLs, add geo tags, improve metadata"
    git push
