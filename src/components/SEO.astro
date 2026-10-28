@@ -20,13 +20,14 @@ const {
   title = t.seo.title,
   description = t.seo.description,
   image = p.ogImage,
-  canonicalUrl = Astro.url.href,
+  canonicalUrl = new URL(Astro.url.pathname, p.siteUrl).href,
   type = 'website'
 } = Astro.props;
 
-const fullImageUrl = image.startsWith('http') ? image : `${p.siteUrl}${image}`;
+const fullImageUrl = new URL(image, p.siteUrl).href;
 const alternateLocale = currentLocale === 'es' ? 'en' : 'es';
 const alternatePath = currentLocale === 'es' ? '/en/' : '/';
+const jsonLd = (value: unknown) => JSON.stringify(value).replace(/</g, '\\u003c');
 
 // Construir array de redes sociales dinámicamente
 const socialLinks: string[] = [];
@@ -84,7 +85,7 @@ const schemaWebsite = {
 <!-- Canonical & Alternate URLs -->
 <link rel="canonical" href={canonicalUrl} />
 <link rel="alternate" hreflang={currentLocale} href={canonicalUrl} />
-<link rel="alternate" hreflang={alternateLocale} href={`${p.siteUrl}${alternatePath}`} />
+<link rel="alternate" hreflang={alternateLocale} href={new URL(alternatePath, p.siteUrl).href} />
 <link rel="alternate" hreflang="x-default" href={p.siteUrl} />
 
 <!-- Open Graph / Facebook -->
@@ -126,5 +127,5 @@ const schemaWebsite = {
 <meta name="distribution" content="global" />
 
 <!-- Schema.org JSON-LD -->
-<script is:inline type="application/ld+json" set:html={JSON.stringify(schemaPersona)} />
-<script is:inline type="application/ld+json" set:html={JSON.stringify(schemaWebsite)} />
+<script is:inline type="application/ld+json" set:html={jsonLd(schemaPersona)} />
+<script is:inline type="application/ld+json" set:html={jsonLd(schemaWebsite)} />

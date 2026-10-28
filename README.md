@@ -126,13 +126,9 @@ Si quieres clonar y personalizar este portfolio:
 git clone https://github.com/AgusAcevedo/AgusAcevedo.github.io.git
 
 # Instalar dependencias
-npm install
-# o
-pnpm install
+pnpm install --frozen-lockfile
 
 # Iniciar servidor de desarrollo
-npm run dev
-# o
 pnpm dev
 ```
 
@@ -185,3 +181,29 @@ Este sitio está deployado en **GitHub Pages** con GitHub Actions.
 
 Este proyecto está bajo la licencia MIT. Siéntete libre de usar el código para tu propio portfolio, pero recuerda personalizarlo con tu información.
 
+
+
+## Validación y mantenimiento
+
+Usar Node indicado en `.node-version` y pnpm indicado en `packageManager`.
+
+```sh
+pnpm install --frozen-lockfile
+pnpm exec playwright install --with-deps chromium firefox webkit
+pnpm validate
+pnpm audit --audit-level=low
+```
+
+`pnpm dev` y `pnpm preview` escuchan en `127.0.0.1`. La validación utiliza una
+vista previa de producción aislada en el puerto 4322. Los PR pasan compilación,
+pruebas del feed, pruebas de teclado/CSP y accesibilidad automatizada antes de
+publicar; solamente `main` puede desplegar a GitHub Pages.
+
+El blog consulta Dev.to una vez al compilar y conserva un respaldo público validado
+cuando la API no responde. Para actualizar artículos, ejecutar un nuevo build.
+La navegación ES/EN utiliza enlaces nativos y no requiere un router cliente.
+
+La versión estable de TypeScript 7 todavía no es compatible con `@astrojs/check`;
+se fija TypeScript 6.0.3 hasta que el verificador estable soporte la nueva API.
+Las políticas efectivas y los ajustes pendientes del hosting están documentados
+en [SECURITY.md](SECURITY.md).

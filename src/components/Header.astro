@@ -53,13 +53,14 @@ const navItems = [
 >
   <!-- Desktop Navigation -->
   <nav
+    aria-label={isEn ? "Main navigation" : "Navegación principal"}
     class="hidden md:flex px-3 text-sm font-medium rounded-full text-gray-600 dark:text-gray-200 justify-center items-center nav-desktop"
   >
     {
       navItems.map((link) => (
         <a
-          class="nav-link relative block px-2 py-2 transition hover:text-violet-600 dark:hover:text-violet-400"
-          aria-label={link.label}
+          class="nav-link relative flex items-center min-h-11 px-2 py-2 transition hover:text-violet-600 dark:hover:text-violet-400"
+          data-section={link.label}
           href={link.url}
         >
           {link.title}
@@ -67,26 +68,28 @@ const navItems = [
       ))
     }
     <div class="flex items-center gap-1 ml-1 border-l border-gray-300 dark:border-gray-600 pl-2">
-      <ThemeToggle />
-      <LanguageToggle />
+      <ThemeToggle id="desktop-theme-menu" />
+      <LanguageToggle id="desktop-language-menu" />
     </div>
   </nav>
 
   <!-- Mobile Navigation -->
   <div class="md:hidden flex items-center gap-2">
-    <nav class="nav-mobile flex items-center gap-1 px-2 py-1 rounded-full">
-      <ThemeToggle />
-      <LanguageToggle />
+    <nav aria-label={isEn ? "Navigation controls" : "Controles de navegación"} class="nav-mobile flex items-center gap-1 px-2 py-1 rounded-full">
+      <ThemeToggle id="mobile-theme-menu" />
+      <LanguageToggle id="mobile-language-menu" />
       <button
         id="mobile-menu-btn"
-        class="flex items-center justify-center size-9 rounded-full text-gray-600 dark:text-gray-200 hover:bg-gray-200/50 dark:hover:bg-gray-700/50 transition focus:outline-none focus-visible:ring-2 focus-visible:ring-violet-500"
-        aria-label="Toggle menu"
+        type="button"
+        aria-controls="mobile-menu"
+        class="flex items-center justify-center size-11 rounded-full text-gray-600 dark:text-gray-200 hover:bg-gray-200/50 dark:hover:bg-gray-700/50 transition focus:outline-none focus-visible:ring-2 focus-visible:ring-violet-500"
+        aria-label={isEn ? "Open navigation menu" : "Abrir menú de navegación"}
         aria-expanded="false"
       >
-        <svg id="menu-icon" class="size-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <svg aria-hidden="true" id="menu-icon" class="size-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
         </svg>
-        <svg id="close-icon" class="size-5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <svg aria-hidden="true" id="close-icon" class="size-5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
         </svg>
       </button>
@@ -97,15 +100,22 @@ const navItems = [
 <!-- Mobile Menu Overlay -->
 <div
   id="mobile-menu"
-  class="fixed inset-0 z-40 hidden md:hidden"
+  role="dialog"
+  aria-modal="true"
+  aria-label={isEn ? "Navigation menu" : "Menú de navegación"}
+  hidden
+  class="fixed inset-0 z-[60] md:hidden"
 >
   <div class="absolute inset-0 bg-black/50 backdrop-blur-sm" id="mobile-menu-backdrop"></div>
-  <nav class="absolute top-16 left-4 right-4 bg-white dark:bg-gray-900 rounded-2xl shadow-xl border border-gray-200 dark:border-gray-700 p-4 space-y-1">
+  <nav aria-label={isEn ? "Main navigation" : "Navegación principal"} class="absolute top-16 left-4 right-4 max-h-[calc(100dvh-5rem)] overflow-y-auto bg-white dark:bg-gray-900 rounded-2xl shadow-xl border border-gray-200 dark:border-gray-700 p-4 space-y-1">
+    <button id="mobile-menu-close" type="button" class="ml-auto flex items-center justify-center size-11 rounded-full text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700" aria-label={isEn ? "Close navigation menu" : "Cerrar menú de navegación"}>
+      <svg class="size-5" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+    </button>
     {
       navItems.map((link) => (
         <a
           class="mobile-nav-link block px-4 py-3 rounded-xl text-gray-700 dark:text-gray-200 hover:bg-violet-50 dark:hover:bg-violet-900/20 hover:text-violet-600 dark:hover:text-violet-400 transition font-medium"
-          aria-label={link.label}
+          data-section={link.label}
           href={link.url}
         >
           {link.title}
@@ -116,76 +126,115 @@ const navItems = [
 </div>
 
 <script>
-  document.addEventListener("astro:page-load", () => {
-    const sections = document.querySelectorAll("section");
-    const navLinks = document.querySelectorAll("header .nav-link");
-    const mobileMenuBtn = document.getElementById("mobile-menu-btn");
-    const mobileMenu = document.getElementById("mobile-menu");
-    const mobileMenuBackdrop = document.getElementById("mobile-menu-backdrop");
+  let cleanup = () => {};
+  function initHeader() {
+    cleanup();
+    const controller = new AbortController();
+    const { signal } = controller;
+    const sections = document.querySelectorAll<HTMLElement>("section[id]");
+    const navLinks = document.querySelectorAll<HTMLAnchorElement>("header .nav-link, .mobile-nav-link");
+    const toggle = document.querySelector<HTMLButtonElement>("#mobile-menu-btn");
+    const menu = document.querySelector<HTMLElement>("#mobile-menu");
+    const backdrop = document.querySelector<HTMLElement>("#mobile-menu-backdrop");
+    const closeButton = document.querySelector<HTMLButtonElement>("#mobile-menu-close");
     const menuIcon = document.getElementById("menu-icon");
     const closeIcon = document.getElementById("close-icon");
-    const mobileNavLinks = document.querySelectorAll(".mobile-nav-link");
+    const desktop = window.matchMedia("(min-width: 768px)");
+    let previousOverflow = "";
+    const inertElements = new Map<HTMLElement, boolean>();
 
-    // Mobile menu toggle
-    function toggleMobileMenu() {
-      const isOpen = mobileMenu?.classList.contains("hidden");
-      mobileMenu?.classList.toggle("hidden", !isOpen);
-      menuIcon?.classList.toggle("hidden", isOpen);
-      closeIcon?.classList.toggle("hidden", !isOpen);
-      mobileMenuBtn?.setAttribute("aria-expanded", isOpen ? "true" : "false");
-      document.body.style.overflow = isOpen ? "hidden" : "";
+    function closeMenu(restoreFocus = true) {
+      if (!menu || menu.hidden) return;
+      menu.hidden = true;
+      toggle?.setAttribute("aria-expanded", "false");
+      menuIcon?.classList.remove("hidden");
+      closeIcon?.classList.add("hidden");
+      document.body.style.overflow = previousOverflow;
+      inertElements.forEach((wasInert, element) => { element.inert = wasInert; });
+      inertElements.clear();
+      if (restoreFocus) toggle?.focus();
     }
-
-    mobileMenuBtn?.addEventListener("click", toggleMobileMenu);
-    mobileMenuBackdrop?.addEventListener("click", toggleMobileMenu);
-    
-    mobileNavLinks.forEach((link) => {
-      link.addEventListener("click", () => {
-        if (!mobileMenu?.classList.contains("hidden")) {
-          toggleMobileMenu();
+    function openMenu() {
+      if (!menu || !menu.hidden || desktop.matches) return;
+      document.dispatchEvent(new CustomEvent("portfolio:menu-open", { detail: menu.id }));
+      previousOverflow = document.body.style.overflow;
+      menu.hidden = false;
+      toggle?.setAttribute("aria-expanded", "true");
+      menuIcon?.classList.add("hidden");
+      closeIcon?.classList.remove("hidden");
+      document.body.style.overflow = "hidden";
+      Array.from(document.body.children).forEach((element) => {
+        if (element instanceof HTMLElement && element !== menu && !element.contains(menu)) {
+          inertElements.set(element, element.inert);
+          element.inert = true;
         }
       });
-    });
-
-    // Active section highlighting
-    const callback = (entries: any[]) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          navLinks.forEach((item) => {
-            if (item.getAttribute("aria-label") == entry.target.id) {
-              item.classList.add("text-violet-600", "dark:text-violet-400");
-            } else {
-              item.classList.remove("text-violet-600", "dark:text-violet-400");
-            }
-          });
+      closeButton?.focus();
+    }
+    toggle?.addEventListener("click", openMenu, { signal });
+    backdrop?.addEventListener("click", () => closeMenu(), { signal });
+    closeButton?.addEventListener("click", () => closeMenu(), { signal });
+    menu?.addEventListener("keydown", (event) => {
+      if (event.key === "Escape") {
+        event.preventDefault();
+        closeMenu();
+      } else if (event.key === "Tab") {
+        const items = Array.from(menu.querySelectorAll<HTMLElement>("a[href], button:not([disabled])"));
+        const first = items[0];
+        const last = items.at(-1);
+        if (event.shiftKey && document.activeElement === first) {
+          event.preventDefault();
+          last?.focus();
+        } else if (!event.shiftKey && document.activeElement === last) {
+          event.preventDefault();
+          first?.focus();
         }
-      });
-    };
-
-    const observer = new IntersectionObserver(callback, {
-      root: null,
-      rootMargin: "0px",
-      threshold: 0.3,
-    });
-
-    sections.forEach((section) => {
-      observer.observe(section);
-    });
-
-    // Cleanup function
-    document.onvisibilitychange = () => {
-      if (document.visibilityState === "hidden") {
-        observer.disconnect();
-      } else {
-        sections.forEach((section) => {
-          observer.observe(section);
-        });
       }
+    }, { signal });
+    menu?.querySelectorAll<HTMLAnchorElement>(".mobile-nav-link").forEach((link) => {
+      link.addEventListener("click", () => {
+        closeMenu(false);
+        const target = document.getElementById(link.dataset.section || "");
+        if (target) {
+          target.setAttribute("tabindex", "-1");
+          target.focus({ preventScroll: true });
+        }
+      }, { signal });
+    });
+    desktop.addEventListener("change", () => {
+      if (desktop.matches) closeMenu(false);
+    }, { signal });
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        navLinks.forEach((link) => {
+          const active = link.dataset.section === entry.target.id;
+          link.classList.toggle("text-violet-600", active);
+          link.classList.toggle("dark:text-violet-400", active);
+          if (active) link.setAttribute("aria-current", "location");
+          else link.removeAttribute("aria-current");
+        });
+      });
+    }, { rootMargin: "-10% 0px -30% 0px", threshold: 0 });
+    sections.forEach((section) => observer.observe(section));
+    document.addEventListener("visibilitychange", () => {
+      if (document.hidden) observer.disconnect();
+      else sections.forEach((section) => observer.observe(section));
+    }, { signal });
+    cleanup = () => {
+      closeMenu(false);
+      controller.abort();
+      observer.disconnect();
     };
-  });
+  }
+  initHeader();
+  document.addEventListener("astro:page-load", initHeader);
+  document.addEventListener("astro:before-swap", () => cleanup());
 </script>
 
 <style>
+  #mobile-menu[hidden] { display: none; }
   .nav-desktop, .nav-mobile {
     animation: nav-shadow 1s linear both;
     animation-timeline: scroll();

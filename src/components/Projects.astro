@@ -12,6 +12,7 @@ import Michigan from "./icons/Michigan.astro";
 
 const currentLocale = (Astro.currentLocale || 'es') as Language;
 const t = useTranslations(currentLocale);
+const isEn = currentLocale === "en";
 
 const TAGS = {
   GOOGLE: {
@@ -57,7 +58,6 @@ const PROJECTS = [
     date: "1 Jan 2023",
     link: "https://www.cloudskillsboost.google/public_profiles/9b7d33b5-f2b7-4736-b5df-e4537f1f7f03/badges/3091080",
     image: "/webp_certs/GoogleCloudEssentials.webp",
-    cl: "no-oculto",
     categories: ["Cloud"],
   },
   {
@@ -66,7 +66,6 @@ const PROJECTS = [
     date: "3 Jan 2023",
     link: "https://www.cloudskillsboost.google/public_profiles/9b7d33b5-f2b7-4736-b5df-e4537f1f7f03/badges/3098272",
     image: "/webp_certs/CreateandManageCloudResources.webp",
-    cl: "no-oculto",
     categories: ["Cloud"],
   },
   {
@@ -75,7 +74,6 @@ const PROJECTS = [
     date: "4 Jan 2023",
     link: "https://www.cloudskillsboost.google/public_profiles/9b7d33b5-f2b7-4736-b5df-e4537f1f7f03/badges/3102799",
     image: "/webp_certs/NetworkPerformanceOptimization.webp",
-    cl: "no-oculto",
     categories: ["Redes", "Cloud"],
   },
   {
@@ -84,7 +82,6 @@ const PROJECTS = [
     date: "5 Jan 2023",
     link: "https://www.cloudskillsboost.google/public_profiles/9b7d33b5-f2b7-4736-b5df-e4537f1f7f03/badges/3103636",
     image: "/webp_certs/SetupAndConfigureACloudEnviroment.webp",
-    cl: "no-oculto",
     categories: ["Cloud"],
   },
   {
@@ -93,7 +90,6 @@ const PROJECTS = [
     date: "5 Jan 2023",
     link: "https://www.cloudskillsboost.google/public_profiles/9b7d33b5-f2b7-4736-b5df-e4537f1f7f03/badges/3103704",
     image: "/webp_certs/PerformInfraestructureTasks.webp",
-    cl: "no-oculto",
     categories: ["Cloud"],
     featured: true,
   },
@@ -103,7 +99,6 @@ const PROJECTS = [
     date: "7 Jan 2023",
     link: "https://www.cloudskillsboost.google/public_profiles/9b7d33b5-f2b7-4736-b5df-e4537f1f7f03/badges/3111946",
     image: "/webp_certs/BuildAndSecureNetworks.webp",
-    cl: "no-oculto",
     categories: ["Redes", "Cloud"],
   },
   {
@@ -112,7 +107,6 @@ const PROJECTS = [
     date: "7 Jan 2023",
     link: "https://www.cloudskillsboost.google/public_profiles/9b7d33b5-f2b7-4736-b5df-e4537f1f7f03/badges/3112487",
     image: "/webp_certs/ServerlessFirebaseDevelopment.webp",
-    cl: "hidden",
     categories: ["Cloud", "Backend"],
   },
   {
@@ -121,7 +115,6 @@ const PROJECTS = [
     date: "7 Jan 2023",
     link: "https://www.cloudskillsboost.google/public_profiles/9b7d33b5-f2b7-4736-b5df-e4537f1f7f03/badges/3112739",
     image: "/webp_certs/ServerlessCloudRun.webp",
-    cl: "hidden",
     categories: ["Cloud", "Backend"],
   },
   {
@@ -130,7 +123,6 @@ const PROJECTS = [
     date: "7 Jan 2023",
     link: "https://www.cloudskillsboost.google/public_profiles/9b7d33b5-f2b7-4736-b5df-e4537f1f7f03/badges/3112920",
     image: "/webp_certs/BaselineInfraestructure.webp",
-    cl: "hidden",
     categories: ["Cloud"],
   },
   {
@@ -139,7 +131,6 @@ const PROJECTS = [
     date: "7 Jan 2023",
     link: "https://www.cloudskillsboost.google/public_profiles/9b7d33b5-f2b7-4736-b5df-e4537f1f7f03/badges/3112922",
     image: "/webp_certs/CloudEng.webp",
-    cl: "no-oculto",
     featured: true,
     categories: ["Cloud"],
   },
@@ -149,7 +140,6 @@ const PROJECTS = [
     date: "7 Jan 2023",
     link: "https://www.cloudskillsboost.google/public_profiles/9b7d33b5-f2b7-4736-b5df-e4537f1f7f03/badges/3112928",
     image: "/webp_certs/BuildAppsAndWebsites.webp",
-    cl: "hidden",
     categories: ["Cloud", "Backend"],
   },
   {
@@ -158,7 +148,6 @@ const PROJECTS = [
     date: "16 Feb 2024",
     link: "/webp_certs/FullStack.webp",
     image: "/webp_certs/FullStack.webp",
-    cl: "no-oculto",
     featured: true,
     categories: ["Otros", "Backend"],
   },
@@ -168,7 +157,6 @@ const PROJECTS = [
     date: "17 Nov 2023",
     link: "/webp_certs/EthicalHacking.webp",
     image: "/webp_certs/EthicalHacking.webp",
-    cl: "no-oculto",
     featured: true,
     categories: ["Seguridad"],
   },
@@ -178,7 +166,6 @@ const PROJECTS = [
     date: "14 Mar 2023",
     link: "/webp_certs/DiplomaturaDjango.webp",
     image: "/webp_certs/DiplomaturaDjango.webp",
-    cl: "no-oculto",
     categories: ["Backend", "Python"],
   },
   {
@@ -187,7 +174,6 @@ const PROJECTS = [
     date: "14 Mar 2023",
     link: "/webp_certs/DjangoAvanzado.webp",
     image: "/webp_certs/DjangoAvanzado.webp",
-    cl: "hidden",
     categories: ["Backend", "Python"],
   },
   {
@@ -196,7 +182,6 @@ const PROJECTS = [
     date: "28 Dec 2022",
     link: "/webp_certs/DjangoIntermedio.webp",
     image: "/webp_certs/DjangoIntermedio.webp",
-    cl: "hidden",
     categories: ["Backend", "Python"],
   },
   {
@@ -205,7 +190,6 @@ const PROJECTS = [
     date: "11 Oct 2022",
     link: "/webp_certs/DjangoInicial.webp",
     image: "/webp_certs/DjangoInicial.webp",
-    cl: "hidden",
     categories: ["Backend", "Python"],
   },
   {
@@ -214,7 +198,6 @@ const PROJECTS = [
     date: "15 Apr 2022",
     link: "/webp_certs/DiploPython.webp",
     image: "/webp_certs/DiploPython.webp",
-    cl: "no-oculto",
     featured: true,
     categories: ["Python", "Backend"],
   },
@@ -224,7 +207,6 @@ const PROJECTS = [
     date: "15 Apr 2022",
     link: "/webp_certs/PythonAvanzado.webp",
     image: "/webp_certs/PythonAvanzado.webp",
-    cl: "hidden",
     categories: ["Python"],
   },
   {
@@ -233,7 +215,6 @@ const PROJECTS = [
     date: "16 Feb 2022",
     link: "/webp_certs/PythonIntermedio.webp",
     image: "/webp_certs/PythonIntermedio.webp",
-    cl: "hidden",
     categories: ["Python"],
   },
   {
@@ -242,7 +223,6 @@ const PROJECTS = [
     date: "15 Dec 2021",
     link: "/webp_certs/PythonInicial.webp",
     image: "/webp_certs/PythonInicial.webp",
-    cl: "hidden",
     categories: ["Python"],
   },
   {
@@ -251,7 +231,6 @@ const PROJECTS = [
     date: "4 Jun 2022",
     link: "/webp_certs/RedesAvanzado.webp",
     image: "/webp_certs/RedesAvanzado.webp",
-    cl: "no-oculto",
     featured: true,
     categories: ["Redes"],
   },
@@ -261,7 +240,6 @@ const PROJECTS = [
     date: "19 Oct 2021",
     link: "/webp_certs/RedesInicial.webp",
     image: "/webp_certs/RedesInicial.webp",
-    cl: "hidden",
     categories: ["Redes"],
   },
   {
@@ -270,7 +248,6 @@ const PROJECTS = [
     date: "29 Jan 2024",
     link: "https://coursera.org/verify/54VYBRBEZNU5",
     image: "/webp_certs/GoogleCoursera1.webp",
-    cl: "no-oculto",
     featured: true,
     categories: ["Cloud", "Python"],
   },
@@ -280,7 +257,6 @@ const PROJECTS = [
     date: "7 Mar 2021",
     link: "https://coursera.org/verify/JABBD5CQNSGA",
     image: "/webp_certs/MichiganCoursera.webp",
-    cl: "hidden",
     categories: ["Python"],
   },
   {
@@ -289,7 +265,6 @@ const PROJECTS = [
     date: "16 Sep 2023",
     link: "https://www.credly.com/badges/045e8502-1b39-4ca2-9303-11c74f827053/public_url",
     image: "/webp_certs/image.webp",
-    cl: "no-oculto",
     featured: true,
     categories: ["Cloud"],
   },
@@ -299,7 +274,6 @@ const PROJECTS = [
     date: "13 Apr 2023",
     link: "https://academy.hackthebox.com/achievement/badge/6db79208-da0a-11ed-acfc-bea50ffe6cb4",
     image: "/webp_certs/academician.webp",
-    cl: "no-oculto",
     categories: ["Seguridad"],
   },
   {
@@ -308,16 +282,9 @@ const PROJECTS = [
     date: "17 Nov 2021",
     link: "https://cutt.ly/mY31JRM",
     image: "/webp_certs/coderhouse.webp",
-    cl: "hidden",
     categories: ["Otros"],
   },
 ];
-PROJECTS.sort(
-  (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()
-);
-PROJECTS.sort(
-  (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
-);
 const sortedProjects = PROJECTS.slice().sort(
   (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
 );
@@ -342,7 +309,7 @@ const FILTERS = [
     <select
       id="filter-select"
       class="w-full px-4 py-3 rounded-xl text-sm text-gray-800 dark:text-white bg-white dark:bg-gray-900/40 border border-gray-300 dark:border-violet-900/30 focus:border-violet-500/60 focus:outline-none focus:ring-2 focus:ring-violet-500/20 transition"
-      aria-label="{t.projects.filterByCategory}"
+      aria-label={t.projects.filterByCategory}
     >
       {FILTERS.map((f) => (
         <option value={f.id} selected={f.id === "featured"}>{f.label}</option>
@@ -357,7 +324,7 @@ const FILTERS = [
         class="filter-btn inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm text-gray-700 dark:text-gray-300 border border-transparent hover:text-gray-900 dark:hover:text-white hover:border-violet-500/60 hover:bg-violet-500/5 transition focus:outline-none focus-visible:ring-2 focus-visible:ring-violet-500 focus-visible:ring-offset-2"
         data-filter={f.id}
         aria-label={`${t.projects.filterBy} ${f.label}`}
-        aria-pressed="false"
+        aria-pressed={f.id === "featured"}
       >
         {f.label}
       </button>
@@ -366,19 +333,19 @@ const FILTERS = [
 </div>
 
 <!-- Modal detalle certificado -->
-<div id="cert-modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm hidden items-center justify-center z-50 p-4" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+<dialog id="cert-modal" class="m-auto w-[calc(100%_-_2rem)] max-w-3xl max-h-[90dvh] overflow-y-auto rounded-2xl border-0 bg-transparent p-0 shadow-2xl" aria-labelledby="modal-title">
   <div class="max-w-3xl w-full bg-white dark:bg-gray-950/95 border border-gray-200 dark:border-violet-700/40 rounded-2xl shadow-2xl overflow-hidden">
     <div class="flex justify-between items-center px-6 py-4 border-b border-gray-200 dark:border-white/10">
       <div>
-        <h3 id="modal-title" class="text-xl font-semibold text-gray-900 dark:text-white"></h3>
+        <h3 id="modal-title" tabindex="-1" data-dialog-initial-focus class="text-xl font-semibold text-gray-900 dark:text-white"></h3>
         <p id="modal-date" class="text-sm text-gray-600 dark:text-gray-400 mt-1"></p>
       </div>
-      <button id="modal-close" class="text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white text-3xl leading-none focus:outline-none focus-visible:ring-2 focus-visible:ring-violet-500 rounded-lg p-1" aria-label="Close modal">×</button>
+      <button id="modal-close" class="text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white text-3xl leading-none focus:outline-none focus-visible:ring-2 focus-visible:ring-violet-500 rounded-lg p-1" aria-label={t.myProjects.modal.close} data-dialog-close type="button">×</button>
     </div>
     <div class="p-6 space-y-6">
       <!-- Imagen grande -->
       <div class="bg-gray-100 dark:bg-black/30 rounded-xl p-4">
-        <img id="modal-image" alt="cert" class="w-full h-auto max-h-[60vh] object-contain" loading="lazy" />
+        <img id="modal-image" alt="" class="w-full h-auto max-h-[60vh] object-contain" loading="lazy" />
       </div>
       
       <!-- Separador -->
@@ -387,25 +354,25 @@ const FILTERS = [
       <!-- Pills y botón -->
       <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
         <div id="modal-issuers-list" class="flex flex-wrap gap-2 justify-center sm:justify-start"></div>
-        <a id="modal-link" href="#" target="_blank" rel="noopener" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-violet-600 text-white hover:bg-violet-500 transition font-medium whitespace-nowrap">
+        <a id="modal-link" href="#" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-violet-600 text-white hover:bg-violet-500 transition font-medium whitespace-nowrap">
           {t.projects.viewCertificate} ↗
         </a>
       </div>
     </div>
   </div>
-</div>
+</dialog>
 
-<div id="cert-grid-wrapper" class="hidden relative transition-[height] duration-300 ease-out">
+<div id="cert-grid-wrapper" class="relative">
   <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-x-6 gap-y-4" id="cert-grid">
   {
-    sortedProjects.map(({ image, title, date, link, issuer, cl, featured, categories }) => (
+    sortedProjects.map(({ image, title, date, link, issuer, featured, categories }) => (
       <article
-        class={`magia group ${cl}`}
+        class={`magia group ${featured ? "" : "hidden"}`}
         data-categories={categories?.join(',') || ""}
         data-featured={featured ? "true" : "false"}
       >
         <div class="relative flex flex-col items-center w-full transition duration-500 ease-in-out transform overflow-clip rounded-xl sm:rounded-xl md:group-hover:-translate-y-1 border border-violet-100/80 hover:border-violet-400/70 dark:border-violet-800/40 dark:hover:border-violet-500/70 bg-white hover:bg-violet-50 dark:bg-gray-900/40 dark:hover:bg-violet-500/5 h-[240px] sm:h-[280px]">
-          <button type="button" class="flex flex-col h-full text-left modal-open" data-link={link} data-title={title} data-date={date} data-image={image} data-issuer={issuer.map((t)=>t.name).join(', ')}>
+          <button type="button" class="flex flex-col h-full text-left modal-open" data-link={link} data-title={title} data-date={date} data-image={image} data-issuer={issuer.map((t)=>t.name).join(', ')} aria-haspopup="dialog" aria-controls="cert-modal">
             <div class="hidden modal-issuers-data">
               {issuer.map((tag) => (
                 <span class={`inline-flex items-center gap-2 rounded-full text-xs py-1 px-3 ${tag.class}`}>
@@ -447,7 +414,7 @@ const FILTERS = [
                           <span
                             title={rest.map((t) => t.name).join(', ')}
                             class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-violet-100 dark:bg-violet-600/20 text-violet-700 dark:text-violet-300 border border-violet-300 dark:border-violet-600/40 text-xs font-semibold"
-                            aria-label={`+${rest.length} emisores`}
+                            aria-label={isEn ? `+${rest.length} issuers` : `+${rest.length} emisores`}
                           >
                             +{rest.length}
                           </span>
@@ -480,370 +447,206 @@ const FILTERS = [
   </div>
 </div>
 
-<!-- Skeleton Loader - shown while JS initializes -->
-<div id="carousel-skeleton" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-x-6 gap-y-4 animate-pulse" aria-hidden="true" aria-label="Loading certifications...">
-  {[1,2,3,4,5,6,7,8].map(() => (
-    <div class="rounded-xl border border-violet-100/80 dark:border-violet-800/40 bg-white dark:bg-gray-900/40 h-[240px] sm:h-[280px]">
-      <div class="bg-gray-200 dark:bg-gray-700 h-24 sm:h-32 md:h-36 rounded-t-xl"></div>
-      <div class="p-4 space-y-3">
-        <div class="bg-gray-200 dark:bg-gray-700 h-4 rounded w-3/4 mx-auto"></div>
-        <div class="bg-gray-200 dark:bg-gray-700 h-3 rounded w-1/2 mx-auto"></div>
-        <div class="bg-gray-200 dark:bg-gray-700 h-6 rounded-full w-24 mx-auto"></div>
-      </div>
-    </div>
-  ))}
-</div>
-
 <!-- Carousel Container -->
-<div class="relative" role="region" aria-label="Certifications carousel">
+<div id="cert-carousel-region" class="hidden relative" role="region" aria-label={t.projects.title} aria-roledescription={isEn ? "carousel" : "carrusel"} data-locale={currentLocale}>
   <!-- Carousel Wrapper con scroll snap y padding para sombras -->
   <div id="carousel-container" class="overflow-x-hidden overflow-y-visible scroll-smooth py-4 -my-4 px-4 sm:px-0">
-    <div id="carousel-track" class="flex transition-transform duration-500 ease-out" role="list" aria-live="polite">
+    <div id="carousel-track" class="flex transition-transform duration-500 ease-out motion-reduce:transition-none">
       <!-- Las páginas se crearán dinámicamente aquí -->
     </div>
   </div>
 </div>
 
 <!-- Pagination controls -->
-<nav class="flex items-center justify-center gap-4 mt-6" id="pagination-controls" aria-label="Carousel pagination">
+<nav class="flex items-center justify-center gap-4 mt-6" id="pagination-controls" aria-label={isEn ? "Certification pagination" : "Paginación de certificados"}>
   <!-- Móvil: botón prev, dots, botón next -->
-  <button id="prev-page-mobile" class="sm:hidden px-4 py-2 rounded-lg font-semibold border transition disabled:opacity-30 disabled:cursor-not-allowed bg-violet-100 text-violet-700 border-violet-200 hover:bg-violet-200 dark:bg-violet-600/20 dark:text-white dark:border-violet-600/40 dark:hover:bg-violet-600/30 focus:outline-none focus-visible:ring-2 focus-visible:ring-violet-500" aria-label="Previous page">&lt;</button>
-  <div id="page-dots-mobile" class="flex sm:hidden gap-2" role="tablist" aria-label="Page indicators"></div>
-  <button id="next-page-mobile" class="sm:hidden px-4 py-2 rounded-lg font-semibold border transition disabled:opacity-30 disabled:cursor-not-allowed bg-violet-100 text-violet-700 border-violet-200 hover:bg-violet-200 dark:bg-violet-600/20 dark:text-white dark:border-violet-600/40 dark:hover:bg-violet-600/30 focus:outline-none focus-visible:ring-2 focus-visible:ring-violet-500" aria-label="Next page">&gt;</button>
+  <button id="prev-page-mobile" class="sm:hidden px-4 py-2 rounded-lg font-semibold border transition disabled:opacity-30 disabled:cursor-not-allowed bg-violet-100 text-violet-700 border-violet-200 hover:bg-violet-200 dark:bg-violet-600/20 dark:text-white dark:border-violet-600/40 dark:hover:bg-violet-600/30 focus:outline-none focus-visible:ring-2 focus-visible:ring-violet-500" aria-label={isEn ? "Previous page" : "Página anterior"} aria-controls="carousel-track">&lt;</button>
+  <div id="page-dots-mobile" class="flex sm:hidden gap-2" role="group" aria-label={isEn ? "Choose page" : "Elegir página"}></div>
+  <button id="next-page-mobile" class="sm:hidden px-4 py-2 rounded-lg font-semibold border transition disabled:opacity-30 disabled:cursor-not-allowed bg-violet-100 text-violet-700 border-violet-200 hover:bg-violet-200 dark:bg-violet-600/20 dark:text-white dark:border-violet-600/40 dark:hover:bg-violet-600/30 focus:outline-none focus-visible:ring-2 focus-visible:ring-violet-500" aria-label={isEn ? "Next page" : "Página siguiente"} aria-controls="carousel-track">&gt;</button>
   
   <!-- Desktop: botón prev, dots, botón next -->
-  <button id="prev-page" class="hidden sm:block px-3 py-2 rounded-lg font-semibold border transition disabled:opacity-30 disabled:cursor-not-allowed bg-violet-100 text-violet-700 border-violet-200 hover:bg-violet-200 dark:bg-violet-600/20 dark:text-white dark:border-violet-600/40 dark:hover:bg-violet-600/30 focus:outline-none focus-visible:ring-2 focus-visible:ring-violet-500" aria-label="Previous page">&lt;</button>
-  <div id="page-dots" class="hidden sm:flex gap-2" role="tablist" aria-label="Page indicators"></div>
-  <button id="next-page" class="hidden sm:block px-3 py-2 rounded-lg font-semibold border transition disabled:opacity-30 disabled:cursor-not-allowed bg-violet-100 text-violet-700 border-violet-200 hover:bg-violet-200 dark:bg-violet-600/20 dark:text-white dark:border-violet-600/40 dark:hover:bg-violet-600/30 focus:outline-none focus-visible:ring-2 focus-visible:ring-violet-500" aria-label="Next page">&gt;</button>
+  <button id="prev-page" class="hidden sm:block px-3 py-2 rounded-lg font-semibold border transition disabled:opacity-30 disabled:cursor-not-allowed bg-violet-100 text-violet-700 border-violet-200 hover:bg-violet-200 dark:bg-violet-600/20 dark:text-white dark:border-violet-600/40 dark:hover:bg-violet-600/30 focus:outline-none focus-visible:ring-2 focus-visible:ring-violet-500" aria-label={isEn ? "Previous page" : "Página anterior"} aria-controls="carousel-track">&lt;</button>
+  <div id="page-dots" class="hidden sm:flex gap-2" role="group" aria-label={isEn ? "Choose page" : "Elegir página"}></div>
+  <button id="next-page" class="hidden sm:block px-3 py-2 rounded-lg font-semibold border transition disabled:opacity-30 disabled:cursor-not-allowed bg-violet-100 text-violet-700 border-violet-200 hover:bg-violet-200 dark:bg-violet-600/20 dark:text-white dark:border-violet-600/40 dark:hover:bg-violet-600/30 focus:outline-none focus-visible:ring-2 focus-visible:ring-violet-500" aria-label={isEn ? "Next page" : "Página siguiente"} aria-controls="carousel-track">&gt;</button>
 </nav>
+<p id="cert-status" class="sr-only" aria-live="polite" aria-atomic="true"></p>
 
 <script>
-  const articles = document.querySelectorAll<HTMLElement>(".magia");
-  
-  const filterButtons = document.querySelectorAll<HTMLElement>(".filter-btn");
-  const modal = document.getElementById("cert-modal");
-  const modalTitle = document.getElementById("modal-title");
-  const modalDate = document.getElementById("modal-date");
-  const modalImage = document.getElementById("modal-image") as HTMLImageElement | null;
-  const modalLink = document.getElementById("modal-link") as HTMLAnchorElement | null;
-  const modalClose = document.getElementById("modal-close");
-  const modalIssuersList = document.getElementById("modal-issuers-list");
-  const modalOpeners = document.querySelectorAll<HTMLElement>(".modal-open");
-  const prevPageBtn = document.getElementById("prev-page") as HTMLButtonElement | null;
-  const nextPageBtn = document.getElementById("next-page") as HTMLButtonElement | null;
-  const prevPageBtnMobile = document.getElementById("prev-page-mobile") as HTMLButtonElement | null;
-  const nextPageBtnMobile = document.getElementById("next-page-mobile") as HTMLButtonElement | null;
-  const pageDots = document.getElementById("page-dots");
-  const pageDotsMobile = document.getElementById("page-dots-mobile");
-  const carouselTrack = document.getElementById("carousel-track")!;
-  const carouselContainer = document.getElementById("carousel-container")!;
-  
-  let currentPage = 0;
-  let itemsPerPage = 8;
-  let filteredArticles: HTMLElement[] = [];
-  let touchStartX = 0;
-  let touchStartY = 0;
-  let touchEndX = 0;
-  let touchEndY = 0;
+  import { bindDialog } from "../scripts/dialog";
 
-  // Update items per page based on screen size
-  function updateItemsPerPage() {
-    const width = window.innerWidth;
-    if (width < 640) {
-      itemsPerPage = 4;
-    } else if (width < 1024) {
-      itemsPerPage = 6;
-    } else if (width < 1280) {
-      itemsPerPage = 6;
-    } else {
-      itemsPerPage = 8;
-    }
-  }
-
-  function createCarouselPages() {
-    updateItemsPerPage();
-    const totalPages = Math.ceil(filteredArticles.length / itemsPerPage);
-    
-    carouselTrack.innerHTML = '';
-    
-    // Crear cada página del carrusel
-    for (let page = 0; page < totalPages; page++) {
-      const pageDiv = document.createElement('div');
-      pageDiv.className = 'min-w-full px-1';
-      
-      const gridDiv = document.createElement('div');
-      gridDiv.className = 'grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 py-2';
-      
-      const start = page * itemsPerPage;
-      const end = start + itemsPerPage;
-      const pageArticles = filteredArticles.slice(start, end);
-      
-      pageArticles.forEach(article => {
-        // Clonar profundamente el artículo
-        const clonedArticle = article.cloneNode(true) as HTMLElement;
-        // Asegurar que el artículo sea visible y no tenga clases de oculto
-        clonedArticle.classList.remove('hidden');
-        clonedArticle.style.display = '';
-        gridDiv.appendChild(clonedArticle);
-      });
-      
-      pageDiv.appendChild(gridDiv);
-      carouselTrack.appendChild(pageDiv);
-    }
-    
-    // Re-attach modal event listeners to cloned elements
-    attachModalListeners();
-    
-    // Initialize dots (create them once)
-    initializeDots(totalPages);
-    
-    // Update pagination controls
-    updatePaginationControls(totalPages);
-    
-    // Reset to first page
-    goToPage(0);
-  }
-  
-  function attachModalListeners() {
-    const clonedOpeners = carouselTrack.querySelectorAll<HTMLElement>(".modal-open");
-    clonedOpeners.forEach((btn) => {
-      btn.addEventListener("click", () => {
-        openModal({
-          title: btn.dataset.title || '',
-          date: btn.dataset.date || '',
-          image: btn.dataset.image || '',
-          link: btn.dataset.link || '',
-        });
-      });
-    });
-  }
-
-  function goToPage(pageIndex: number) {
-    const totalPages = Math.ceil(filteredArticles.length / itemsPerPage);
-    currentPage = Math.max(0, Math.min(pageIndex, totalPages - 1));
-    
-    const offset = -currentPage * 100;
-    carouselTrack.style.transform = `translateX(${offset}%)`;
-    
-    updatePaginationControls(totalPages);
-  }
-
-  function initializeDots(totalPages: number) {
-    // Create dots only once
-    [pageDots, pageDotsMobile].forEach(dotsContainer => {
-      if (!dotsContainer) return;
-      dotsContainer.innerHTML = "";
-      for (let i = 0; i < totalPages; i++) {
-        const dot = document.createElement("button");
-        dot.className = "size-2 rounded-full bg-gray-300 dark:bg-gray-600 transition-all duration-300";
-        dot.setAttribute('aria-label', `Go to page ${i + 1}`);
-        dot.addEventListener("click", () => goToPage(i));
-        dotsContainer.appendChild(dot);
-      }
-    });
-  }
-
-  function updatePaginationControls(totalPages: number) {
-    // Update buttons state
-    if (prevPageBtn) prevPageBtn.disabled = currentPage === 0;
-    if (nextPageBtn) nextPageBtn.disabled = currentPage === totalPages - 1;
-    if (prevPageBtnMobile) prevPageBtnMobile.disabled = currentPage === 0;
-    if (nextPageBtnMobile) nextPageBtnMobile.disabled = currentPage === totalPages - 1;
-    
-    // Update dots - only toggle classes, don't recreate
-    [pageDots, pageDotsMobile].forEach(dotsContainer => {
-      if (!dotsContainer) return;
-      const dots = dotsContainer.querySelectorAll('button');
-      dots.forEach((dot, index) => {
-        if (index === currentPage) {
-          dot.classList.add('bg-violet-600', 'dark:bg-violet-400', 'w-6');
-          dot.classList.remove('bg-gray-300', 'dark:bg-gray-600');
-        } else {
-          dot.classList.remove('bg-violet-600', 'dark:bg-violet-400', 'w-6');
-          dot.classList.add('bg-gray-300', 'dark:bg-gray-600');
-        }
-      });
-    });
-    
-    // Show/hide pagination controls
-    const paginationControls = document.getElementById("pagination-controls");
-    if (paginationControls) {
-      paginationControls.style.display = totalPages <= 1 ? "none" : "flex";
-    }
-  }
-
-  // Función compartida para aplicar filtro
-  function applyFilter(filterId: string) {
-    
-    // Update button styles (desktop)
-    filterButtons.forEach((b) => b.classList.remove("border-violet-400", "border-violet-500", "text-violet-700", "dark:text-white", "bg-violet-500/10", "shadow-[0_0_0_1px_rgba(124,58,237,0.4)]"));
-    const activeBtn = Array.from(filterButtons).find(b => b.dataset.filter === filterId);
-    if (activeBtn) {
-      activeBtn.classList.add("border-violet-500", "text-violet-700", "dark:text-white", "bg-violet-500/10", "shadow-[0_0_0_1px_rgba(124,58,237,0.4)]");
-    }
-    
-    // Update select value (mobile)
+  function initCertifications() {
+    const articles = Array.from(document.querySelectorAll<HTMLElement>(".magia"));
+    const filterButtons = document.querySelectorAll<HTMLButtonElement>(".filter-btn");
     const filterSelect = document.getElementById("filter-select") as HTMLSelectElement | null;
-    if (filterSelect) {
-      filterSelect.value = filterId;
-    }
-    
-    // Apply filter
-    filteredArticles = Array.from(articles).filter((article) => {
-      const cats = article.dataset.categories || "";
-      const isFeatured = article.dataset.featured === "true";
-      if (filterId === "featured") return isFeatured;
-      if (filterId === "all") return true;
-      return cats.includes(filterId);
-    });
-    
-    createCarouselPages();
-  }
+    const modal = document.getElementById("cert-modal") as HTMLDialogElement | null;
+    const modalTitle = document.getElementById("modal-title");
+    const modalDate = document.getElementById("modal-date");
+    const modalImage = document.getElementById("modal-image") as HTMLImageElement | null;
+    const modalLink = document.getElementById("modal-link") as HTMLAnchorElement | null;
+    const modalIssuers = document.getElementById("modal-issuers-list");
+    const track = document.getElementById("carousel-track");
+    const container = document.getElementById("carousel-container");
+    const region = document.getElementById("cert-carousel-region");
+    const sourceGrid = document.getElementById("cert-grid-wrapper");
+    const status = document.getElementById("cert-status");
+    const controls = document.getElementById("pagination-controls");
+    if (!modal || !track || !container || !region) return;
+    const isEn = region.dataset.locale === "en";
+    const dialog = bindDialog(modal);
+    const previousButtons = ["prev-page", "prev-page-mobile"].map(id => document.getElementById(id) as HTMLButtonElement | null);
+    const nextButtons = ["next-page", "next-page-mobile"].map(id => document.getElementById(id) as HTMLButtonElement | null);
+    const dotContainers = [document.getElementById("page-dots"), document.getElementById("page-dots-mobile")];
+    let currentPage = 0;
+    let activeArticle: HTMLElement | null = null;
+    modal.addEventListener("close", () => { activeArticle = null; });
+    const getItemsPerPage = () => window.innerWidth < 640 ? 4 : window.innerWidth < 1280 ? 6 : 8;
+    let itemsPerPage = getItemsPerPage();
+    let filteredArticles: HTMLElement[] = [];
+    let pages: HTMLElement[] = [];
+    const getTotalPages = () => Math.ceil(filteredArticles.length / itemsPerPage);
 
-  // Filtros por botones (desktop)
-  filterButtons.forEach((btn) => {
-    btn.addEventListener("click", () => {
-      applyFilter(btn.dataset.filter || '');
-    });
-  });
-
-  // Filtro por select (móvil)
-  const filterSelect = document.getElementById("filter-select") as HTMLSelectElement | null;
-  if (filterSelect) {
-    filterSelect.addEventListener("change", (e) => {
-      applyFilter((e.target as HTMLSelectElement).value);
-    });
-  }
-  
-  // Navegación
-  if (prevPageBtn) {
-    prevPageBtn.addEventListener("click", () => goToPage(currentPage - 1));
-  }
-  if (nextPageBtn) {
-    nextPageBtn.addEventListener("click", () => goToPage(currentPage + 1));
-  }
-  if (prevPageBtnMobile) {
-    prevPageBtnMobile.addEventListener("click", () => goToPage(currentPage - 1));
-  }
-  if (nextPageBtnMobile) {
-    nextPageBtnMobile.addEventListener("click", () => goToPage(currentPage + 1));
-  }
-  
-  // Swipe functionality - only handle horizontal swipes
-  carouselContainer.addEventListener("touchstart", (e) => {
-    touchStartX = e.changedTouches[0].clientX;
-    touchStartY = e.changedTouches[0].clientY;
-  }, { passive: true });
-  
-  carouselContainer.addEventListener("touchend", (e) => {
-    touchEndX = e.changedTouches[0].clientX;
-    touchEndY = e.changedTouches[0].clientY;
-    
-    const diffX = touchStartX - touchEndX;
-    const diffY = touchStartY - touchEndY;
-    
-    // Only trigger carousel navigation if it's a horizontal swipe
-    // (horizontal movement is greater than vertical movement)
-    if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > 50) {
-      if (diffX > 0) {
-        goToPage(currentPage + 1);
-      } else {
-        goToPage(currentPage - 1);
-      }
-    }
-    // If vertical movement is greater, let the browser handle it as scroll
-  }, { passive: true });
-
-  // Modal
-  interface ModalData {
-    title: string;
-    date: string;
-    image: string;
-    link: string;
-    issuer?: string;
-    issuerJson?: string;
-  }
-  
-  const openModal = (data: ModalData) => {
-    if (modalTitle) modalTitle.textContent = data.title;
-    if (modalDate) modalDate.textContent = data.date;
-    if (modalIssuersList) {
-      modalIssuersList.innerHTML = "";
-      
-      // Find the button in carousel that was clicked and get its hidden issuers
-      const btn = Array.from(carouselTrack.querySelectorAll<HTMLElement>('.modal-open')).find(
-        b => b.dataset.title === data.title
-      );
-      
-      if (btn) {
-        const hiddenContainer = btn.querySelector('.modal-issuers-data');
-        if (hiddenContainer) {
-          // Clone all issuer badges from hidden container
-          const badges = hiddenContainer.querySelectorAll('span');
-          badges.forEach(badge => {
-            const clonedBadge = badge.cloneNode(true);
-            modalIssuersList.appendChild(clonedBadge);
-          });
+    articles.forEach((article) => {
+      const opener = article.querySelector<HTMLButtonElement>(".modal-open");
+      opener?.addEventListener("click", () => {
+        activeArticle = article;
+        if (modalTitle) modalTitle.textContent = opener.dataset.title || "";
+        if (modalDate) modalDate.textContent = opener.dataset.date || "";
+        if (modalImage) {
+          modalImage.src = opener.dataset.image || "";
+          modalImage.alt = opener.dataset.title || "";
         }
-      }
-    }
-    if (modalImage) modalImage.src = data.image;
-    if (modalLink) modalLink.href = data.link;
-    if (modal) {
-      modal.classList.remove("hidden");
-      modal.classList.add("flex");
-    }
-  };
-
-  modalOpeners.forEach((btn) => {
-    btn.addEventListener("click", () => {
-      openModal({
-        title: btn.dataset.title || '',
-        date: btn.dataset.date || '',
-        image: btn.dataset.image || '',
-        link: btn.dataset.link || '',
-        issuer: btn.dataset.issuer || '',
-        issuerJson: btn.dataset.issuerJson || '',
+        if (modalLink) modalLink.href = opener.dataset.link || "#";
+        modalIssuers?.replaceChildren();
+        article.querySelector(".modal-issuers-data")?.childNodes.forEach((badge) => {
+          modalIssuers?.append(badge.cloneNode(true));
+        });
+        dialog.open(opener);
       });
     });
-  });
 
-  const closeModal = () => {
-    if (modal) {
-      modal.classList.add("hidden");
-      modal.classList.remove("flex");
+    function updatePagination() {
+      const totalPages = getTotalPages();
+      previousButtons.forEach(button => { if (button) button.disabled = currentPage === 0; });
+      nextButtons.forEach(button => { if (button) button.disabled = totalPages === 0 || currentPage >= totalPages - 1; });
+      dotContainers.forEach(container => container?.querySelectorAll<HTMLButtonElement>("button").forEach((dot, index) => {
+        const active = index === currentPage;
+        dot.setAttribute("aria-pressed", String(active));
+        const marker = dot.firstElementChild as HTMLElement;
+        marker.classList.toggle("w-6", active);
+        marker.classList.toggle("bg-violet-600", active);
+        marker.classList.toggle("dark:bg-violet-400", active);
+        marker.classList.toggle("bg-gray-300", !active);
+        marker.classList.toggle("dark:bg-gray-600", !active);
+      }));
+      if (controls) controls.style.display = totalPages <= 1 ? "none" : "flex";
+      if (status) status.textContent = isEn ? `Page ${totalPages ? currentPage + 1 : 0} of ${totalPages}` : `Página ${totalPages ? currentPage + 1 : 0} de ${totalPages}`;
     }
-  };
-  if (modalClose) modalClose.addEventListener("click", closeModal);
-  if (modal) modal.addEventListener("click", (e) => {
-    if (e.target === modal) closeModal();
-  });
 
-  // Handle window resize
-  let resizeTimeout: ReturnType<typeof setTimeout>;
-  window.addEventListener("resize", () => {
-    clearTimeout(resizeTimeout);
-    resizeTimeout = setTimeout(() => {
-      const oldItemsPerPage = itemsPerPage;
-      updateItemsPerPage();
-      if (oldItemsPerPage !== itemsPerPage) {
-        createCarouselPages();
+    function goToPage(index: number) {
+      if (!track) return;
+      currentPage = Math.max(0, Math.min(index, getTotalPages() - 1));
+      const focusWasInTrack = track.contains(document.activeElement);
+      track.style.transform = `translateX(-${currentPage * 100}%)`;
+      pages.forEach((page, index) => {
+        page.inert = index !== currentPage;
+        page.setAttribute("aria-hidden", String(index !== currentPage));
+      });
+      if (focusWasInTrack && document.activeElement?.closest("[inert]")) {
+        pages[currentPage]?.querySelector<HTMLButtonElement>(".modal-open")?.focus({ preventScroll: true });
       }
-    }, 150);
-  });
-  
-  // Hide skeleton loader and initialize
-  const skeleton = document.getElementById('carousel-skeleton');
-  if (skeleton) {
-    skeleton.remove();
-  }
-  
-  const firstFilter = document.querySelector<HTMLElement>('.filter-btn[data-filter="featured"]');
-  if (firstFilter) firstFilter.click();
+      updatePagination();
+    }
 
+    function createPages() {
+      if (!track) return;
+      const focusedElement = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+      const totalPages = getTotalPages();
+      track.replaceChildren();
+      pages = [];
+      for (let index = 0; index < totalPages; index++) {
+        const page = document.createElement("div");
+        page.className = "min-w-full px-1";
+        page.setAttribute("role", "group");
+        page.setAttribute("aria-label", isEn ? `Page ${index + 1} of ${totalPages}` : `Página ${index + 1} de ${totalPages}`);
+        const grid = document.createElement("div");
+        grid.className = "grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 py-2";
+        filteredArticles.slice(index * itemsPerPage, (index + 1) * itemsPerPage).forEach((article) => {
+          article.classList.remove("hidden");
+          grid.append(article);
+        });
+        page.append(grid);
+        track.append(page);
+        pages.push(page);
+      }
+      dotContainers.forEach((container) => {
+        container?.replaceChildren();
+        for (let index = 0; index < totalPages; index++) {
+          const dot = document.createElement("button");
+          dot.type = "button";
+          dot.className = "flex items-center justify-center min-w-6 h-6 rounded-full";
+          dot.setAttribute("aria-label", isEn ? `Go to page ${index + 1}` : `Ir a la página ${index + 1}`);
+          dot.setAttribute("aria-controls", "carousel-track");
+          const marker = document.createElement("span");
+          marker.className = "block size-2 rounded-full transition-all duration-300 motion-reduce:transition-none";
+          dot.append(marker);
+          dot.addEventListener("click", () => goToPage(index));
+          container?.append(dot);
+        }
+      });
+      goToPage(currentPage);
+      if (focusedElement?.isConnected && !focusedElement.closest("[inert]")) focusedElement.focus({ preventScroll: true });
+    }
+
+    function applyFilter(filter: string) {
+      filterButtons.forEach((button) => {
+        const active = button.dataset.filter === filter;
+        button.setAttribute("aria-pressed", String(active));
+        ["border-violet-500", "text-violet-700", "dark:text-white", "bg-violet-500/10", "shadow-[0_0_0_1px_rgba(124,58,237,0.4)]"].forEach(className => button.classList.toggle(className, active));
+      });
+      if (filterSelect) filterSelect.value = filter;
+      filteredArticles = articles.filter(article => filter === "featured" ? article.dataset.featured === "true" : filter === "all" || article.dataset.categories?.split(",").includes(filter));
+      currentPage = 0;
+      createPages();
+    }
+
+    filterButtons.forEach(button => button.addEventListener("click", () => applyFilter(button.dataset.filter || "featured")));
+    filterSelect?.addEventListener("change", () => applyFilter(filterSelect.value));
+    previousButtons.forEach(button => button?.addEventListener("click", () => goToPage(currentPage - 1)));
+    nextButtons.forEach(button => button?.addEventListener("click", () => goToPage(currentPage + 1)));
+    let touchStartX = 0;
+    let touchStartY = 0;
+    container.addEventListener("touchstart", (event) => {
+      touchStartX = event.changedTouches[0].clientX;
+      touchStartY = event.changedTouches[0].clientY;
+    }, { passive: true });
+    container.addEventListener("touchend", (event) => {
+      const diffX = touchStartX - event.changedTouches[0].clientX;
+      const diffY = touchStartY - event.changedTouches[0].clientY;
+      if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > 50) goToPage(currentPage + (diffX > 0 ? 1 : -1));
+    }, { passive: true });
+    window.addEventListener("resize", () => {
+      const nextItemsPerPage = getItemsPerPage();
+      if (nextItemsPerPage === itemsPerPage) return;
+      const focusedIndex = filteredArticles.findIndex(article => article.contains(document.activeElement) || article === activeArticle);
+      itemsPerPage = nextItemsPerPage;
+      if (focusedIndex >= 0) currentPage = Math.floor(focusedIndex / itemsPerPage);
+      createPages();
+    });
+    applyFilter("featured");
+    sourceGrid?.classList.add("hidden");
+    region.classList.remove("hidden");
+  }
+
+  initCertifications();
 </script>
 
 <style>
+#cert-modal::backdrop { background: rgb(0 0 0 / 0.6); backdrop-filter: blur(4px); }
+@media (prefers-reduced-motion: reduce) {
+  .magia, .magia *, #carousel-track { animation: none; transition: none; }
+  .magia img { transform: none; }
+}
+
 .animate-card-in {
   animation: cardIn 500ms ease-out;
 }

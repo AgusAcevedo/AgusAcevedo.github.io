@@ -22,3 +22,9 @@ pnpm-debug.log*
 .DS_Store
 
 package-lock.json
+# Local tests and diagnostics
+test-results/
+playwright-report/
+coverage/
+.pnpm-store/
+.env.*

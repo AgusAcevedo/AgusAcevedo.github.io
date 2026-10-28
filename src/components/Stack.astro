@@ -137,8 +137,11 @@ const allTechs = STACK_SECTIONS.flatMap(section =>
     <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 gap-2">
       {STACK_SECTIONS.map((section) => (
         <button 
+          type="button"
           data-category={section.title.toLowerCase().replace(/\s+/g, '-')}
           data-active="true"
+          aria-pressed="true"
+          aria-controls="tech-cloud"
           class="category-filter filter-button px-4 py-2 rounded-lg font-medium text-sm transition-all duration-200 border-2 hover:shadow-md hover:scale-[1.02]"
           class:list={[
             section.lightBg,
@@ -157,7 +160,7 @@ const allTechs = STACK_SECTIONS.flatMap(section =>
 
   <!-- Nube de tecnologías compacta -->
   <div class="flex flex-wrap gap-2 justify-center md:justify-start" id="tech-cloud">
-    {allTechs.map((tech, idx) => (
+    {allTechs.map((tech) => (
       <span 
         class="tech-tag group relative inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-all duration-300 cursor-default hover:scale-105 hover:shadow-md border"
         class:list={[
@@ -177,12 +180,13 @@ const allTechs = STACK_SECTIONS.flatMap(section =>
         {tech.name}
         
         <!-- Tooltip con categoría -->
-        <span class="tooltip absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1 text-[10px] font-semibold bg-gray-900 text-white rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-10">
+        <span aria-hidden="true" class="tooltip absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1 text-[10px] font-semibold bg-gray-900 text-white rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-10">
           {tech.category}
         </span>
       </span>
     ))}
   </div>
+  <p id="stack-filter-status" class="sr-only" role="status" aria-live="polite" data-locale={currentLocale}></p>
 </section>
 
 <script>
@@ -192,14 +196,7 @@ const allTechs = STACK_SECTIONS.flatMap(section =>
 
     function updateButtonState(button: HTMLButtonElement, isActive: boolean) {
       button.dataset.active = isActive.toString();
-      
-      if (isActive) {
-        button.style.opacity = '1';
-        button.style.filter = 'grayscale(0)';
-      } else {
-        button.style.opacity = '0.5';
-        button.style.filter = 'grayscale(1)';
-      }
+      button.setAttribute('aria-pressed', isActive.toString());
     }
 
     function updateTechVisibility() {
@@ -211,33 +208,16 @@ const allTechs = STACK_SECTIONS.flatMap(section =>
         }
       });
 
-      // Solo animar los items que CAMBIAN de estado
       techTags.forEach(tag => {
         const category = tag.dataset.category!;
-        const shouldShow = activeCategories.size === 0 ? false : activeCategories.has(category);
-        const isCurrentlyVisible = tag.style.display !== 'none';
-        
-        // Solo animar si hay un cambio de estado
-        if (shouldShow && !isCurrentlyVisible) {
-          // Mostrar con animación
-          tag.style.display = 'inline-flex';
-          tag.style.opacity = '0';
-          tag.style.transform = 'scale(0.85)';
-          // Delay para que el navegador registre el estado inicial
-          setTimeout(() => {
-            tag.style.opacity = '1';
-            tag.style.transform = 'scale(1)';
-          }, 20);
-        } else if (!shouldShow && isCurrentlyVisible) {
-          // Ocultar con animación
-          tag.style.opacity = '0';
-          tag.style.transform = 'scale(0.85)';
-          setTimeout(() => {
-            tag.style.display = 'none';
-          }, 200);
-        }
-        // Si no hay cambio de estado, no hacer nada
+        // No delayed writes: rapid toggles cannot leave a selected tag hidden.
+        tag.hidden = !activeCategories.has(category);
       });
+      const status = document.getElementById('stack-filter-status');
+      const visibleCount = Array.from(techTags).filter(tag => !tag.hidden).length;
+      if (status) status.textContent = status.dataset.locale === 'es'
+        ? `${visibleCount} tecnologías visibles`
+        : `${visibleCount} technologies visible`;
     }
 
     // Manejar botones individuales
@@ -250,13 +230,21 @@ const allTechs = STACK_SECTIONS.flatMap(section =>
     });
   }
 
-  // Run on page load and after transitions
-  document.addEventListener('astro:page-load', initStackFilters);
+  initStackFilters();
 </script>
 
 <style>
   .tech-tag {
     transition: opacity 0.25s ease-out, transform 0.25s ease-out;
+  }
+
+  .tech-tag[hidden] {
+    display: none;
+  }
+
+  .category-filter[data-active="false"] {
+    opacity: 0.5;
+    filter: grayscale(1);
   }
 
   .tooltip::after {
@@ -280,5 +268,12 @@ const allTechs = STACK_SECTIONS.flatMap(section =>
 
   .category-filter {
     transition: opacity 0.3s ease, filter 0.3s ease, transform 0.2s ease;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .tech-tag,
+    .category-filter {
+      transition: none;
+    }
   }
 </style>

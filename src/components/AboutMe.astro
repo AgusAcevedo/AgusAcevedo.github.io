@@ -3,6 +3,7 @@ import { useTranslations } from "../i18n";
 import type { Language } from "../i18n/languages";
 import Calendar from "./icons/Calendar.astro";
 import Certificate from "./icons/Certificate.astro";
+import RichText from "./RichText.astro";
 
 const currentLocale = (Astro.currentLocale || 'es') as Language;
 const t = useTranslations(currentLocale);
@@ -44,46 +45,8 @@ const t = useTranslations(currentLocale);
   <div
     class="[&>p>strong]:text-violet-600 dark:[&>p>strong]:text-violet-300 [&>p>strong]:font-normal [&>p>strong]:font-mono text-pretty text-gray-700 dark:text-gray-300 text-justify space-y-4 px-4 sm:px-0"
   >
-    {t.about.content.map((paragraph, index) => (
-      <p 
-        set:html={paragraph} 
-        class="reveal-on-scroll"
-        style={`transition-delay: ${index * 100}ms`}
-      ></p>
+    {t.about.content.map((paragraph) => (
+      <p><RichText text={paragraph} /></p>
     ))}
   </div>
 </article>
-
-<style>
-  .reveal-on-scroll {
-    opacity: 0;
-    transform: translateY(20px);
-    transition: opacity 0.6s ease-out, transform 0.6s ease-out;
-  }
-
-  .reveal-on-scroll.revealed {
-    opacity: 1;
-    transform: translateY(0);
-  }
-</style>
-
-<script>
-  const observerOptions = {
-    root: null,
-    rootMargin: '0px',
-    threshold: 0.1,
-  };
-
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach((entry) => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('revealed');
-        observer.unobserve(entry.target);
-      }
-    });
-  }, observerOptions);
-
-  document.querySelectorAll('.reveal-on-scroll').forEach((el) => {
-    observer.observe(el);
-  });
-</script>

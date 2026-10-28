@@ -47,9 +47,7 @@ Esta guía técnica te ayudará a personalizar y mantener tu portfolio.
 ### 1. Instalar dependencias
 
 ```bash
-npm install
-# o
-pnpm install
+pnpm install --frozen-lockfile
 ```
 
 ### 2. Configurar tu dominio
@@ -59,7 +57,8 @@ Edita `astro.config.mjs`:
 ```javascript
 export default defineConfig({
   site: 'https://tudominio.com/', // 👈 Cambia esto
-  integrations: [tailwind(), robotsTxt()],
+  // Conservar las integraciones y políticas actuales del proyecto.
+  // Tailwind usa @tailwindcss/vite; robots.txt está en public/robots.txt.
 })
 ```
 
@@ -312,7 +311,7 @@ myProjects: {
 - `id`: Identificador único (usado internamente)
 - `title`: Título del proyecto
 - `shortDescription`: Descripción corta para la card
-- `description`: Descripción completa con HTML (se ve en el modal al hacer click)
+- `description`: Descripción completa con párrafos <p> y énfasis <strong> (se ve en el modal)
 - `tags`: Array de tecnologías/herramientas usadas
 - `image`: Ruta de la imagen (opcional, se muestra gradiente si no hay)
 - `github`: URL del repositorio (opcional, muestra botón si existe)
@@ -324,8 +323,8 @@ myProjects: {
 - Resolución sugerida: 1200x630px (ratio 16:9)
 
 **Tips:**
-- Usa HTML en `description` para mejor formato
-- Clases de Tailwind funcionan dentro de `description`
+- `description` admite párrafos `<p>` (opcional `class="mt-4"`) y énfasis `<strong>`
+- El resto del HTML se trata como texto; cambiar el diseño en `MyProjects.astro`, no en las traducciones
 - Máximo 4-6 proyectos destacados para mejor UX
 
 ### 📝 Blog (Dev.to)
@@ -687,8 +686,6 @@ personal: {
 ### Desarrollo
 
 ```bash
-npm run dev
-# o
 pnpm dev
 ```
 
@@ -697,7 +694,7 @@ Abre: `http://localhost:4321`
 ### Build
 
 ```bash
-npm run build
+pnpm build
 # o
 pnpm build
 ```
@@ -707,7 +704,7 @@ Genera el sitio en `dist/`
 ### Preview (ver el build localmente)
 
 ```bash
-npm run preview
+pnpm preview
 # o
 pnpm preview
 ```
@@ -715,7 +712,7 @@ pnpm preview
 ### Linting
 
 ```bash
-npm run lint
+pnpm check
 # o
 pnpm lint
 ```
@@ -752,9 +749,9 @@ Se deployará automáticamente.
 - **Cloudflare Pages:** Conecta el repo
 
 **Build settings:**
-- Build command: `npm run build` o `pnpm build`
+- Build command: `pnpm build` o `pnpm build`
 - Output directory: `dist`
-- Node version: 18+
+- Node version: 24.22.1 (ver `.node-version`)
 
 ---
 
@@ -782,8 +779,8 @@ Verifica que la key existe en ambos archivos (`es.ts` y `en.ts`).
 ### Build falla
 
 1. Verifica que todas las imágenes referenciadas existen
-2. Revisa errores de TypeScript: `npm run build`
-3. Verifica versión de Node: `node --version` (debe ser 18+)
+2. Revisa errores de TypeScript: `pnpm build`
+3. Verifica versión de Node: `node --version` (debe coincidir con `.node-version`: 24.22.1)
 
 ---
 
