@@ -42,40 +42,80 @@ this migration, GitHub dependency-graph detection and Dependabot security update
 do not fully support that lockfile format. The independent CI `pnpm audit` gate
 therefore checks the complete lockfile and must remain enabled.
 
-## Hosting settings pending in Cloudflare
+## Hosting verification and remaining Cloudflare settings
 
 GitHub Pages **does not apply `public/_headers`**. That file is a portable template
 for hosts supporting it; it is not evidence of active HTTP protections on Pages.
-The owner chose to defer Cloudflare changes during this implementation.
+Public HTTPS checks on 2026-10-28 confirmed HSTS with `max-age=2592000` and
+`X-Content-Type-Options: nosniff` on both languages and sampled assets. HTTP
+requests redirect to the same HTTPS path. The owner confirmed enabling those
+two settings; the response-header rule below has not yet been configured.
 
-For the proxied `agusacevedo.com.ar` hostname, prepare these Response Header
-Transform Rules (without replacing the Astro CSP):
+For the proxied hostname, create a Response Header Transform Rule in Cloudflare
+with the expression `http.host eq "agusacevedo.com.ar"`. Apply these operations
+without replacing the Astro CSP:
 
-| Header | Value |
-| --- | --- |
-| `X-Content-Type-Options` | `nosniff` |
-| `X-Frame-Options` | `DENY` |
-| `Referrer-Policy` | `strict-origin-when-cross-origin` |
-| `Permissions-Policy` | `geolocation=(), microphone=(), camera=(), payment=(), usb=()` |
-| `Content-Security-Policy` | `frame-ancestors 'none'` |
+| Operation | Header | Value |
+| --- | --- | --- |
+| Set static | `X-Frame-Options` | `DENY` |
+| Set static | `Referrer-Policy` | `strict-origin-when-cross-origin` |
+| Set static | `Permissions-Policy` | `geolocation=(), microphone=(), camera=(), payment=(), usb=()` |
+| Add static | `Content-Security-Policy` | `frame-ancestors 'none'` |
 
 The frame-ancestors header is enforced alongside the document's full CSP meta
-policy. Browsers do not enforce frame-ancestors from a meta element.
+policy. Browsers do not enforce frame-ancestors from a meta element. Use **Add**
+for this header so any existing HTTP policy remains enforced as well. See the
+[Cloudflare rule setup](https://developers.cloudflare.com/rules/transform/response-header-modification/create-dashboard/).
 
-The observed HTTPS response has `Strict-Transport-Security: max-age=0`. After
-confirming Cloudflare-to-origin **Full (strict)** TLS and HTTPS availability,
-enable HSTS for the apex hostname. Start with `max-age=2592000` (30 days), then
-increase after verifying the site and certificate renewal. Do not enable
+HSTS is now active for 30 days. Confirm Cloudflare-to-origin **Full (strict)**
+TLS in the dashboard; this origin setting cannot be verified externally. Increase
+the HSTS duration only after verifying the site and certificate renewal. Do not enable
 `includeSubDomains` or preload without reviewing every affected subdomain.
 Keep HTTP-to-HTTPS redirection. Do not weaken origin TLS validation.
 
-Use long immutable caching only for fingerprinted `/_astro/*` assets. The CV,
+Use long immutable caching only for fingerprinted `/_astro/*` assets. The CVs,
 `theme-init.js`, public images, and other stable filenames must remain refreshable.
 Do not apply a year-long immutable policy to all PNG/WebP/JS files indiscriminately.
 
 Verify final response headers with `curl -I https://agusacevedo.com.ar/` after
 applying hosting settings. These changes require a separate authenticated
 Cloudflare session; they are not activated by merging this PR.
+
+### Cloudflare script injection and CSP
+
+Public responses also contain JavaScript Detections and Web Analytics injected by
+Cloudflare. Their variable inline bootstrap and external analytics beacon are
+not authorized by the portfolio's strict CSP; analytics collection is also blocked
+by `connect-src 'none'`. This follows from the delivered scripts and policy, rather
+than a captured console error. Do not enable `unsafe-inline` to make them work.
+
+Resolve this in the Cloudflare configuration: either remove optional automatic
+injections that are not needed, or deliberately integrate the wanted feature.
+JavaScript Detections needs a compatible HTTP nonce policy and edge integration;
+adding a permissive header cannot override the stricter meta policy. Keeping Web
+Analytics would require an explicit decision to allow its script and collection
+endpoint. Neither feature is enabled or reconfigured by this repository.
+See [JavaScript Detections CSP requirements](https://developers.cloudflare.com/cloudflare-challenges/challenge-types/javascript-detections/)
+and [Web Analytics collection](https://developers.cloudflare.com/web-analytics/data-metrics/data-origin-and-collection/).
+
+## Public files and privacy
+
+Files under `public/` are downloadable, and every committed file in this public
+repository can be read through GitHub. The two language-specific CVs are published
+at the owner's explicit request; the obsolete single-language PDF is removed from
+the current tree. Git treats PDFs as binary to preserve their exact bytes.
+
+Manual review found the holder's document number in twelve UTN certificate images.
+The owner explicitly chose to keep those images unchanged. Other certificates may
+include ordinary issuer signatures and verification codes. Removing or redacting
+a file in a later commit would not remove previous versions, forks, or caches.
+Do not claim that `.gitignore` removes already tracked content or Git history.
+
+Build output, dependencies, diagnostics, local credentials, environment values,
+and caches are ignored. Portable editor settings, source code, the lockfile,
+configuration, CVs, and certificate images are intentionally versioned. A pattern
+scan found no credentials in the reviewed text files; image review is a separate
+privacy check, not a malware or exhaustive steganography scan.
 
 ## Verification and limits
 

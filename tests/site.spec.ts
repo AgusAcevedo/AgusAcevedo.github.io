@@ -1,5 +1,7 @@
 import { test as base, expect, type Locator, type Page, type TestInfo } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
+import { readFile } from "node:fs/promises";
+import { createHash } from "node:crypto";
 
 /** Collect browser errors for each test and verify the shared log at teardown. */
 const test = base.extend<{ runtimeHealth: readonly string[] }>({
@@ -127,6 +129,55 @@ for (const locale of locales) {
       await expect.poll(() => page.evaluate(() => localStorage.getItem("theme"))).toBe("system");
     });
 
+    test("downloads the selected locale's complete PDF resume", async ({ page }) => {
+      await page.goto(locale.path);
+      const filename = `CV-Agustin-Acevedo-${locale.code.toUpperCase()}.pdf`;
+      const resume = page.locator("#top a[download]");
+      await expect(resume).toHaveAttribute("href", `/${filename}`);
+      await expect(resume).toHaveAttribute("download", filename);
+      await expect(resume).toHaveAttribute("hreflang", locale.code);
+      const downloadPromise = page.waitForEvent("download");
+      await resume.click();
+      const download = await downloadPromise;
+      expect(download.suggestedFilename()).toBe(filename);
+      expect(await download.failure()).toBeNull();
+      const path = await download.path();
+      if (path === null) throw new Error("The resume download did not produce a file");
+      const actual = await readFile(path);
+      const expected = await readFile(`public/${filename}`);
+      expect(actual.subarray(0, 5).toString()).toBe("%PDF-");
+      expect(createHash("sha256").update(actual).digest("hex"))
+        .toBe(createHash("sha256").update(expected).digest("hex"));
+    });
+
+    test("navigation keeps an opaque container while scrolling in both themes and at tablet widths", async ({ page }) => {
+      await page.goto(locale.path);
+      for (const width of [390, 820, 1280]) {
+        await page.setViewportSize({ width, height: 844 });
+        const navigation = page.locator("header nav:visible");
+        await expect(navigation).toHaveCount(1);
+        for (const theme of ["light", "dark"]) {
+          await page.locator(".theme-toggle-btn:visible").click();
+          await page.locator(`.themes-menu:visible [data-theme="${theme}"]`).click();
+          await expect(page.locator("html")).toHaveAttribute("data-theme", theme);
+          const initialColor = await navigation.evaluate(element => getComputedStyle(element).backgroundColor);
+          expect(initialColor).not.toMatch(/transparent|rgba\(|\//u);
+          await page.locator("#blog").scrollIntoViewIfNeeded();
+          await expect(navigation).toBeVisible();
+          expect(await navigation.evaluate(element => getComputedStyle(element).backgroundColor)).toBe(initialColor);
+          const bounds = await navigation.boundingBox();
+          if (bounds === null) throw new Error("Navigation has no visible container");
+          expect(bounds.y).toBeGreaterThanOrEqual(0);
+          expect(bounds.y).toBeLessThan(40);
+          expect(bounds.x).toBeGreaterThanOrEqual(0);
+          expect(bounds.x + bounds.width).toBeLessThanOrEqual(width);
+          await page.locator("h1").scrollIntoViewIfNeeded();
+        }
+        if (width < 1024) await expect(page.locator("#mobile-menu-btn")).toBeVisible();
+        else await expect(page.locator("#mobile-menu-btn")).toBeHidden();
+      }
+    });
+
     test("language disclosure supports Escape and navigates to the other localized page", async ({ page }) => {
       await page.goto(locale.path);
       const toggle = page.locator(".lang-toggle-btn:visible");
@@ -146,6 +197,8 @@ for (const locale of locales) {
       await expect(page.locator("html")).toHaveAttribute("lang", locale.otherLanguage);
       await expect(page.locator(".lang-toggle-btn:visible")).toHaveAttribute("aria-expanded", "false");
       await expect(page.locator("#cert-carousel-region")).toBeVisible();
+      const otherCode = locale.code === "es" ? "EN" : "ES";
+      await expect(page.locator("#top a[download]")).toHaveAttribute("href", `/CV-Agustin-Acevedo-${otherCode}.pdf`);
     });
 
     test("mobile navigation contains focus, closes with Escape, and reaches a section", async ({ page }, testInfo) => {

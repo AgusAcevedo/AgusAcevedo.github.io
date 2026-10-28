@@ -1,6 +1,7 @@
 ---
 import { useTranslations } from "../i18n";
 import type { Language } from "../i18n/languages";
+import { serializeJsonLd } from "../lib/seo";
 
 interface Props {
   title?: string;
@@ -25,9 +26,14 @@ const {
 } = Astro.props;
 
 const fullImageUrl = new URL(image, p.siteUrl).href;
-const alternateLocale = currentLocale === 'es' ? 'en' : 'es';
+const profileImageUrl = new URL(p.profileImage, p.siteUrl).href;
+const imagePath = new URL(fullImageUrl).pathname.toLowerCase();
+const imageType = imagePath.endsWith('.jpg') || imagePath.endsWith('.jpeg') ? 'image/jpeg' : 'image/png';
+const currentLanguage = currentLocale === 'es' ? 'es-AR' : 'en-US';
+const alternateLanguage = currentLocale === 'es' ? 'en-US' : 'es-AR';
 const alternatePath = currentLocale === 'es' ? '/en/' : '/';
-const jsonLd = (value: unknown) => JSON.stringify(value).replace(/</g, '\\u003c');
+const personId = new URL('#person', p.siteUrl).href;
+const websiteId = new URL('#website', p.siteUrl).href;
 
 // Construir array de redes sociales dinámicamente
 const socialLinks: string[] = [];
@@ -37,20 +43,16 @@ if (p.twitter) socialLinks.push(p.twitter);
 
 // Schema.org JSON-LD para persona/profesional
 const schemaPersona = {
-  "@context": "https://schema.org",
   "@type": "Person",
+  "@id": personId,
   "name": p.name,
   "jobTitle": p.jobTitle,
   "description": description,
   "url": p.siteUrl,
-  "image": fullImageUrl,
+  "image": profileImageUrl,
   "sameAs": socialLinks,
   "email": p.email,
   "knowsAbout": p.skills,
-  "alumniOf": {
-    "@type": "EducationalOrganization",
-    "name": p.university
-  },
   "worksFor": {
     "@type": "Organization",
     "name": p.currentCompany
@@ -58,34 +60,46 @@ const schemaPersona = {
 };
 
 const schemaWebsite = {
-  "@context": "https://schema.org",
   "@type": "WebSite",
+  "@id": websiteId,
   "name": `${p.name} Portfolio`,
   "url": p.siteUrl,
   "description": description,
-  "inLanguage": currentLocale === 'es' ? 'es-AR' : 'en-US',
-  "author": {
-    "@type": "Person",
-    "name": p.name
-  }
+  "inLanguage": ['es-AR', 'en-US'],
+  "author": { "@id": personId }
+};
+
+const structuredData = {
+  "@context": "https://schema.org",
+  "@graph": [
+    schemaPersona,
+    schemaWebsite,
+    {
+      "@type": "ProfilePage",
+      "@id": new URL('#profile', canonicalUrl).href,
+      "url": canonicalUrl,
+      "name": title,
+      "description": description,
+      "inLanguage": currentLanguage,
+      "mainEntity": { "@id": personId },
+      "isPartOf": { "@id": websiteId },
+    },
+  ],
 };
 ---
 
 <!-- Primary Meta Tags -->
-<meta name="title" content={title} />
 <meta name="description" content={description} />
-<meta name="keywords" content={t.seo.keywords} />
 <meta name="author" content={p.name} />
-<meta name="robots" content="index, follow" />
-<meta name="googlebot" content="index, follow" />
+<meta name="robots" content="index, follow, max-image-preview:large" />
 
 <!-- Google Search Console Verification -->
 <meta name="google-site-verification" content="dW5FVklswoOeDUwMbCNMdK3Qduway3TmFeDQj_gxmK8" />
 
 <!-- Canonical & Alternate URLs -->
 <link rel="canonical" href={canonicalUrl} />
-<link rel="alternate" hreflang={currentLocale} href={canonicalUrl} />
-<link rel="alternate" hreflang={alternateLocale} href={new URL(alternatePath, p.siteUrl).href} />
+<link rel="alternate" hreflang={currentLanguage} href={canonicalUrl} />
+<link rel="alternate" hreflang={alternateLanguage} href={new URL(alternatePath, p.siteUrl).href} />
 <link rel="alternate" hreflang="x-default" href={p.siteUrl} />
 
 <!-- Open Graph / Facebook -->
@@ -95,7 +109,7 @@ const schemaWebsite = {
 <meta property="og:description" content={t.seo.ogDescription} />
 <meta property="og:image" content={fullImageUrl} />
 <meta property="og:image:secure_url" content={fullImageUrl} />
-<meta property="og:image:type" content="image/png" />
+<meta property="og:image:type" content={imageType} />
 <meta property="og:image:alt" content={`${p.name} - ${p.jobTitle}`} />
 <meta property="og:image:width" content="1200" />
 <meta property="og:image:height" content="630" />
@@ -115,17 +129,5 @@ const schemaWebsite = {
 <meta name="theme-color" content={p.themeColor} />
 <meta name="msapplication-TileColor" content={p.themeColor} />
 
-<!-- Geo tags for location -->
-<meta name="geo.region" content="AR-C" />
-<meta name="geo.placename" content="Buenos Aires" />
-<meta name="geo.position" content="-34.603722;-58.381592" />
-<meta name="ICBM" content="-34.603722, -58.381592" />
-
-<!-- Additional indexing hints -->
-<meta name="revisit-after" content="7 days" />
-<meta name="rating" content="general" />
-<meta name="distribution" content="global" />
-
 <!-- Schema.org JSON-LD -->
-<script is:inline type="application/ld+json" set:html={jsonLd(schemaPersona)} />
-<script is:inline type="application/ld+json" set:html={jsonLd(schemaWebsite)} />
+<script is:inline type="application/ld+json" set:html={serializeJsonLd(structuredData)} />

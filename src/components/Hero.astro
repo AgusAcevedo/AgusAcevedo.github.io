@@ -6,6 +6,7 @@ const t = useTranslations(currentLocale);
 
 // Datos personales centralizados
 const p = t.personal;
+const resumeFile = currentLocale === 'en' ? 'CV-Agustin-Acevedo-EN.pdf' : 'CV-Agustin-Acevedo-ES.pdf';
 
 import LinkedInIcon from "@/components/icons/LinkedIn.astro";
 import MailIcon from "@/components/icons/Mail.astro";
@@ -42,7 +43,7 @@ import RichText from "./RichText.astro";
         {t.hero.contact}
       </SocialPill>
 
-      <DownloadPill>{t.hero.cv}</DownloadPill>
+      <DownloadPill href={`/${resumeFile}`} download={resumeFile} hreflang={currentLocale}>{t.hero.cv}</DownloadPill>
 
       <LinkedinPill href={p.linkedin}>
         <LinkedInIcon class="size-4" />

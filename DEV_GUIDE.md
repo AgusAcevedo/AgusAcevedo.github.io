@@ -100,9 +100,9 @@ personal: {
   twitter: 'https://twitter.com/tuusuario', // Opcional
   
   // Imágenes
-  profileImage: '/me.png',     // Tu foto de perfil
-  ogImage: '/agus.webp',       // Imagen para compartir en redes
-  favicon: '/favicon.svg',     // Ícono del sitio
+  profileImage: '/agus.webp',  // Tu foto de perfil
+  ogImage: '/og.jpg',          // Imagen para compartir en redes
+  favicon: '/favicon.ico',     // Ícono del sitio
   
   // Educación principal
   university: 'Tu Universidad',
@@ -568,7 +568,7 @@ myProjects: {
 
 ## � SEO y Posicionamiento
 
-El sitio está completamente optimizado para SEO. Aquí está todo lo que necesitas saber:
+El sitio incluye metadatos y un sitemap. Las protecciones y los límites del hosting están documentados en [SECURITY.md](SECURITY.md).
 
 ### ✅ SEO Implementado
 
@@ -580,8 +580,9 @@ El portfolio incluye:
 - ✅ robots.txt configurado
 - ✅ Canonical URLs
 - ✅ Tags de geolocalización (Buenos Aires, Argentina)
-- ✅ H1 semántico (oculto visualmente, visible para buscadores)
-- ✅ Headers de seguridad (_headers)
+- ✅ Un H1 visible y semántico
+- ✅ Content Security Policy generada en el HTML de ambos idiomas
+- ℹ️ GitHub Pages ignora `public/_headers`; los headers HTTP adicionales requieren configurar el hosting, como explica `SECURITY.md`.
 
 ### 📝 Configuración SEO
 
@@ -695,8 +696,6 @@ Abre: `http://localhost:4321`
 
 ```bash
 pnpm build
-# o
-pnpm build
 ```
 
 Genera el sitio en `dist/`
@@ -705,16 +704,16 @@ Genera el sitio en `dist/`
 
 ```bash
 pnpm preview
-# o
-pnpm preview
 ```
 
-### Linting
+### Verificación de tipos y pruebas
 
 ```bash
 pnpm check
-# o
-pnpm lint
+pnpm test
+# Instalar navegadores una vez para ejecutar la validación completa.
+pnpm exec playwright install --with-deps chromium firefox webkit
+pnpm validate
 ```
 
 ---
