@@ -1,7 +1,7 @@
 import { test as base, expect, type Locator, type Page, type TestInfo } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
 
-const test = base.extend<{ runtimeHealth: void }>({
+const test = base.extend<{ runtimeHealth: undefined }>({
   runtimeHealth: [async ({ page }, use, testInfo) => {
     const errors: string[] = [];
     let expectedInlineRejections = 0;
@@ -12,13 +12,13 @@ const test = base.extend<{ runtimeHealth: void }>({
       const intentionalCspRejection = testInfo.title.includes("CSP rejects an injected inline script")
         && testInfo.annotations.some(annotation => annotation.type === "intentional-csp-probe")
         && expectedInlineRejections === 0
-        && (/inline script.*Content Security Policy|Refused to execute inline script/i.test(text)
-          || /Content-Security-Policy: The page[’']s settings blocked an inline script \(script-src-elem\)/.test(text)
+        && (/inline script.*Content Security Policy|Refused to execute inline script/iu.test(text)
+          || /Content-Security-Policy: The page[’']s settings blocked an inline script \(script-src-elem\)/u.test(text)
           || text === "Refused to execute a script because its hash, its nonce, or 'unsafe-inline' does not appear in the script-src directive of the Content Security Policy.");
       if (intentionalCspRejection) expectedInlineRejections++;
       if (!intentionalCspRejection) errors.push(`Console: ${text}`);
     });
-    await use();
+    await use(undefined);
     expect.soft(errors, "No uncaught application exceptions or unexpected console errors").toEqual([]);
   }, { auto: true }],
 });
@@ -29,6 +29,14 @@ const locales = [
   { code: "en", path: "/en/", language: "en-US", otherPath: "/", otherLanguage: "es-AR" },
 ] as const;
 
+/** Fail immediately when required markup wiring is missing from a control. */
+async function requiredAttribute(locator: Locator, attribute: string): Promise<string> {
+  const value = await locator.getAttribute(attribute);
+  if (value === null) throw new Error(`Expected required attribute "${attribute}" on ${locator}`);
+  return value;
+}
+
+/** Report actionable WCAG failures and attach the complete axe evidence. */
 async function checkAccessibility(page: Page, testInfo: TestInfo, state: string) {
   const results = await new AxeBuilder({ page })
     .withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "wcag22aa"])
@@ -43,6 +51,7 @@ async function checkAccessibility(page: Page, testInfo: TestInfo, state: string)
   })), `No serious/critical WCAG A/AA violations in ${state}`).toEqual([]);
 }
 
+/** Exercise forward and backward Tab navigation across a modal boundary. */
 async function expectFocusInside(dialog: Locator, page: Page) {
   // Several forward/backward Tabs exercise the actual browser focus boundary.
   for (const key of ["Tab", "Tab", "Tab", "Shift+Tab", "Shift+Tab"]) {
@@ -55,7 +64,7 @@ for (const locale of locales) {
   test.describe(locale.code.toUpperCase(), () => {
     test("loads meaningful semantic content and opens LinkedIn with the keyboard", async ({ page, context }) => {
       await page.goto(locale.path);
-      await expect(page).toHaveTitle(/Agust[ií]n.*Acevedo/i);
+      await expect(page).toHaveTitle(/Agust[ií]n.*Acevedo/iu);
       await expect(page.locator("html")).toHaveAttribute("lang", locale.language);
       await expect(page.locator("main")).toHaveCount(1);
       await expect(page.getByRole("heading", { level: 1 })).toHaveCount(1);
@@ -68,9 +77,9 @@ for (const locale of locales) {
       const destination = "https://linkedin.com/in/agustinezequielacevedo";
       await expect(linkedin).toHaveAttribute("href", destination);
       await expect(linkedin).toHaveAttribute("target", "_blank");
-      await expect(linkedin).toHaveAttribute("rel", /noopener/);
+      await expect(linkedin).toHaveAttribute("rel", /noopener/u);
       // Fulfil the destination locally: verify navigation without hitting LinkedIn.
-      await context.route(/^https:\/\/(?:www\.)?linkedin\.com\/in\//, route => route.fulfill({
+      await context.route(/^https:\/\/(?:www\.)?linkedin\.com\/in\//u, route => route.fulfill({
         status: 200, contentType: "text/html", body: "<!doctype html><title>LinkedIn navigation observed</title>",
       }));
       await linkedin.focus();
@@ -95,25 +104,25 @@ for (const locale of locales) {
       await page.keyboard.press("Enter");
       await expect(toggle).toHaveAttribute("aria-expanded", "false");
       await expect(toggle).toBeFocused();
-      await expect(page.locator("html")).toHaveClass(/dark/);
+      await expect(page.locator("html")).toHaveClass(/dark/u);
       await expect.poll(() => page.evaluate(() => localStorage.getItem("theme"))).toBe("dark");
 
       for (let reload = 0; reload < 2; reload++) {
         await page.reload();
         await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
-        await expect(page.locator("html")).toHaveClass(/dark/);
+        await expect(page.locator("html")).toHaveClass(/dark/u);
       }
       await toggle.press("ArrowDown");
       await page.keyboard.press("Home");
       await page.keyboard.press("Enter");
-      await expect(page.locator("html")).not.toHaveClass(/dark/);
+      await expect(page.locator("html")).not.toHaveClass(/dark/u);
       await expect.poll(() => page.evaluate(() => localStorage.getItem("theme"))).toBe("light");
 
       await toggle.press("ArrowDown");
       await page.keyboard.press("End");
       await page.keyboard.press("Enter");
       await page.emulateMedia({ colorScheme: "dark" });
-      await expect(page.locator("html")).toHaveClass(/dark/);
+      await expect(page.locator("html")).toHaveClass(/dark/u);
       await expect.poll(() => page.evaluate(() => localStorage.getItem("theme"))).toBe("system");
     });
 
@@ -160,7 +169,7 @@ for (const locale of locales) {
       await toggle.press("Enter");
       await menu.locator(".mobile-nav-link").first().press("Enter");
       const target = locale.code === "es" ? "sobre-mi" : "about";
-      await expect(page).toHaveURL(new RegExp(`#${target}$`));
+      await expect(page).toHaveURL(new RegExp(`#${target}$`, "u"));
       await expect(menu).toBeHidden();
       await expect(page.locator(`#${target}`)).toBeFocused();
       await expect.poll(() => page.evaluate(() => document.body.style.overflow)).toBe("");
@@ -170,7 +179,7 @@ for (const locale of locales) {
       await page.goto(locale.path);
       await expect(page.locator("#cert-carousel-region")).toBeVisible();
       const select = page.locator("#filter-select");
-      await expect(select).not.toHaveAttribute("aria-label", /\{t\./);
+      await expect(select).not.toHaveAttribute("aria-label", /\{t\./u);
       if (testInfo.project.name.endsWith("-mobile")) await select.selectOption("all");
       else await page.locator('.filter-btn[data-filter="all"]').click();
       await expect(page.locator('.filter-btn[data-filter="all"]')).toHaveAttribute("aria-pressed", "true");
@@ -178,18 +187,18 @@ for (const locale of locales) {
       const next = page.locator(testInfo.project.name.endsWith("-mobile") ? "#next-page-mobile" : "#next-page");
       await expect(next).toBeEnabled();
       await next.click();
-      await expect(page.locator("#cert-status")).toHaveText(new RegExp(locale.code === "es" ? "Página 2 de" : "Page 2 of"));
+      await expect(page.locator("#cert-status")).toHaveText(new RegExp(locale.code === "es" ? "Página 2 de" : "Page 2 of", "u"));
       const track = page.locator("#carousel-track");
       await expect(track.locator(':scope > div[aria-hidden="false"]')).toHaveCount(1);
       await expect(track.locator(':scope > div[aria-hidden="true"]').first()).toHaveAttribute("inert", "");
       const dots = page.locator(testInfo.project.name.endsWith("-mobile") ? "#page-dots-mobile" : "#page-dots");
       await expect(dots.getByRole("button").nth(1)).toHaveAttribute("aria-pressed", "true");
       const opener = track.locator(':scope > div[aria-hidden="false"] .modal-open').first();
-      const title = await opener.getAttribute("data-title");
+      const title = await requiredAttribute(opener, "data-title");
       await opener.focus();
       await opener.press("Enter");
       const dialog = page.locator("#cert-modal");
-      await expect(page.getByRole("dialog", { name: title!, exact: true })).toBeVisible();
+      await expect(page.getByRole("dialog", { name: title, exact: true })).toBeVisible();
       await expect.poll(() => dialog.evaluate(element => element.matches(":modal"))).toBe(true);
       await expect(dialog.locator("[data-dialog-initial-focus]")).toBeFocused();
       await expectFocusInside(dialog, page);
@@ -214,7 +223,7 @@ for (const locale of locales) {
       expect(totalProjects).toBeGreaterThan(visibleCount);
       await expect(carousel.locator('.project-card[inert]')).toHaveCount(totalProjects - visibleCount);
       const first = carousel.locator(".project-card:not([inert]) [data-project-dialog]").first();
-      const dialogId = await first.getAttribute("aria-controls");
+      const dialogId = await requiredAttribute(first, "aria-controls");
       await first.focus();
       await first.press("Enter");
       const dialog = page.locator(`#${dialogId}`);
@@ -229,9 +238,9 @@ for (const locale of locales) {
       await expect(first).toBeFocused();
       await page.locator("#projects-next").click();
       await expect(page.locator("#projects-dots button").nth(1)).toHaveAttribute("aria-pressed", "true");
-      const position = await carousel.getAttribute("style");
+      const position = await requiredAttribute(carousel, "style");
       await page.clock.fastForward(6_000);
-      await expect(carousel).toHaveAttribute("style", position!);
+      await expect(carousel).toHaveAttribute("style", position);
       await expect(carousel.locator('.project-card[data-index="0"]')).toHaveAttribute("inert", "");
       await expect(carousel.locator(".project-card:not([inert])")).toHaveCount(visibleCount);
     });
@@ -255,9 +264,9 @@ for (const locale of locales) {
         return;
       }
       await expect(mobileArticles.nth(1)).toHaveAttribute("inert", "");
-      const position = await carousel.getAttribute("style");
+      const position = await requiredAttribute(carousel, "style");
       await page.clock.fastForward(6_000);
-      await expect(carousel).toHaveAttribute("style", position!);
+      await expect(carousel).toHaveAttribute("style", position);
       await page.locator("#blog-next").click();
       await expect(mobileArticles.first()).toHaveAttribute("inert", "");
       await expect(mobileArticles.nth(1)).not.toHaveAttribute("inert");
@@ -275,15 +284,15 @@ for (const locale of locales) {
       await page.keyboard.press("Home");
       await page.keyboard.press("ArrowDown");
       await page.keyboard.press("Enter");
-      await expect(page.locator("html")).toHaveClass(/dark/);
+      await expect(page.locator("html")).toHaveClass(/dark/u);
       await checkAccessibility(page, testInfo, "dark-page");
     });
 
     test("CSP rejects an injected inline script while application controls still run", async ({ page }, testInfo) => {
       await page.goto(locale.path);
-      const policy = await page.locator('meta[http-equiv="Content-Security-Policy"]').getAttribute("content");
-      expect(policy).toMatch(/script-src/);
-      expect(policy).not.toMatch(/script-src(?:-elem)?[^;]*(?:'unsafe-inline'|'unsafe-eval')/);
+      const policy = await requiredAttribute(page.locator('meta[http-equiv="Content-Security-Policy"]'), "content");
+      expect(policy).toMatch(/script-src/u);
+      expect(policy).not.toMatch(/script-src(?:-elem)?[^;]*(?:'unsafe-inline'|'unsafe-eval')/u);
       testInfo.annotations.push({ type: "intentional-csp-probe", description: "The next inline script must be rejected by the page policy" });
       await page.evaluate(() => {
         const securityWindow = window as Window & {
@@ -322,9 +331,9 @@ for (const locale of locales) {
         await expect(noJsPage.locator("main")).toContainText("Cloud");
         await expect(noJsPage.locator("#cert-grid-wrapper")).toBeVisible();
         expect(await noJsPage.locator("#cert-grid .magia:not(.hidden)").count()).toBeGreaterThan(0);
-        await expect(noJsPage.locator("#top").getByRole("link", { name: "LinkedIn", exact: true })).toHaveAttribute("href", /^https:\/\/linkedin\.com\/in\//);
+        await expect(noJsPage.locator("#top").getByRole("link", { name: "LinkedIn", exact: true })).toHaveAttribute("href", /^https:\/\/linkedin\.com\/in\//u);
         await expect(noJsPage.locator('#top a[href^="mailto:"]')).toHaveAttribute("href", "mailto:agus.acevedo2000@gmail.com");
-        await expect(noJsPage.locator("#blog-window")).toHaveClass(/overflow-x-auto/);
+        await expect(noJsPage.locator("#blog-window")).toHaveClass(/overflow-x-auto/u);
       } finally {
         await context.close();
       }

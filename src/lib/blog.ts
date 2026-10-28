@@ -21,12 +21,14 @@ export interface ArticleSummary {
   readingTime: number | null;
 }
 
+/** Normalize control/whitespace characters and bound text from the public feed. */
 function text(value: unknown, limit: number): string {
   return typeof value === "string"
-    ? value.replace(/[\u0000-\u001f\u007f]/g, " ").replace(/\s+/g, " ").trim().slice(0, limit)
+    ? value.replace(/\p{Cc}/gu, " ").replace(/\s+/gu, " ").trim().slice(0, limit)
     : "";
 }
 
+/** Accept only bounded HTTPS URLs on explicit hosts, without credentials or ports. */
 function allowedUrl(value: unknown, allowedHosts: ReadonlySet<string>): string | null {
   if (typeof value !== "string" || value.length > 2048) return null;
   try {
@@ -43,6 +45,7 @@ function allowedUrl(value: unknown, allowedHosts: ReadonlySet<string>): string |
 
 // Treat the API as untrusted input. Templates render these strings through Astro's
 // normal HTML escaping; no API-provided HTML is inserted into the document.
+/** Validate at most three complete article summaries from an untrusted payload. */
 export function parseArticles(payload: unknown): ArticleSummary[] {
   if (!Array.isArray(payload)) return [];
   const articles: ArticleSummary[] = [];
@@ -84,6 +87,7 @@ export function parseArticles(payload: unknown): ArticleSummary[] {
   return articles;
 }
 
+/** Fetch a bounded feed, preserving a validated snapshot on upstream failure. */
 async function loadArticles(): Promise<ArticleSummary[]> {
   try {
     const response = await fetch(ARTICLES_ENDPOINT, {
@@ -125,7 +129,9 @@ async function loadArticles(): Promise<ArticleSummary[]> {
 
 // Both localized pages share one bounded API request per build.
 let articlesPromise: Promise<ArticleSummary[]> | undefined;
+/** Share the same request/result between the static Spanish and English pages. */
 export function getArticles(): Promise<ArticleSummary[]> {
-  return articlesPromise ??= loadArticles();
+  articlesPromise ??= loadArticles();
+  return articlesPromise;
 }
 

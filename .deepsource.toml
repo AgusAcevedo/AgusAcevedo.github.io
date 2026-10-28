@@ -1,8 +1,10 @@
 version = 1
 
+test_patterns = ["tests/**"]
+exclude_patterns = ["dist/**", "node_modules/**", "playwright-report/**", "test-results/**"]
+
 [[analyzers]]
 name = "javascript"
 
   [analyzers.meta]
-  plugins = ["react"]
-  environment = ["browser"]
+  environment = ["browser", "nodejs"]
