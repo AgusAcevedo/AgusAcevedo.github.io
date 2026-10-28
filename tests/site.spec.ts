@@ -1,7 +1,8 @@
 import { test as base, expect, type Locator, type Page, type TestInfo } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
 
-const test = base.extend<{ runtimeHealth: undefined }>({
+/** Collect browser errors for each test and verify the shared log at teardown. */
+const test = base.extend<{ runtimeHealth: readonly string[] }>({
   runtimeHealth: [async ({ page }, use, testInfo) => {
     const errors: string[] = [];
     let expectedInlineRejections = 0;
@@ -18,7 +19,7 @@ const test = base.extend<{ runtimeHealth: undefined }>({
       if (intentionalCspRejection) expectedInlineRejections++;
       if (!intentionalCspRejection) errors.push(`Console: ${text}`);
     });
-    await use(undefined);
+    await use(errors);
     expect.soft(errors, "No uncaught application exceptions or unexpected console errors").toEqual([]);
   }, { auto: true }],
 });

@@ -8,6 +8,7 @@ export const translations = {
   en,
 } as const;
 
+/** Return the requested language's messages, falling back to the default locale when omitted. */
 export function useTranslations(lang?: Language) {
   // Si se proporciona un idioma explícito, usarlo
   if (lang && lang in translations) {
