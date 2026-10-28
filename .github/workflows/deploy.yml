@@ -9,14 +9,14 @@ on:
 permissions:
   contents: read
 
-concurrency:
-  group: portfolio-${{ github.ref }}
-  cancel-in-progress: true
-
 jobs:
   validate:
     runs-on: ubuntu-latest
     timeout-minutes: 15
+    # Superseded validation can stop without cancelling an active deployment.
+    concurrency:
+      group: portfolio-validation-${{ github.workflow }}-${{ github.ref }}
+      cancel-in-progress: true
     steps:
       - name: Check out source
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -41,6 +41,17 @@ jobs:
         run: pnpm exec playwright install --with-deps chromium firefox webkit
       - name: Test accessibility and interactions
         run: pnpm test:e2e
+      - name: Preserve failed browser test diagnostics
+        if: failure() && !cancelled()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: playwright-failure-${{ github.run_id }}-${{ github.run_attempt }}
+          path: |
+            playwright-report/
+            test-results/
+          if-no-files-found: ignore
+          retention-days: 7
+          compression-level: 0
       - name: Upload Pages artifact
         if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
         uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5.0.0

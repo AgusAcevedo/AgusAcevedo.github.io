@@ -1,5 +1,7 @@
 ---
 import "../styles/global.css";
+import onestLatinFontUrl from "@fontsource-variable/onest/files/onest-latin-wght-normal.woff2?url";
+import themeInitScript from "../../public/theme-init.js?raw";
 
 import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
@@ -22,7 +24,8 @@ const htmlLang = currentLocale === 'es' ? 'es-AR' : 'en-US';
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="referrer" content="strict-origin-when-cross-origin" />
-    <script is:inline src="/theme-init.js"></script>
+    <script is:inline set:html={themeInitScript} />
+    <link rel="preload" href={onestLatinFontUrl} as="font" type="font/woff2" crossorigin="anonymous" />
     
     <!-- Favicons múltiples formatos para mejor compatibilidad -->
     <link rel="icon" type="image/x-icon" href="/favicon.ico" />

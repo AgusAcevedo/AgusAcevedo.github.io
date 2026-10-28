@@ -18,8 +18,8 @@ export const es = {
     github: 'https://github.com/AgusAcevedo',
     twitter: '', // Opcional: 'https://twitter.com/usuario'
     // Imágenes
-    profileImage: '/agus.webp', //'/me.png',
-    ogImage: '/og.png', // Imagen para compartir en redes y buscadores
+    profileImage: '/agus.webp',
+    ogImage: '/og.jpg', // Imagen para compartir en redes y buscadores
     favicon: '/favicon.svg',
     // Educación
     university: 'UADE',

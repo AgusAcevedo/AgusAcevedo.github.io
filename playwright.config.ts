@@ -10,6 +10,8 @@ export default defineConfig({
   retries: process.env.CI ? 1 : 0,
   workers: process.env.CI ? 2 : undefined,
   timeout: 30_000,
+  // Stop cleanly in CI so reporters finish before the workflow's 15-minute limit.
+  globalTimeout: process.env.CI ? 7 * 60_000 : undefined,
   expect: { timeout: 5_000 },
   outputDir: "test-results",
   reporter: [["list"], ["html", { outputFolder: "playwright-report", open: "never" }]],
