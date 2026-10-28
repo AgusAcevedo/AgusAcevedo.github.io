@@ -1,7 +1,24 @@
-<div class="flex items-center">
+---
+import type { HTMLAttributes } from "astro/types";
+
+interface Props extends HTMLAttributes<"a"> {
+  href: string;
+}
+
+const { href, ...props } = Astro.props;
+---
+
+<a
+  {...props}
+  href={href}
+  target="_blank"
+  rel="noopener noreferrer"
+  class="flex items-center rounded-full focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-violet-500"
+>
   <span class="relative inline-flex overflow-hidden rounded-full p-[1px]">
     <span
-      class="absolute inset-[-1000%] animate-[spin_2s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,#a78bfa_0%,#4c1d95_50%,#a78bfa_100%)]"
+      aria-hidden="true"
+      class="absolute inset-[-1000%] animate-[spin_2s_linear_infinite] motion-reduce:animate-none bg-[conic-gradient(from_90deg_at_50%_50%,#a78bfa_0%,#4c1d95_50%,#a78bfa_100%)]"
     ></span>
     <div
       class="inline-flex items-center justify-center w-full px-3 py-1 text-sm text-violet-800 bg-violet-100 rounded-full cursor-pointer dark:bg-gray-800 dark:text-white/80 backdrop-blur-3xl whitespace-nowrap"
@@ -9,4 +26,4 @@
       <slot />
     </div>
   </span>
-</div>
+</a>
