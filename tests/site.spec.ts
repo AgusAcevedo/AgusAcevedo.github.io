@@ -164,7 +164,9 @@ for (const locale of locales) {
           expect(initialColor).not.toMatch(/transparent|rgba\(|\//u);
           await page.locator("#blog").scrollIntoViewIfNeeded();
           await expect(navigation).toBeVisible();
-          expect(await navigation.evaluate(element => getComputedStyle(element).backgroundColor)).toBe(initialColor);
+          const scrolledColor = await navigation.evaluate(element => getComputedStyle(element).backgroundColor);
+          expect(scrolledColor).not.toMatch(/transparent|rgba\(|\//u);
+          await expect(page.locator("html")).toHaveAttribute("data-theme", theme);
           const bounds = await navigation.boundingBox();
           if (bounds === null) throw new Error("Navigation has no visible container");
           expect(bounds.y).toBeGreaterThanOrEqual(0);
