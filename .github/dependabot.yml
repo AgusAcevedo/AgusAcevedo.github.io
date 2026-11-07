@@ -11,6 +11,9 @@ updates:
       # The stable Astro checker does not yet support the TypeScript 7 API.
       - dependency-name: typescript
         versions: ['>=7']
+      # Keep declarations aligned with Node 24; revisit when upgrading the runtime.
+      - dependency-name: '@types/node'
+        versions: ['>=25']
   - package-ecosystem: github-actions
     directory: /
     schedule:
