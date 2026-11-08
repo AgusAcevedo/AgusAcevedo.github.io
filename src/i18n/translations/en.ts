@@ -51,10 +51,10 @@ export const en = {
     experience: 'Experience',
     education: 'Education',
     stack: 'Stack',
-    projects: 'Certifications',
+    projects: 'Credentials',
     myProjects: 'Projects',
     blog: 'Blog',
-    certifications: 'Certifications',
+    certifications: 'Credentials',
     contact: 'Contact',
   },
 
@@ -62,7 +62,8 @@ export const en = {
   hero: {
     greeting: "Hi, I'm",
     available: 'Available for work',
-    description: '<strong>Cloud & Platform Engineer</strong> with experience in design, automation, and operation of IT infrastructure for <strong>large-scale corporate environments</strong> in Latin America and the Caribbean.',
+    role: 'Cloud & Platform Engineer',
+    description: 'I design, automate, and operate cloud platforms and IT infrastructure for large-scale enterprise environments across Latin America and the Caribbean.',
     contact: 'Contact me',
     cv: 'Download Resume',
   },
@@ -124,9 +125,24 @@ export const en = {
     ],
   },
 
-  // Projects/Certifications
+  credentials: {
+    title: 'Credentials',
+    certificationsTitle: 'Certifications',
+    certificationsDescription: 'Credentials earned through certification exams.',
+    coursesDescription: 'Courses, diplomas, and learning badges.',
+    issued: 'Earned',
+    expires: 'Expires',
+    verify: 'Verify credential',
+    badgeAlt: 'Badge for',
+    status: {
+      active: 'Active',
+      expired: 'Expired',
+    },
+  },
+
+  // Courses and learning badges
   projects: {
-    title: 'Certifications and Badges',
+    title: 'Courses & Badges',
     filters: {
       featured: 'Featured',
       cloud: 'Cloud',
@@ -138,9 +154,9 @@ export const en = {
       all: 'All',
     },
     viewCertificate: 'View certificate',
-    filterByCategory: 'Filter certifications by category',
+    filterByCategory: 'Filter courses and badges by category',
     filterBy: 'Filter by',
-    loading: 'Loading certifications...',
+    loading: 'Loading courses and badges...',
     modal: {
       close: 'Close',
       issuedBy: 'Issued by',
@@ -181,11 +197,6 @@ export const en = {
         value: '30+',
         label: 'Certificates',
       },
-      // Uncomment when you have paid certifications
-      // certifications: {
-      //   value: '5+',
-      //   label: 'Certifications',
-      // },
     },
   },
 

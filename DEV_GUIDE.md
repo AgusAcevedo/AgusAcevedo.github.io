@@ -10,7 +10,7 @@ Esta guía técnica te ayudará a personalizar y mantener tu portfolio.
   - [Información Personal](#información-personal)
   - [Experiencia Laboral](#experiencia-laboral)
   - [Educación](#educación)
-  - [Certificados](#certificados)
+  - [Credenciales](#credenciales)
   - [Stack Tecnológico](#stack-tecnológico)
   - [Proyectos](#proyectos)
   - [Blog](#blog)
@@ -27,9 +27,11 @@ Esta guía técnica te ayudará a personalizar y mantener tu portfolio.
 /
 ├── public/              # Archivos estáticos
 │   ├── webp_certs/     # Imágenes de certificados
+│   ├── certifications/ # Insignias de certificaciones
 │   └── projects/       # Imágenes de proyectos
 ├── src/
 │   ├── components/     # Componentes Astro
+│   ├── data/           # Datos de certificaciones y respaldo del blog
 │   ├── i18n/          # Traducciones (ES/EN)
 │   │   └── translations/
 │   │       ├── es.ts  # 🔥 ARCHIVO PRINCIPAL DE CONTENIDO (Español)
@@ -74,7 +76,7 @@ tudominio.com
 
 ## 📝 Gestión de Contenido
 
-**IMPORTANTE:** Todo el contenido editable está en:
+El contenido personal y las traducciones están en:
 - **Español:** `src/i18n/translations/es.ts`
 - **Inglés:** `src/i18n/translations/en.ts`
 
@@ -179,58 +181,68 @@ education: {
 }
 ```
 
-### 🏆 Certificados
+### 🏆 Credenciales
 
-Los certificados están **hardcodeados** en `src/components/Projects.astro`.
+Un único enlace **Credenciales / Credentials** lleva a dos grupos: primero
+**Certificaciones / Certifications**, para credenciales obtenidas mediante
+exámenes de certificación; luego **Cursos e insignias / Courses & Badges**, para
+formación, diplomaturas y logros de aprendizaje. La clasificación depende del
+tipo de credencial. Se conservan los anchors `/#certificados` y
+`/en/#certifications`.
 
-#### Agregar un nuevo certificado:
+#### Certificaciones
 
-1. **Agrega la imagen** en `public/webp_certs/`
-
-2. **Define el tag** (si es nuevo proveedor):
-
-```typescript
-// En Projects.astro, línea ~15
-const TAGS = {
-  // ... tags existentes
-  TU_PROVEEDOR: {
-    name: "Nombre del Proveedor",
-    class: "bg-[#COLOR] text-white",
-    icon: IconoComponente, // Importa un ícono si lo tienes
-  },
-};
-```
-
-3. **Agrega el certificado al array** `PROJECTS`:
+Edita el array tipado `certifications` en `src/data/certifications.ts` y guarda
+las imágenes en `public/certifications/`. Por ejemplo, la credencial actual:
 
 ```typescript
-const PROJECTS = [
-  // ... certificados existentes
-  {
-    title: "Nombre del Certificado",
-    issuer: [TAGS.TU_PROVEEDOR], // Puede ser múltiple: [TAGS.GOOGLE, TAGS.COURSERA]
-    date: "1 Ene 2024",
-    link: "https://link-al-certificado.com/verify/123",
-    image: "/webp_certs/tu-certificado.webp",
-    cl: "no-oculto", // "no-oculto" = destacado, "hidden" = oculto por defecto
-  },
-];
+{
+  id: 'google-cloud-associate-cloud-engineer',
+  title: 'Associate Cloud Engineer Certification',
+  issuer: 'Google Cloud',
+  issuedOn: '2026-09-04',
+  expiresAt: '2029-09-04T00:00:00.000Z',
+  image: '/certifications/google-cloud-associate-cloud-engineer.png',
+  verificationUrl: 'https://www.credly.com/badges/8a67eb1e-099c-4708-a6ad-1c51245e0d53',
+}
 ```
 
-**Estructura completa:**
-- `title`: Nombre del certificado
-- `issuer`: Array de tags (puede ser múltiple para co-branded)
-- `date`: Fecha de obtención (formato libre)
-- `link`: URL de verificación del certificado
-- `image`: Ruta relativa desde `public/`
-- `cl`: 
-  - `"no-oculto"` = Se muestra en la vista inicial (destacados)
-  - `"hidden"` = Se muestra solo al expandir "Ver más"
+Usa un `id` único, `issuedOn` como fecha ISO `YYYY-MM-DD` y `expiresAt` como
+fecha y hora ISO con zona horaria, verificadas con el emisor. Conserva el
+instante exacto de vencimiento; no lo conviertas a una fecha sin hora.
+`src/components/Certifications.astro` presenta las fechas en cada idioma y
+actualiza el estado **Vigente / Active** o **Vencida / Expired** en el navegador.
+El estado cambia a vencida en el instante UTC indicado por `expiresAt`. Un
+temporizador actualiza la página al próximo vencimiento y también se revisa el
+estado cuando vuelve a mostrarse o estar visible. No requiere recompilar el
+sitio. Sin JavaScript, las fechas y el enlace de verificación siguen visibles.
+Al renovar, actualiza las fechas y el enlace; las credenciales vencidas se
+conservan.
 
-**Tips:**
-- Usa formato `.webp` para mejor compresión
-- Ordena los certificados por fecha (más recientes primero)
-- Usa `cl: "no-oculto"` para los más importantes (6-8 certificados)
+#### Cursos e insignias
+
+El array `PROJECTS` de `src/components/Projects.astro` conserva los cursos,
+diplomaturas e insignias, con sus filtros, paginación y modal. Para agregar uno,
+guarda su imagen en `public/webp_certs/`, define el proveedor en `TAGS` si es
+necesario y añade una entrada:
+
+```typescript
+{
+  title: "Nombre del curso",
+  issuer: [TAGS.GOOGLE, TAGS.COURSERA],
+  date: "1 Jan 2024",
+  link: "https://link-al-certificado.com/verify/123",
+  image: "/webp_certs/tu-certificado.webp",
+  featured: true,
+  categories: ["Cloud", "Python"],
+}
+```
+
+`featured: true` lo incluye en la vista inicial de destacados. Usa las categorías
+existentes (`Cloud`, `Backend`, `Python`, `Redes`, `Seguridad`, `Otros`) para que
+funcionen los filtros. El componente ordena las entradas por fecha; usa fechas
+con mes en inglés como en las entradas actuales. Los textos de ambos grupos se
+editan en `src/i18n/translations/es.ts` y `en.ts`.
 
 ### 🛠️ Stack Tecnológico
 
@@ -469,216 +481,117 @@ Para cambiar:
 
 ### Carousels
 
-Hay 3 carousels en el sitio:
+La navegación es manual; los carousels no avanzan por temporizador:
 
-1. **Blog** (móvil solamente)
-2. **Proyectos** (full responsive)
-3. **Certificados** (full responsive)
+- `Blog.astro` presenta un carousel en móvil, con flechas, indicadores y gestos
+  horizontales. En escritorio muestra las tarjetas sin ese desplazamiento.
+- `MyProjects.astro` adapta cuántos proyectos se ven al ancho disponible; las
+  flechas, indicadores y gestos cambian de grupo.
+- `Projects.astro` filtra los cursos e insignias por categoría y los pagina con
+  flechas, indicadores o gestos. El filtro usa botones en escritorio y un
+  selector en móvil.
 
-Configuración en cada componente:
-- Auto-avance cada 5 segundos
-- Navegación con flechas
-- Indicadores de página (dots)
-
-Para modificar velocidad del auto-avance, busca:
-
-```javascript
-setInterval(() => {
-  // lógica del carousel
-}, 5000); // 👈 5000ms = 5 segundos
-```
+Al cambiar de página, las tarjetas o grupos fuera de vista usan `inert` y
+`aria-hidden` para que sus controles no reciban foco ni se anuncien como
+contenido activo. Conserva este comportamiento al modificar la navegación, y
+comprueba el teclado, los límites de página y los cambios de ancho con
+`pnpm test:e2e`.
 
 ---
 
 ## 🌍 Internacionalización (i18n)
 
-El sitio soporta **Español** (default) e **Inglés**.
+El portfolio genera español en `/` e inglés en `/en/`. Cada página obtiene su
+idioma de `Astro.currentLocale` durante la compilación y pasa ese valor a
+`useTranslations(currentLocale)`. No hay un estado de idioma del navegador que
+vuelva a traducir la página.
 
-### Estructura:
+### Archivos y contenido
 
-```
-/                   → Español (default)
-/en/               → Inglés
-```
+- `src/i18n/languages.ts` define los idiomas y el predeterminado (`es`).
+- `src/i18n/index.ts` exporta los diccionarios y `useTranslations`.
+- `src/i18n/translations/es.ts` define la estructura y el contenido español.
+- `src/i18n/translations/en.ts` aporta el inglés con `satisfies Translations`.
+- `src/components/LanguageToggle.astro` contiene los enlaces nativos a las dos
+  rutas; `Header.astro` incluye ese selector en escritorio y móvil.
 
-### Archivos de traducción:
+Al modificar contenido, mantén la misma estructura de claves en los dos
+idiomas y conserva los identificadores de datos compartidos. El tipado
+comprueba la estructura, pero la calidad de la traducción y los textos largos
+requieren revisión en ambas vistas.
 
-- `src/i18n/translations/es.ts` → Todo el contenido en español
-- `src/i18n/translations/en.ts` → Todo el contenido en inglés
+### Añadir otro idioma
 
-### Agregar un idioma nuevo:
+La implementación tiene varios puntos específicos de dos idiomas. Añadir un
+tercero requiere revisar el registro de idiomas, diccionarios, configuración de
+Astro y sitemap, nueva página y anchors, selector, navegación, HTML `lang`,
+alternates SEO, formatos de fecha y pruebas. Crear sólo un archivo de traducción
+no completa la integración.
 
-1. **Crear archivo de traducción:**
-
-```bash
-cp src/i18n/translations/es.ts src/i18n/translations/fr.ts
-```
-
-2. **Traducir el contenido** en el nuevo archivo
-
-3. **Crear página:**
-
-```bash
-mkdir src/pages/fr
-cp src/pages/en/index.astro src/pages/fr/index.astro
-```
-
-4. **Actualizar imports:**
-
-En `src/pages/fr/index.astro`:
-
-```typescript
-import { fr } from '@/i18n/translations/fr';
-const t = fr;
-```
-
-5. **Actualizar navegación:**
-
-Agrega el selector de idioma en `src/components/Header.astro`
-
-### Sincronizar traducciones:
-
-**IMPORTANTE:** Al agregar contenido nuevo en español, recuerda:
-
-1. Agregar la misma estructura en `en.ts`
-2. Traducir todos los textos
-3. Mantener las mismas `id` y `keys` en ambos archivos
-
-**Ejemplo:**
-
-```typescript
-// es.ts
-myProjects: {
-  title: 'Mis Proyectos',
-  items: [
-    { id: 'proyecto-1', title: 'Proyecto 1', ... }
-  ]
-}
-
-// en.ts
-myProjects: {
-  title: 'My Projects', // 👈 Traducido
-  items: [
-    { id: 'proyecto-1', title: 'Project 1', ... } // 👈 Mismo ID
-  ]
-}
-```
+La [documentación de i18n](src/i18n/README.md) explica el uso en componentes y la
+lista de cambios necesaria para ampliar idiomas. Tras modificarlo, ejecuta
+`pnpm build` y `pnpm test:e2e`, y revisa las rutas en escritorio y móvil.
 
 ---
 
-## � SEO y Posicionamiento
+## 🔍 SEO y Posicionamiento
 
-El sitio incluye metadatos y un sitemap. Las protecciones y los límites del hosting están documentados en [SECURITY.md](SECURITY.md).
+El sitio genera dos páginas estáticas: español en `/` e inglés en `/en/`.
+Consulta [SEO_GUIDE.md](SEO_GUIDE.md) para el mantenimiento y la revisión de
+Search Console; las decisiones de CSP y hosting están en
+[SECURITY.md](SECURITY.md).
 
-### ✅ SEO Implementado
+### Implementación actual
 
-El portfolio incluye:
-- ✅ Meta tags completos (title, description, keywords)
-- ✅ Open Graph para redes sociales (Facebook, Twitter)
-- ✅ Schema.org structured data (Person, WebSite)
-- ✅ Sitemap XML multi-idioma con hreflang
-- ✅ robots.txt configurado
-- ✅ Canonical URLs
-- ✅ Tags de geolocalización (Buenos Aires, Argentina)
-- ✅ Un H1 visible y semántico
-- ✅ Content Security Policy generada en el HTML de ambos idiomas
-- ℹ️ GitHub Pages ignora `public/_headers`; los headers HTTP adicionales requieren configurar el hosting, como explica `SECURITY.md`.
+- `src/components/SEO.astro` genera descripción, canonical por ruta,
+  alternates `es-AR` / `en-US` / `x-default`, Open Graph y Twitter Cards.
+- El JSON-LD contiene `Person`, `WebSite` y `ProfilePage`, con una
+  `Organization` anidada en `Person.worksFor`.
+- `Layout.astro` publica el título, y `Hero.astro` contiene el H1 de la página.
+- `@astrojs/sitemap` genera el sitemap al compilar. `public/robots.txt` permite
+  el rastreo y referencia `https://agusacevedo.com.ar/sitemap-index.xml`.
+- El meta tag de Search Console está configurado en `SEO.astro`; la propiedad
+  y su verificación efectiva se comprueban en Search Console.
 
-### 📝 Configuración SEO
+### Editar metadatos
 
-**Archivo principal:** `src/i18n/translations/es.ts` (y `en.ts`)
+Actualiza `src/i18n/translations/es.ts` y `en.ts`:
 
 ```typescript
 seo: {
   title: 'Tu Nombre | Tu Puesto',
-  description: 'Descripción de 150-160 caracteres optimizada para buscadores',
-  keywords: 'keyword1, keyword2, keyword3, ...',
-  ogTitle: 'Título para redes sociales',
-  ogDescription: 'Descripción para cuando se comparte en redes',
+  description: 'Descripción clara del perfil y del contenido visible',
+  ogTitle: 'Título para compartir en redes',
+  ogDescription: 'Descripción para compartir en redes',
 }
 ```
 
-**Tips para mejorar SEO:**
+`personal.ogImage` selecciona la imagen social; actualmente usa `/og.jpg`.
+Si cambias la imagen, revisa su tipo y dimensiones declaradas en `SEO.astro`.
+El campo existente `seo.keywords` no se publica como meta tag en el componente
+actual; tampoco se generan tags de geolocalización.
 
-1. **Title**: Máximo 60 caracteres, incluye tu nombre y puesto
-2. **Description**: 150-160 caracteres, natural y descriptivo
-3. **Keywords**: 10-15 keywords relevantes, separadas por comas
-4. **OG Tags**: Pueden ser diferentes del title/description normal
+Al cambiar de dominio, actualiza `site` en `astro.config.mjs`,
+`personal.siteUrl` en **ambos idiomas**, `public/CNAME` y el sitemap indicado en
+`public/robots.txt`. Revisa enlaces absolutos y redirecciones para mantener las
+URLs coherentes. Al añadir idiomas o rutas, actualiza también los alternates de
+`SEO.astro` y la configuración de sitemap.
 
-### 🚀 Hacer que tu sitio aparezca en Google
+### Verificar cambios
 
-**Lee la guía completa:** [`SEO_GUIDE.md`](./SEO_GUIDE.md)
+Ejecuta `pnpm build`, `pnpm test` y `pnpm test:e2e`. Revisa el HTML y los sitemaps
+generados en `dist/`, y vuelve a comprobar las URLs públicas tras desplegar.
+La guía [SEO_GUIDE.md](SEO_GUIDE.md) incluye las herramientas oficiales para
+inspeccionar URLs, validar datos estructurados y medir el rendimiento. No se
+presupone una puntuación de Lighthouse, una posición ni un plazo de indexación.
 
-**Pasos rápidos:**
+### Analítica
 
-1. **Google Search Console** (OBLIGATORIO):
-   - Ve a: https://search.google.com/search-console
-   - Agrega tu sitio
-   - Verifica propiedad (descarga archivo HTML y ponlo en `public/`)
-   - Envía sitemap: `https://tudominio.com/sitemap-index.xml`
-
-2. **Solicita indexación manual:**
-   - En Search Console → "Inspección de URLs"
-   - Ingresa tu URL y solicita indexación
-   - Hazlo para ambas versiones (ES y EN)
-
-3. **Agrega backlinks:**
-   - LinkedIn: Agrega URL en tu perfil
-   - GitHub: Agrega en perfil y repos importantes
-   - Dev.to: Agrega en perfil
-   - Comparte en redes sociales
-
-**Tiempo esperado:** 2-7 días para aparecer en Google
-
-### 🛠️ Herramientas de Verificación
-
-Antes de deployar, verifica:
-
-- **Schema Validator**: https://validator.schema.org/
-- **Rich Results Test**: https://search.google.com/test/rich-results
-- **Mobile-Friendly Test**: https://search.google.com/test/mobile-friendly
-- **PageSpeed Insights**: https://pagespeed.web.dev/
-
-### 📊 Google Analytics (Opcional)
-
-Para trackear visitas, agrega en `src/layouts/Layout.astro` (antes de `</head>`):
-
-```astro
-<!-- Google Analytics -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
-<script is:inline>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-XXXXXXXXXX');
-</script>
-```
-
-Obtén tu ID en: https://analytics.google.com/
-
-### 🔧 Configuración Avanzada
-
-**Cambiar URLs del sitio:**
-
-Edita `astro.config.mjs`:
-
-```javascript
-export default defineConfig({
-  site: 'https://tudominio.com/', // 👈 Tu URL
-  // ...
-})
-```
-
-Y en `src/i18n/translations/es.ts`:
-
-```typescript
-personal: {
-  siteUrl: 'https://tudominio.com/', // 👈 Debe coincidir
-  // ...
-}
-```
-
-**IMPORTANTE:** Ambas URLs deben ser **exactamente iguales** o el SEO fallará.
+Agregar analítica requiere elegir qué datos y proveedor utilizar, además de
+configurar una integración compatible con la CSP y el hosting. Los scripts
+externos y las conexiones de recopilación no están autorizados por la política
+actual. Sigue [SECURITY.md](SECURITY.md) antes de habilitar un proveedor; pegar
+su snippet en el layout no basta.
 
 ---
 

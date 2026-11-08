@@ -3,6 +3,7 @@ import { Image } from 'astro:assets';
 import { useTranslations } from "../i18n";
 import type { Language } from "../i18n/languages";
 import Google from "./icons/Google.astro";
+import GcpChip from "./GcpChip.astro";
 import Aws from "./icons/Aws.astro";
 import Htb from "./icons/Htb.astro";
 import Coderhouse from "./icons/Coderhouse.astro";
@@ -375,10 +376,12 @@ const FILTERS = [
           <button type="button" class="flex flex-col h-full text-left modal-open" data-link={link} data-title={title} data-date={date} data-image={image} data-issuer={issuer.map((t)=>t.name).join(', ')} aria-haspopup="dialog" aria-controls="cert-modal">
             <div class="hidden modal-issuers-data">
               {issuer.map((tag) => (
-                <span class={`inline-flex items-center gap-2 rounded-full text-xs py-1 px-3 ${tag.class}`}>
-                  <tag.icon class="size-4" />
-                  {tag.name}
-                </span>
+                tag.name === 'GCP' ? <GcpChip variant="modal" /> : (
+                  <span class={`inline-flex items-center gap-2 rounded-full text-xs py-1 px-3 ${tag.class}`}>
+                    <tag.icon class="size-4" />
+                    {tag.name}
+                  </span>
+                )
               ))}
             </div>
             <div>
@@ -393,7 +396,7 @@ const FILTERS = [
               />
             </div>
             <div class="flex flex-col items-center pt-6 px-2 flex-grow">
-              <h3 class="text-sm font-bold text-center leading-snug min-h-[36px] text-gray-800 dark:text-white">{title}</h3>
+              <h4 class="text-sm font-bold text-center leading-snug min-h-[36px] text-gray-800 dark:text-white">{title}</h4>
               <p class="text-sm text-gray-500 dark:text-gray-400">{date}</p>
             </div>
             <div class="flex justify-center">
@@ -404,10 +407,12 @@ const FILTERS = [
                   return (
                     <>
                       <li>
-                        <span class={`inline-flex items-center gap-2 rounded-full text-xs h-8 px-3 ${first.class}`}>
-                          <first.icon class="size-4" />
-                          {first.name}
-                        </span>
+                        {first.name === 'GCP' ? <GcpChip /> : (
+                          <span class={`inline-flex items-center gap-2 rounded-full text-xs h-8 px-3 ${first.class}`}>
+                            <first.icon class="size-4" />
+                            {first.name}
+                          </span>
+                        )}
                       </li>
                       {rest.length > 0 && (
                         <li class="relative group/extra">
@@ -423,10 +428,12 @@ const FILTERS = [
                               <ul class="flex flex-col gap-1 text-xs text-gray-200">
                                 {rest.map((t) => (
                                   <li>
-                                    <span class={`inline-flex items-center gap-2 rounded-full h-6 px-2 ${t.class}`}>
-                                      <t.icon class="size-3.5" />
-                                      {t.name}
-                                    </span>
+                                    {t.name === 'GCP' ? <GcpChip variant="compact" /> : (
+                                      <span class={`inline-flex items-center gap-2 rounded-full h-6 px-2 ${t.class}`}>
+                                        <t.icon class="size-3.5" />
+                                        {t.name}
+                                      </span>
+                                    )}
                                   </li>
                                 ))}
                               </ul>

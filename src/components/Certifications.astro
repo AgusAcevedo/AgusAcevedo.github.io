@@ -1,0 +1,97 @@
+---
+import { certifications } from '../data/certifications';
+import { useTranslations } from '../i18n';
+import type { Language } from '../i18n/languages';
+import GcpChip from './GcpChip.astro';
+
+const locale = (Astro.currentLocale || 'es') as Language;
+const t = useTranslations(locale);
+const dateFormatter = new Intl.DateTimeFormat(locale === 'es' ? 'es-AR' : 'en-US', {
+  day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC',
+});
+const formatDate = (date: string) => dateFormatter.format(new Date(date));
+---
+
+<div class="space-y-5">
+  <div class="px-2.5">
+    <h3 class="text-2xl font-semibold text-gray-900 dark:text-white">{t.credentials.certificationsTitle}</h3>
+    <p class="mt-2 text-sm text-gray-600 dark:text-gray-400">{t.credentials.certificationsDescription}</p>
+  </div>
+
+  {certifications.map((certification) => (
+    <article aria-labelledby={`credential-${certification.id}`} class="rounded-2xl border border-violet-300 bg-white p-6 shadow-sm dark:border-violet-700/60 dark:bg-gray-900/60 sm:p-8">
+      <div class="flex flex-col gap-6 sm:flex-row sm:items-center sm:gap-8">
+        <div class="flex shrink-0 items-center justify-center self-center rounded-2xl bg-white p-4 sm:self-auto">
+          <img
+            src={certification.image}
+            alt={`${t.credentials.badgeAlt} ${certification.title}`}
+            width="176"
+            height="176"
+            class="size-40 object-contain sm:size-44"
+            loading="lazy"
+            decoding="async"
+          />
+        </div>
+        <div class="min-w-0 flex-1 text-center sm:text-left">
+          <div class="flex min-h-8 flex-wrap items-center justify-center gap-x-3 gap-y-2 sm:justify-start">
+            {certification.issuer === 'Google Cloud'
+              ? <GcpChip />
+              : <p class="text-sm font-medium text-violet-700 dark:text-violet-300">{certification.issuer}</p>}
+            <span
+              hidden
+              data-certification-status
+              data-expires-at={certification.expiresAt}
+              data-active-label={t.credentials.status.active}
+              data-expired-label={t.credentials.status.expired}
+              class="rounded-full px-3 py-1 text-xs font-semibold data-[status=active]:bg-emerald-100 data-[status=active]:text-emerald-800 data-[status=expired]:bg-amber-100 data-[status=expired]:text-amber-900 dark:data-[status=active]:bg-emerald-950 dark:data-[status=active]:text-emerald-300 dark:data-[status=expired]:bg-amber-950 dark:data-[status=expired]:text-amber-300"
+            ></span>
+          </div>
+          <h4 id={`credential-${certification.id}`} class="mt-3 text-balance text-xl font-semibold leading-snug text-gray-900 dark:text-white sm:text-2xl">{certification.title}</h4>
+          <dl class="mt-5 grid gap-4 text-sm tabular-nums sm:grid-cols-2">
+            <div>
+              <dt class="text-gray-600 dark:text-gray-400">{t.credentials.issued}</dt>
+              <dd class="mt-1 font-medium text-gray-900 dark:text-gray-200"><time datetime={certification.issuedOn}>{formatDate(certification.issuedOn)}</time></dd>
+            </div>
+            <div>
+              <dt class="text-gray-600 dark:text-gray-400">{t.credentials.expires}</dt>
+              <dd class="mt-1 font-medium text-gray-900 dark:text-gray-200"><time datetime={certification.expiresAt}>{formatDate(certification.expiresAt)}</time></dd>
+            </div>
+          </dl>
+          <a href={certification.verificationUrl} target="_blank" rel="noopener noreferrer" class="mt-6 inline-flex min-h-11 items-center justify-center gap-2 rounded-full bg-violet-600 px-5 py-2.5 text-sm font-medium text-white transition hover:bg-violet-700">
+            {t.credentials.verify}
+            <svg aria-hidden="true" class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M7 7h10v10" /></svg>
+          </a>
+        </div>
+      </div>
+    </article>
+  ))}
+</div>
+
+<script>
+  import { getCertificationStatus } from '../lib/certifications';
+
+  let midnightTimer: number | undefined;
+  function updateCertificationStatuses() {
+    window.clearTimeout(midnightTimer);
+    const now = new Date();
+    let nextUpdate = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate() + 1);
+    document.querySelectorAll<HTMLElement>('[data-certification-status]').forEach((element) => {
+      const expiresAt = element.dataset.expiresAt!;
+      const status = getCertificationStatus(expiresAt, now);
+      element.dataset.status = status;
+      element.textContent = status === 'active' ? element.dataset.activeLabel! : element.dataset.expiredLabel!;
+      element.hidden = false;
+      const expiration = Date.parse(expiresAt);
+      if (expiration > now.getTime()) nextUpdate = Math.min(nextUpdate, expiration);
+    });
+    // Keep an open page current as well as pages served from an older static build.
+    midnightTimer = window.setTimeout(updateCertificationStatuses, nextUpdate - now.getTime());
+  }
+
+  updateCertificationStatuses();
+  document.addEventListener('astro:page-load', updateCertificationStatuses);
+  window.addEventListener('pageshow', updateCertificationStatuses);
+  document.addEventListener('visibilitychange', () => {
+    if (!document.hidden) updateCertificationStatuses();
+  });
+</script>
