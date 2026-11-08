@@ -513,7 +513,8 @@ vuelva a traducir la página.
 - `src/i18n/translations/es.ts` define la estructura y el contenido español.
 - `src/i18n/translations/en.ts` aporta el inglés con `satisfies Translations`.
 - `src/components/LanguageToggle.astro` contiene los enlaces nativos a las dos
-  rutas; `Header.astro` incluye ese selector en escritorio y móvil.
+  rutas, visibles como ES / EN sin depender de JavaScript; `Header.astro`
+  incluye ese selector en escritorio y móvil.
 
 Al modificar contenido, mantén la misma estructura de claves en los dos
 idiomas y conserva los identificadores de datos compartidos. El tipado

@@ -180,24 +180,17 @@ for (const locale of locales) {
       }
     });
 
-    test("language disclosure supports Escape and navigates to the other localized page", async ({ page }) => {
+    test("native language links navigate to the other localized page with the keyboard", async ({ page }) => {
       await page.goto(locale.path);
-      const toggle = page.locator(".lang-toggle-btn:visible");
-      await toggle.press("ArrowDown");
-      await expect(toggle).toHaveAttribute("aria-expanded", "true");
-      const menu = page.locator(".lang-menu:visible");
-      await expect(menu.locator(`a[hreflang="${locale.code}"]`)).toHaveAttribute("aria-current", "page");
-      await page.keyboard.press("Escape");
-      await expect(toggle).toBeFocused();
-      await expect(toggle).toHaveAttribute("aria-expanded", "false");
-      await toggle.press("ArrowDown");
-      await page.keyboard.press(locale.code === "es" ? "End" : "Home");
-      const destination = menu.locator(`a[href="${locale.otherPath}"]`);
+      const links = page.locator('header .language-link:visible');
+      await expect(links).toHaveCount(2);
+      await expect(page.locator(`header .language-link[hreflang="${locale.code}"]:visible`)).toHaveAttribute('aria-current', 'page');
+      const destination = page.locator(`header .language-link[href="${locale.otherPath}"]:visible`);
+      await destination.focus();
       await expect(destination).toBeFocused();
       await destination.press("Enter");
       await expect(page).toHaveURL(new URL(locale.otherPath, origin).href);
       await expect(page.locator("html")).toHaveAttribute("lang", locale.otherLanguage);
-      await expect(page.locator(".lang-toggle-btn:visible")).toHaveAttribute("aria-expanded", "false");
       await expect(page.locator("#cert-carousel-region")).toBeVisible();
       const otherCode = locale.code === "es" ? "EN" : "ES";
       await expect(page.locator("#top a[download]")).toHaveAttribute("href", `/CV-Agustin-Acevedo-${otherCode}.pdf`);
@@ -344,10 +337,24 @@ for (const locale of locales) {
       for (const tag of await cloudTags.all()) await expect(tag).toBeHidden();
       await expect(page.locator('.tech-tag:not([hidden])')).toHaveCount(total - cloudCount);
       await checkAccessibility(page, testInfo, 'stack-category-unselected');
-      for (const button of await filters.locator('button').all()) {
+      for (const button of await filters.locator('.category-filter').all()) {
         if (await button.getAttribute('aria-pressed') === 'true') await button.click();
       }
       await expect(page.locator('.tech-tag:not([hidden])')).toHaveCount(0);
+      await expect(page.locator('#stack-empty-state')).toBeVisible();
+      await page.locator('#stack-reset').focus();
+      await page.locator('#stack-reset').press('Enter');
+      await expect(page.locator('.tech-tag:not([hidden])')).toHaveCount(total);
+      await expect(page.locator('#stack-empty-state')).toBeHidden();
+      await expect(page.locator('#stack-select-all')).toBeFocused();
+      await page.locator('#stack-clear-all').click();
+      await expect(page.locator('.tech-tag:not([hidden])')).toHaveCount(0);
+      await expect(page.locator('#stack-empty-state')).toBeVisible();
+      await checkAccessibility(page, testInfo, 'stack-empty-state');
+      await page.locator('#stack-select-all').click();
+      await expect(page.locator('.tech-tag:not([hidden])')).toHaveCount(total);
+      await expect(page.locator('#stack-filter-status')).toContainText(String(total));
+      await page.locator('#stack-clear-all').click();
       await cloud.press('Enter');
       await expect(cloud).toHaveAttribute('aria-pressed', 'true');
       await expect(page.locator('.tech-tag:not([hidden])')).toHaveCount(cloudCount);
@@ -511,6 +518,13 @@ for (const locale of locales) {
         await expect(noJsPage.locator("#top").getByRole("link", { name: "LinkedIn", exact: true })).toHaveAttribute("href", /^https:\/\/linkedin\.com\/in\//u);
         await expect(noJsPage.locator('#top a[href^="mailto:"]')).toHaveAttribute("href", "mailto:agus.acevedo2000@gmail.com");
         await expect(noJsPage.locator("#blog-window")).toHaveClass(/overflow-x-auto/u);
+        const languageLinks = noJsPage.locator('header .language-link:visible');
+        await expect(languageLinks).toHaveCount(2);
+        const otherLanguage = noJsPage.locator(`header .language-link[href="${locale.otherPath}"]:visible`);
+        await otherLanguage.focus();
+        await otherLanguage.press('Enter');
+        await expect(noJsPage).toHaveURL(new URL(locale.otherPath, origin).href);
+        await expect(noJsPage.locator('html')).toHaveAttribute('lang', locale.otherLanguage);
       } finally {
         await context.close();
       }

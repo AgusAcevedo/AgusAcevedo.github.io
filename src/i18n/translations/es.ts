@@ -165,6 +165,15 @@ export const es = {
   stack: {
     title: 'Stack Tecnológico',
     description: 'Tecnologías y herramientas que utilizo en mi día a día',
+    filters: {
+      instructions: 'Selecciona categorías para mostrar u ocultar tecnologías.',
+      categoriesLabel: 'Categorías de tecnologías',
+      selectAll: 'Seleccionar todas',
+      clearAll: 'Limpiar selección',
+      showAll: 'Mostrar todas las tecnologías',
+      empty: 'No hay categorías seleccionadas.',
+      count: '{visible} de {total} tecnologías visibles',
+    },
     categories: {
       virtualization: 'Virtualización',
       os: 'Sist. Operativos',

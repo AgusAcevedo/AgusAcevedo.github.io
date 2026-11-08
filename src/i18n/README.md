@@ -44,14 +44,14 @@ estado de idioma independiente de la ruta que deba sincronizarse.
 
 ## Selector de idioma
 
-`Header.astro` incluye el selector en sus controles de escritorio y móvil. El
-botón abre una lista de enlaces a `/` y `/en/`; el enlace activo usa
-`aria-current="page"` y cada opción indica `lang` y `hreflang`.
+`Header.astro` muestra enlaces directos **ES / EN** en escritorio y móvil. Sus
+destinos son `/` y `/en/`; el enlace activo usa `aria-current="page"` y cada
+opción indica `lang`, `hreflang` y su nombre accesible.
 
-El cambio de idioma navega a la otra página mediante un enlace normal. El
-JavaScript del selector controla su apertura y el teclado; no reemplaza las
-rutas ni vuelve a traducir el DOM. La preferencia de tema es independiente y
-sí utiliza `localStorage`; no debe confundirse con el idioma.
+El cambio de idioma usa navegación nativa y teclado estándar, sin un menú que
+deba abrirse y sin depender de JavaScript. No vuelve a traducir el DOM. La
+preferencia de tema es independiente y sí utiliza `localStorage`; no debe
+confundirse con el idioma.
 
 ## Añadir o modificar contenido
 
