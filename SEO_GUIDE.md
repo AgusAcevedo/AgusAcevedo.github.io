@@ -1,354 +1,99 @@
-# 🚀 Guía SEO - Cómo aparecer en Google
-
-Esta guía te ayudará a hacer que tu portfolio aparezca en Google y otros buscadores.
-
-## ✅ Problemas SEO Corregidos
-
-### 1. **URL Inconsistente (CRÍTICO)** ✅
-- **Problema:** `astro.config.mjs` tenía `agustinacevedo.me` pero traducciones `agusacevedo.com.ar`
-- **Solución:** Unificado todo a `https://agusacevedo.com.ar/`
-- **Archivos modificados:**
-  - `astro.config.mjs` - URL del sitio corregida
-  - Sitemap ahora apunta al dominio correcto
-
-### 2. Sitemap e idiomas
-- Ubicación: `https://agusacevedo.com.ar/sitemap-index.xml`.
-- Rutas ES/EN con alternates correctos. No se inventa `lastmod` en cada build.
-- Las URLs canónicas y Open Graph se construyen con `new URL()`.
-
-### 3. Encabezado principal
-- Un único H1 visible en `Hero.astro` y un único `main` en `Layout.astro`.
-- Mantener la jerarquía de secciones H2/H3 al agregar contenido.
-
-### 4. Seguridad y verificación
-- Astro genera una CSP efectiva en el HTML y una política de referrer.
-- GitHub Pages ignora `public/_headers`; la configuración de HTTP requiere
-  Cloudflare u otro hosting compatible. Ver [SECURITY.md](SECURITY.md).
-- Search Console utiliza el meta tag de verificación configurado en `SEO.astro`.
-- No se garantiza una posición en buscadores por agregar metadatos o cabeceras.
-
----
-
-## 📝 Pasos Siguientes para Indexación
-
-### **Paso 1: Google Search Console** (OBLIGATORIO)
-
-1. Ve a: https://search.google.com/search-console
-2. Click en "Agregar propiedad"
-3. Selecciona "Prefijo de URL": `https://agusacevedo.com.ar`
-4. Elige método de verificación:
-
-**Opción A: Archivo HTML (Recomendado)**
-```bash
-# Google te dará un archivo como: google1234567890abcdef.html
-# Descárgalo y ponlo en: public/google1234567890abcdef.html
-# Luego build y deploy
-pnpm build
-git add public/google1234567890abcdef.html
-git commit -m "Add Google Search Console verification"
-git push
-```
-
-**Opción B: Meta Tag**
-```astro
-<!-- En src/components/SEO.astro, después de la línea 79 -->
-<meta name="google-site-verification" content="TU_CODIGO_AQUI" />
-```
-
-5. **Verificar** en Search Console
-6. **Enviar sitemap:**
-   - En Search Console → "Sitemaps"
-   - Agregar: `https://agusacevedo.com.ar/sitemap-index.xml`
-   - Click "Enviar"
-
-### **Paso 2: Solicitar Indexación Manual** (IMPORTANTE)
-
-1. En Google Search Console, ve a "Inspección de URLs"
-2. Ingresa: `https://agusacevedo.com.ar`
-3. Click "Solicitar indexación"
-4. Repite para: `https://agusacevedo.com.ar/en/`
-
-**Tiempo estimado:** 2-7 días para aparecer en Google
-
-### **Paso 3: Bing Webmaster Tools**
-
-1. Ve a: https://www.bing.com/webmasters
-2. Agrega tu sitio: `https://agusacevedo.com.ar`
-3. Verificación (puedes importar desde Google Search Console)
-4. Enviar sitemap: `https://agusacevedo.com.ar/sitemap-index.xml`
-
-### **Paso 4: Schema.org Validation**
-
-Valida tus structured data:
-1. Ve a: https://validator.schema.org/
-2. Pega tu URL: `https://agusacevedo.com.ar`
-3. Verifica que no haya errores
-
-También prueba:
-- https://search.google.com/test/rich-results (Rich Results Test)
-- https://search.google.com/test/mobile-friendly (Mobile-Friendly Test)
-
----
-
-## 🔍 SEO On-Page Implementado
-
-### ✅ **Meta Tags Esenciales**
-```astro
-✓ Title tag único por página
-✓ Meta description (155-160 caracteres)
-✓ Meta keywords
-✓ Canonical URLs
-✓ Hreflang tags (ES/EN)
-✓ Robots meta (index, follow)
-```
-
-### ✅ **Open Graph (Redes Sociales)**
-```astro
-✓ og:type, og:url, og:title
-✓ og:description, og:image
-✓ og:locale (es_AR / en_US)
-✓ og:site_name
-✓ Image dimensions (1200x630)
-```
-
-### ✅ **Twitter Cards**
-```astro
-✓ twitter:card (summary_large_image)
-✓ twitter:title, twitter:description
-✓ twitter:image con alt text
-```
-
-### ✅ **Schema.org Structured Data**
-```json
-✓ Person schema (con jobTitle, skills, etc)
-✓ WebSite schema
-✓ Organization schema (employer)
-✓ EducationalOrganization schema
-```
-
-### ✅ **Technical SEO**
-```
-✓ Sitemap XML multi-idioma
-✓ robots.txt configurado
-✓ Canonical tags
-✓ Hreflang tags (ES ↔ EN)
-✓ Mobile responsive
-✓ HTTPS enabled
-✓ Fast loading (Astro SSG)
-✓ Semantic HTML (H1, sections, nav)
-```
-
----
-
-## 📊 Monitoreo y Análisis
-
-### Google Analytics 4 (Opcional pero recomendado)
-
-1. Crea cuenta en: https://analytics.google.com/
-2. Crea propiedad para tu sitio
-3. Obtén el ID de medición (G-XXXXXXXXXX)
-4. Agrega en `src/layouts/Layout.astro` (antes de `</head>`):
-
-```astro
-<!-- Google Analytics -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
-<script is:inline>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-XXXXXXXXXX');
-</script>
-```
-
-### Alternativa: Plausible Analytics (Privacy-friendly)
-
-```astro
-<script defer data-domain="agusacevedo.com.ar" src="https://plausible.io/js/script.js"></script>
-```
-
----
-
-## 🎯 Optimizaciones de Contenido
-
-### Keywords Detectadas en tu Portfolio:
-```
-- Cloud Engineer
-- Platform Engineer
-- DevOps
-- AWS, Azure, Google Cloud
-- Kubernetes, Docker
-- Terraform, Ansible
-- Python, Bash
-- Grafana, Prometheus
-- Buenos Aires, Argentina
-```
-
-### Tips para Mejor Ranking:
-
-1. **Blog (Ya implementado con Dev.to)** ✅
-   - Publica regularmente sobre temas técnicos
-   - Usa las keywords mencionadas arriba
-   - Comparte en LinkedIn (generas backlinks)
-
-2. **LinkedIn Integration**
-   - Agrega link a tu portfolio en tu perfil de LinkedIn
-   - Publica posts mencionando proyectos de tu portfolio
-   - Esto genera backlinks valiosos
-
-3. **GitHub README**
-   - En tu perfil de GitHub, agrega link al portfolio
-   - En repos importantes, menciona el portfolio
-
-4. **Proyectos con URLs**
-   - Si tus proyectos están en GitHub, agrégalos al portfolio
-   - Google valora sitios con muchos links externos de calidad
-
----
-
-## 🚀 Performance SEO
-
-### Core Web Vitals (Ya optimizados)
-```
-✓ LCP (Largest Contentful Paint) - Astro SSG
-✓ FID (First Input Delay) - JavaScript mínimo
-✓ CLS (Cumulative Layout Shift) - Diseño estático
-✓ Mobile responsive
-✓ Lazy loading de imágenes
-✓ Webp format para imágenes
-```
-
-### Lighthouse Score Expected:
-- Performance: 95-100
-- Accessibility: 95-100
-- Best Practices: 95-100
-- SEO: 95-100
-
-Verifica en: https://pagespeed.web.dev/
-
----
-
-## ⏱️ Timeline de Indexación
-
-### **Primeras 24-48 horas:**
-- Google descubre tu sitio (si enviaste a Search Console)
-- Crawling inicial
-
-### **2-7 días:**
-- Primera indexación
-- Aparición en búsquedas de marca: "Agustin Acevedo"
-
-### **2-4 semanas:**
-- Indexación completa de todas las secciones
-- Aparición en búsquedas genéricas: "cloud engineer buenos aires"
-
-### **1-3 meses:**
-- Ranking estabilizado
-- Mejora progresiva según backlinks y contenido
-
----
-
-## 🔗 Backlinks Strategy (Importante para SEO)
-
-### 1. Perfiles Profesionales
-```
-✓ LinkedIn - Agrega URL en "Website"
-✓ GitHub - Agrega en perfil y repos
-□ Dev.to - Agrega en perfil
-□ Twitter/X - Agrega en bio
-□ Stack Overflow - Agrega en perfil
-```
-
-### 2. Comunidades Tech
-- Publica en Dev.to y referencia tu portfolio
-- Responde en Stack Overflow, agrega link si es relevante
-- Participa en foros de DevOps/Cloud (Reddit r/devops, r/aws)
-
-### 3. Directorios
-- https://www.bestfolios.com/
-- https://www.awwwards.com/
-- https://github.com/emmabostian/developer-portfolios
-
----
-
-## 📋 Checklist Final
-
-Antes de considerar el SEO "completo", verifica:
-
-- [ ] Google Search Console verificado
-- [ ] Sitemap enviado a Google
-- [ ] Sitemap enviado a Bing
-- [ ] Indexación manual solicitada para ambas URLs (ES/EN)
-- [ ] Schema.org validado sin errores
-- [ ] Mobile-friendly test pasado
-- [ ] Rich results test pasado
-- [ ] Lighthouse score > 90 en SEO
-- [ ] Links en LinkedIn y GitHub agregados
-- [ ] Al menos 3 artículos publicados en Dev.to
-
----
-
-## 🆘 Troubleshooting
-
-### "Mi sitio no aparece después de 2 semanas"
-
-1. Verifica en Search Console: "Cobertura" → revisa errores
-2. Verifica que `robots.txt` permita indexación
-3. Verifica que no haya `noindex` en meta tags
-4. Solicita indexación manual de nuevo
-5. Revisa que CNAME esté configurado correctamente
-
-### "Aparezco en Google pero con descripción incorrecta"
-
-- Google tarda en actualizar snippets (1-4 semanas)
-- Fuerza re-crawl en Search Console
-- Verifica que meta description esté bien escrita
-
-### "No aparezco en búsquedas genéricas"
-
-- Normal al principio (falta autoridad)
-- Necesitas backlinks de calidad
-- Publica contenido regularmente en Dev.to
-- Comparte portfolio en LinkedIn
-
----
-
-## 📚 Recursos Útiles
-
-- [Google Search Console](https://search.google.com/search-console)
-- [Bing Webmaster Tools](https://www.bing.com/webmasters)
-- [Schema.org Validator](https://validator.schema.org/)
-- [PageSpeed Insights](https://pagespeed.web.dev/)
-- [Google Rich Results Test](https://search.google.com/test/rich-results)
-- [Ahrefs Webmaster Tools](https://ahrefs.com/webmaster-tools) (Gratis, excelente)
-
----
-
-## 🎉 Próximos Pasos INMEDIATOS
-
-1. **HOY:**
-   ```bash
-   pnpm build
-   git add .
-   git commit -m "feat: optimize SEO - fix URLs, add geo tags, improve metadata"
-   git push
-   ```
-
-2. **HOY (después del deploy):**
-   - Registra sitio en Google Search Console
-   - Verifica propiedad
-   - Envía sitemap
-
-3. **ESTA SEMANA:**
-   - Solicita indexación manual
-   - Registra en Bing Webmaster Tools
-   - Agrega links en LinkedIn/GitHub
-   - Valida Schema.org
-
-4. **PRÓXIMAS 2 SEMANAS:**
-   - Publica 2-3 artículos en Dev.to sobre tus proyectos
-   - Monitorea indexación en Search Console
-   - Revisa errores en Coverage report
-
----
-
-¿Dudas? Cualquier cosa pregunta! 🚀
+# Mantenimiento SEO del portfolio
+
+Esta guía describe lo que genera el código y cómo revisarlo. La verificación de
+propiedad, los envíos de sitemap y el estado de indexación se comprueban en las
+cuentas correspondientes; no se deducen de los archivos del repositorio.
+
+## Implementación actual
+
+| Elemento | Fuente |
+| --- | --- |
+| Rutas en español `/` e inglés `/en/` | `src/pages/`, i18n de `astro.config.mjs` |
+| Título y descripción por idioma | `src/i18n/translations/es.ts` y `en.ts`; `Layout.astro` y `SEO.astro` |
+| Canonical de cada ruta y alternates `es-AR`, `en-US`, `x-default` | `src/components/SEO.astro` |
+| Open Graph y Twitter Cards | `SEO.astro`; textos `seo.ogTitle` y `seo.ogDescription`, imagen `personal.ogImage` |
+| JSON-LD `Person`, `WebSite` y `ProfilePage` | `SEO.astro`; `Organization` aparece dentro de `Person.worksFor` |
+| Sitemap generado al compilar | `@astrojs/sitemap` en `astro.config.mjs` |
+| Permiso de rastreo y referencia al sitemap | `public/robots.txt` |
+| Meta tag de verificación de Search Console | `SEO.astro` |
+
+Las URLs públicas actuales son `https://agusacevedo.com.ar/` y
+`https://agusacevedo.com.ar/en/`. El índice del sitemap está en
+`https://agusacevedo.com.ar/sitemap-index.xml`.
+
+El campo `seo.keywords` existe en las traducciones, pero el componente actual no
+lo publica como meta tag. No se generan metadatos de geolocalización ni un schema
+`EducationalOrganization`.
+
+## Cambiar contenido, dominio o idiomas
+
+- Escribe títulos y descripciones claros que correspondan al contenido visible.
+  Actualiza ambos archivos de traducciones cuando cambie el perfil.
+- Revisa `personal.ogImage` en ambos idiomas; el valor actual es `/og.jpg`. Al
+  sustituir la imagen, comprueba también su tipo y dimensiones declaradas en
+  `SEO.astro`.
+- Al cambiar de dominio, actualiza `site` en `astro.config.mjs`,
+  `personal.siteUrl` en ambos idiomas, `public/CNAME` y la referencia de sitemap
+  en `public/robots.txt`. Revisa también enlaces absolutos y redirecciones del
+  hosting para evitar señales inconsistentes.
+- Al añadir una ruta o idioma, actualiza las páginas, los alternates de
+  `SEO.astro` y la configuración del sitemap. Cada versión debe referenciarse a
+  sí misma y a las otras versiones con URLs completas, según la [guía de
+  versiones localizadas de Google](https://developers.google.com/search/docs/specialty/international/localized-versions).
+- Conserva el canonical correspondiente a cada versión traducida. Evita que la
+  página inglesa apunte como canonical a la española; consulta las [reglas de
+  canonicalización](https://developers.google.com/search/docs/crawling-indexing/consolidate-duplicate-urls).
+
+## Revisar después de un cambio
+
+1. Ejecuta `pnpm build`, `pnpm test` y `pnpm test:e2e` con las versiones de Node y
+   pnpm indicadas en el repositorio.
+2. Inspecciona `dist/index.html` y `dist/en/index.html`: un título, descripción,
+   canonical propio, alternates recíprocos y JSON-LD coherente con el perfil.
+   Confirma que el contenido principal y los enlaces existen sin JavaScript.
+3. Revisa `dist/sitemap-index.xml` y los sitemaps que referencia. Las URLs deben
+   corresponder al dominio y las rutas publicadas. `robots.txt` debe permitir
+   las páginas que quieras que se rastreen.
+4. Tras publicar, abre ambas URLs, `robots.txt`, el sitemap y la imagen social.
+   Comprueba las respuestas del hosting y las redirecciones, además del HTML.
+5. Usa [Schema Markup Validator](https://validator.schema.org/) para revisar
+   JSON-LD y [Rich Results Test](https://search.google.com/test/rich-results) para
+   las funciones de Google compatibles. Un schema válido no implica que se
+   mostrará un resultado enriquecido.
+6. Mide las URLs publicadas con [PageSpeed Insights](https://pagespeed.web.dev/).
+   Guarda la fecha, dispositivo y resultados observados para comparar cambios;
+   el framework por sí solo no establece una puntuación de rendimiento.
+
+## Search Console e indexación
+
+En [Google Search Console](https://search.google.com/search-console), comprueba
+que tienes acceso a la propiedad correcta y que la verificación elegida está
+vigente. El meta tag presente en el código no confirma el estado del panel.
+
+Envía `https://agusacevedo.com.ar/sitemap-index.xml` en el informe de sitemaps y
+revisa los errores que comunique. Google explica que [enviar un sitemap es una
+señal, no una garantía de rastreo](https://developers.google.com/search/docs/crawling-indexing/sitemaps/build-sitemap).
+
+Usa [Inspección de URLs](https://support.google.com/webmasters/answer/9012289)
+para consultar cada versión, ver el canonical elegido por Google y probar la
+URL publicada. Cuando sea necesario, puedes solicitar un nuevo rastreo desde
+esa herramienta. La [solicitud de indexación](https://developers.google.com/search/docs/crawling-indexing/ask-google-to-recrawl)
+no garantiza inclusión ni una fecha de aparición en los resultados.
+
+Si una página no aparece, empieza por las razones del informe: acceso HTTP,
+redirecciones, bloqueo de rastreo, `noindex`, canonical y contenido publicado.
+Registra qué cambio hiciste y verifica su efecto; evita plazos o posiciones
+prometidas.
+
+## Analítica y hosting
+
+La analítica es una decisión separada de Search Console. No pegues scripts de
+Google Analytics, Plausible u otro proveedor sin revisar la integración: la CSP
+actual restringe scripts y bloquea las conexiones del navegador con
+`connect-src 'none'`. Deben decidirse los proveedores, datos recogidos, permisos
+de CSP y ajustes del hosting antes de habilitarlos.
+
+[SECURITY.md](SECURITY.md) documenta la CSP y las inyecciones de Cloudflare, así
+como las cabeceras que requieren configuración en el hosting. GitHub Pages no
+aplica `public/_headers`; ese archivo se conserva como plantilla para hosts
+compatibles.
