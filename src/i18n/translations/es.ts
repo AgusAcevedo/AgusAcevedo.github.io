@@ -60,7 +60,8 @@ export const es = {
   hero: {
     greeting: 'Hola, soy',
     available: 'Disponible para trabajar',
-    description: '<strong>Cloud & Platform Engineer</strong> con experiencia en diseño, automatización y operación de infraestructura IT para <strong>entornos corporativos de gran escala</strong> en Latinoamérica y Caribe.',
+    role: 'Cloud & Platform Engineer',
+    description: 'Diseño, automatizo y opero plataformas cloud e infraestructura IT para entornos corporativos de gran escala en Latinoamérica y el Caribe.',
     contact: 'Contáctame',
     cv: 'Descargar CV',
   },

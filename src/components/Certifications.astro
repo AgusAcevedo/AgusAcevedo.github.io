@@ -2,6 +2,7 @@
 import { certifications } from '../data/certifications';
 import { useTranslations } from '../i18n';
 import type { Language } from '../i18n/languages';
+import GcpChip from './GcpChip.astro';
 
 const locale = (Astro.currentLocale || 'es') as Language;
 const t = useTranslations(locale);
@@ -31,9 +32,11 @@ const formatDate = (date: string) => dateFormatter.format(new Date(date));
             decoding="async"
           />
         </div>
-        <div class="min-w-0 flex-1">
-          <div class="flex min-h-7 flex-wrap items-center gap-x-3 gap-y-2">
-            <p class="text-sm font-medium text-violet-700 dark:text-violet-300">{certification.issuer}</p>
+        <div class="min-w-0 flex-1 text-center sm:text-left">
+          <div class="flex min-h-8 flex-wrap items-center justify-center gap-x-3 gap-y-2 sm:justify-start">
+            {certification.issuer === 'Google Cloud'
+              ? <GcpChip />
+              : <p class="text-sm font-medium text-violet-700 dark:text-violet-300">{certification.issuer}</p>}
             <span
               hidden
               data-certification-status
@@ -43,8 +46,8 @@ const formatDate = (date: string) => dateFormatter.format(new Date(date));
               class="rounded-full px-3 py-1 text-xs font-semibold data-[status=active]:bg-emerald-100 data-[status=active]:text-emerald-800 data-[status=expired]:bg-amber-100 data-[status=expired]:text-amber-900 dark:data-[status=active]:bg-emerald-950 dark:data-[status=active]:text-emerald-300 dark:data-[status=expired]:bg-amber-950 dark:data-[status=expired]:text-amber-300"
             ></span>
           </div>
-          <h4 id={`credential-${certification.id}`} class="mt-3 text-xl font-semibold leading-snug text-gray-900 dark:text-white sm:text-2xl">{certification.title}</h4>
-          <dl class="mt-5 grid gap-4 text-sm sm:grid-cols-2">
+          <h4 id={`credential-${certification.id}`} class="mt-3 text-balance text-xl font-semibold leading-snug text-gray-900 dark:text-white sm:text-2xl">{certification.title}</h4>
+          <dl class="mt-5 grid gap-4 text-sm tabular-nums sm:grid-cols-2">
             <div>
               <dt class="text-gray-600 dark:text-gray-400">{t.credentials.issued}</dt>
               <dd class="mt-1 font-medium text-gray-900 dark:text-gray-200"><time datetime={certification.issuedOn}>{formatDate(certification.issuedOn)}</time></dd>

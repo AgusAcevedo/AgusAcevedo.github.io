@@ -240,7 +240,7 @@ for (const locale of locales) {
       await expect(section.getByRole('heading', { level: 3 })).toHaveText(locale.code === 'es'
         ? ['Certificaciones', 'Cursos e insignias'] : ['Certifications', 'Courses & Badges']);
       const certification = section.getByRole('article', { name: 'Associate Cloud Engineer Certification', exact: true });
-      await expect(certification).toContainText('Google Cloud');
+      await expect(certification.getByText('GCP', { exact: true })).toHaveAttribute('title', 'Google Cloud');
       await expect(certification.locator('time').first()).toHaveAttribute('datetime', '2026-09-04');
       await expect(certification.locator('time').last()).toHaveAttribute('datetime', '2029-09-04T00:00:00.000Z');
       await expect(certification.locator('time').first()).toHaveText(locale.code === 'es' ? '4 de septiembre de 2026' : 'September 4, 2026');

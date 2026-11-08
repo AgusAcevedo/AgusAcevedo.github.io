@@ -13,31 +13,29 @@ import MailIcon from "@/components/icons/Mail.astro";
 import SocialPill from "@/components/SocialPill.astro";
 import LinkedinPill from "@/components/LinkedinPill.astro";
 import DownloadPill from "@/components/DownloadPill.astro";
-import RichText from "./RichText.astro";
 ---
 
-<div class="flex flex-col gap-4 items-center md:flex-row">
+<div class="flex flex-col items-center gap-8 lg:flex-row lg:gap-10">
   <img
-    width="200"
-    height="200"
+    width="320"
+    height="320"
     src={p.profileImage}
     alt={p.name}
-    class="order-1 rounded-full object-cover w-64 h-full p-1 bg-white md:order-2 lg:p-2 lg:w-64 aspect-square dark:bg-violet-500/5 ring-1 ring-white/20"
+    class="size-64 shrink-0 rounded-full bg-white object-cover p-1 ring-1 ring-white/20 sm:size-72 lg:size-80 lg:p-2 dark:bg-violet-500/5"
     fetchpriority="high"
     loading="eager"
   />
-  <div class="order-2 object-cover h-full p-1">
+  <div class="min-w-0 flex-1 text-center lg:text-left">
     <h1
-      class="text-4xl font-bold tracking-tight text-gray-800 sm:text-5xl dark:text-white text-center md:text-left"
+      class="text-balance text-4xl font-bold tracking-tight text-gray-800 sm:text-5xl dark:text-white"
     >
       {p.name}
     </h1>
-    <p
-      class="text-center sm:text-left mt-6 text-xl text-gray-800 dark:[&>strong]:text-violet-200 [&>strong]:text-violet-600 [&>strong]:font-semibold dark:text-gray-300"
-    >
-      <RichText text={t.hero.description} />
+    <p class="mt-4 text-balance text-xl font-semibold text-violet-600 dark:text-violet-200">{t.hero.role}</p>
+    <p class="mt-4 text-pretty text-lg leading-relaxed text-gray-700 dark:text-gray-300">
+      {t.hero.description}
     </p>
-    <nav aria-label={currentLocale === 'es' ? 'Contacto y currículum' : 'Contact and resume'} class="flex flex-wrap justify-center md:justify-normal gap-4 mt-8">
+    <nav aria-label={currentLocale === 'es' ? 'Contacto y currículum' : 'Contact and resume'} class="mt-6 flex flex-wrap justify-center gap-3 lg:justify-start">
       <SocialPill href={`mailto:${p.email}`}>
         <MailIcon class="size-4" />
         {t.hero.contact}
