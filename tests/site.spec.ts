@@ -231,6 +231,52 @@ for (const locale of locales) {
       await expect.poll(() => page.evaluate(() => document.body.style.overflow)).toBe("");
     });
 
+    test("credentials separate certifications from training and stay current after expiration", async ({ page, context }, testInfo) => {
+      await page.clock.install({ time: new Date('2029-09-03T23:59:58Z') });
+      await page.clock.pauseAt(new Date('2029-09-03T23:59:59Z'));
+      await page.goto(locale.path);
+      const section = page.locator(locale.code === 'es' ? '#certificados' : '#certifications');
+      await expect(section.getByRole('heading', { level: 2 })).toHaveText(locale.code === 'es' ? 'Credenciales' : 'Credentials');
+      await expect(section.getByRole('heading', { level: 3 })).toHaveText(locale.code === 'es'
+        ? ['Certificaciones', 'Cursos e insignias'] : ['Certifications', 'Courses & Badges']);
+      const certification = section.getByRole('article', { name: 'Associate Cloud Engineer Certification', exact: true });
+      await expect(certification).toContainText('Google Cloud');
+      await expect(certification.locator('time').first()).toHaveAttribute('datetime', '2026-09-04');
+      await expect(certification.locator('time').last()).toHaveAttribute('datetime', '2029-09-04T00:00:00.000Z');
+      await expect(certification.locator('time').first()).toHaveText(locale.code === 'es' ? '4 de septiembre de 2026' : 'September 4, 2026');
+      await expect(certification.locator('time').last()).toHaveText(locale.code === 'es' ? '4 de septiembre de 2029' : 'September 4, 2029');
+      const status = certification.locator('[data-certification-status]');
+      await expect(status).toHaveText(locale.code === 'es' ? 'Vigente' : 'Active');
+
+      // Existing bookmarks and the single credentials navigation entry still work.
+      if (testInfo.project.name.endsWith('-mobile')) await page.locator('#mobile-menu-btn').click();
+      const nav = page.locator(testInfo.project.name.endsWith('-mobile') ? '#mobile-menu' : 'header');
+      await nav.getByRole('link', { name: locale.code === 'es' ? 'Credenciales' : 'Credentials', exact: true }).click();
+      await expect(page).toHaveURL(new RegExp(locale.code === 'es' ? '#certificados$' : '#certifications$', 'u'));
+      await expect.poll(() => certification.locator('img').evaluate((image: HTMLImageElement) => image.complete && image.naturalWidth > 0)).toBe(true);
+
+      // Verify the real destination without depending on Credly's availability.
+      const destination = 'https://www.credly.com/badges/8a67eb1e-099c-4708-a6ad-1c51245e0d53';
+      await context.route(destination, route => route.fulfill({ status: 200, contentType: 'text/html', body: '<title>Credential verification observed</title>' }));
+      const verify = certification.getByRole('link', { name: locale.code === 'es' ? 'Verificar credencial' : 'Verify credential', exact: true });
+      await expect(verify).toHaveAttribute('href', destination);
+      await expect(verify).toHaveAttribute('target', '_blank');
+      await expect(verify).toHaveAttribute('rel', /noopener/u);
+      await verify.focus();
+      const popupPromise = page.waitForEvent('popup');
+      await verify.press('Enter');
+      const popup = await popupPromise;
+      await expect(popup).toHaveURL(destination);
+      await popup.close();
+
+      await page.clock.fastForward(2_000);
+      await expect(status).toHaveText(locale.code === 'es' ? 'Vencida' : 'Expired');
+      await expect(certification).toBeVisible();
+      await expect(verify).toBeVisible();
+      await page.reload();
+      await expect(status).toHaveText(locale.code === 'es' ? 'Vencida' : 'Expired');
+    });
+
     test("certificate filters announce selection, page safely, and open a native keyboard dialog", async ({ page }, testInfo) => {
       await page.goto(locale.path);
       await expect(page.locator("#cert-carousel-region")).toBeVisible();
@@ -386,6 +432,10 @@ for (const locale of locales) {
         await expect(noJsPage.getByRole("heading", { level: 1 })).toBeVisible();
         await expect(noJsPage.locator("main")).toContainText("Cloud");
         await expect(noJsPage.locator("#cert-grid-wrapper")).toBeVisible();
+        const certification = noJsPage.getByRole('article', { name: 'Associate Cloud Engineer Certification', exact: true });
+        await expect(certification.locator('time')).toHaveCount(2);
+        await expect(certification.getByRole('link', { name: locale.code === 'es' ? 'Verificar credencial' : 'Verify credential', exact: true })).toBeVisible();
+        await expect(certification.locator('[data-certification-status]')).toBeHidden();
         expect(await noJsPage.locator("#cert-grid .magia:not(.hidden)").count()).toBeGreaterThan(0);
         await expect(noJsPage.locator("#top").getByRole("link", { name: "LinkedIn", exact: true })).toHaveAttribute("href", /^https:\/\/linkedin\.com\/in\//u);
         await expect(noJsPage.locator('#top a[href^="mailto:"]')).toHaveAttribute("href", "mailto:agus.acevedo2000@gmail.com");

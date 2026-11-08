@@ -110,10 +110,18 @@ Este es mi **portfolio personal**, desarrollado con tecnologías modernas para m
 2. **Sobre Mí:** Biografía y estadísticas profesionales
 3. **Experiencia:** Trayectoria laboral detallada
 4. **Educación:** Formación académica
-5. **Certificaciones:** +50 certificaciones y badges de tecnología
+5. **Credenciales:** Certificaciones con vigencia y verificación, seguidas de cursos, diplomaturas e insignias
 6. **Stack Tecnológico:** Herramientas y tecnologías que domino
 7. **Proyectos:** Proyectos destacados con detalles técnicos
 8. **Blog:** Últimos artículos publicados en Dev.to
+
+La sección **Credenciales / Credentials** distingue las certificaciones obtenidas
+mediante exámenes de los **Cursos e insignias / Courses & Badges**. Las
+certificaciones muestran emisor, fecha de obtención, vencimiento y enlace de
+verificación. Su estado se actualiza en el navegador en el instante exacto de
+vencimiento publicado por el emisor, sin necesitar un nuevo despliegue; sin
+JavaScript siguen disponibles las fechas y la verificación.
+Se conservan los enlaces `/#certificados` y `/en/#certifications`.
 
 ---
 

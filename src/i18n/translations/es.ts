@@ -49,10 +49,10 @@ export const es = {
     experience: 'Experiencia',
     education: 'Educación',
     stack: 'Stack',
-    projects: 'Certificados',
+    projects: 'Credenciales',
     myProjects: 'Proyectos',
     blog: 'Blog',
-    certifications: 'Certificados',
+    certifications: 'Credenciales',
     contact: 'Contacto',
   },
 
@@ -122,9 +122,24 @@ export const es = {
     ],
   },
 
-  // Projects/Certifications
+  credentials: {
+    title: 'Credenciales',
+    certificationsTitle: 'Certificaciones',
+    certificationsDescription: 'Credenciales obtenidas mediante exámenes de certificación.',
+    coursesDescription: 'Cursos, diplomaturas e insignias de aprendizaje.',
+    issued: 'Fecha de obtención',
+    expires: 'Fecha de vencimiento',
+    verify: 'Verificar credencial',
+    badgeAlt: 'Insignia de',
+    status: {
+      active: 'Vigente',
+      expired: 'Vencida',
+    },
+  },
+
+  // Courses and learning badges
   projects: {
-    title: 'Certificaciones y Badges',
+    title: 'Cursos e insignias',
     filters: {
       featured: 'Destacados',
       cloud: 'Cloud',
@@ -136,9 +151,9 @@ export const es = {
       all: 'Todos',
     },
     viewCertificate: 'Ver certificado',
-    filterByCategory: 'Filtrar certificaciones por categoría',
+    filterByCategory: 'Filtrar cursos e insignias por categoría',
     filterBy: 'Filtrar por',
-    loading: 'Cargando certificaciones...',
+    loading: 'Cargando cursos e insignias...',
     modal: {
       close: 'Cerrar',
       issuedBy: 'Emitido por',
@@ -179,11 +194,6 @@ export const es = {
         value: '30+',
         label: 'Certificados',
       },
-      // Descomentar cuando tengas certificaciones de pago
-      // certifications: {
-      //   value: '5+',
-      //   label: 'Certificaciones',
-      // },
     },
   },
 

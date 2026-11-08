@@ -5,7 +5,7 @@ import Layout from "@/layouts/Layout.astro";
 
 import AboutMe from "@/components/AboutMe.astro";
 import Briefcase from "@/components/icons/Briefcase.astro";
-import CodeIcon from "@/components/icons/Code.astro";
+import Certificate from "@/components/icons/Certificate.astro";
 import Article from "@/components/icons/Article.astro";
 import ProjectsIcon from "@/components/icons/Projects.astro";
 import Experience from "@/components/Experience.astro";
@@ -14,6 +14,7 @@ import GraduationCap from "@/components/icons/GraduationCap.astro";
 import ProfileCheck from "@/components/icons/ProfileCheck.astro";
 import Stackicon from "@/components/icons/Stackicon.astro";
 import Projects from "@/components/Projects.astro";
+import Certifications from "@/components/Certifications.astro";
 import Blog from "@/components/Blog.astro";
 import MyProjects from "@/components/MyProjects.astro";
 import SectionContainer from "@/components/SectionContainer.astro";
@@ -68,10 +69,17 @@ const t = useTranslations(currentLocale);
       <h2
         class="ml-2.5 flex items-center mb-6 text-3xl font-semibold gap-x-3 text-black/80 dark:text-white"
       >
-        <CodeIcon class="size-7" />
-        {t.projects.title}
+        <span aria-hidden="true"><Certificate class="size-7" /></span>
+        {t.credentials.title}
       </h2>
-      <Projects />
+      <div class="space-y-12">
+        <Certifications />
+        <div>
+          <h3 class="ml-2.5 mb-2 text-2xl font-semibold text-gray-900 dark:text-white">{t.projects.title}</h3>
+          <p class="ml-2.5 mb-6 text-sm text-gray-600 dark:text-gray-400">{t.credentials.coursesDescription}</p>
+          <Projects />
+        </div>
+      </div>
     </SectionContainer>
 
     <SectionContainer id="stack">

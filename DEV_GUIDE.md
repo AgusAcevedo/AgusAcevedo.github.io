@@ -10,7 +10,7 @@ Esta guía técnica te ayudará a personalizar y mantener tu portfolio.
   - [Información Personal](#información-personal)
   - [Experiencia Laboral](#experiencia-laboral)
   - [Educación](#educación)
-  - [Certificados](#certificados)
+  - [Credenciales](#credenciales)
   - [Stack Tecnológico](#stack-tecnológico)
   - [Proyectos](#proyectos)
   - [Blog](#blog)
@@ -27,9 +27,11 @@ Esta guía técnica te ayudará a personalizar y mantener tu portfolio.
 /
 ├── public/              # Archivos estáticos
 │   ├── webp_certs/     # Imágenes de certificados
+│   ├── certifications/ # Insignias de certificaciones
 │   └── projects/       # Imágenes de proyectos
 ├── src/
 │   ├── components/     # Componentes Astro
+│   ├── data/           # Datos de certificaciones y respaldo del blog
 │   ├── i18n/          # Traducciones (ES/EN)
 │   │   └── translations/
 │   │       ├── es.ts  # 🔥 ARCHIVO PRINCIPAL DE CONTENIDO (Español)
@@ -74,7 +76,7 @@ tudominio.com
 
 ## 📝 Gestión de Contenido
 
-**IMPORTANTE:** Todo el contenido editable está en:
+El contenido personal y las traducciones están en:
 - **Español:** `src/i18n/translations/es.ts`
 - **Inglés:** `src/i18n/translations/en.ts`
 
@@ -179,58 +181,68 @@ education: {
 }
 ```
 
-### 🏆 Certificados
+### 🏆 Credenciales
 
-Los certificados están **hardcodeados** en `src/components/Projects.astro`.
+Un único enlace **Credenciales / Credentials** lleva a dos grupos: primero
+**Certificaciones / Certifications**, para credenciales obtenidas mediante
+exámenes de certificación; luego **Cursos e insignias / Courses & Badges**, para
+formación, diplomaturas y logros de aprendizaje. La clasificación depende del
+tipo de credencial. Se conservan los anchors `/#certificados` y
+`/en/#certifications`.
 
-#### Agregar un nuevo certificado:
+#### Certificaciones
 
-1. **Agrega la imagen** en `public/webp_certs/`
-
-2. **Define el tag** (si es nuevo proveedor):
-
-```typescript
-// En Projects.astro, línea ~15
-const TAGS = {
-  // ... tags existentes
-  TU_PROVEEDOR: {
-    name: "Nombre del Proveedor",
-    class: "bg-[#COLOR] text-white",
-    icon: IconoComponente, // Importa un ícono si lo tienes
-  },
-};
-```
-
-3. **Agrega el certificado al array** `PROJECTS`:
+Edita el array tipado `certifications` en `src/data/certifications.ts` y guarda
+las imágenes en `public/certifications/`. Por ejemplo, la credencial actual:
 
 ```typescript
-const PROJECTS = [
-  // ... certificados existentes
-  {
-    title: "Nombre del Certificado",
-    issuer: [TAGS.TU_PROVEEDOR], // Puede ser múltiple: [TAGS.GOOGLE, TAGS.COURSERA]
-    date: "1 Ene 2024",
-    link: "https://link-al-certificado.com/verify/123",
-    image: "/webp_certs/tu-certificado.webp",
-    cl: "no-oculto", // "no-oculto" = destacado, "hidden" = oculto por defecto
-  },
-];
+{
+  id: 'google-cloud-associate-cloud-engineer',
+  title: 'Associate Cloud Engineer Certification',
+  issuer: 'Google Cloud',
+  issuedOn: '2026-09-04',
+  expiresAt: '2029-09-04T00:00:00.000Z',
+  image: '/certifications/google-cloud-associate-cloud-engineer.png',
+  verificationUrl: 'https://www.credly.com/badges/8a67eb1e-099c-4708-a6ad-1c51245e0d53',
+}
 ```
 
-**Estructura completa:**
-- `title`: Nombre del certificado
-- `issuer`: Array de tags (puede ser múltiple para co-branded)
-- `date`: Fecha de obtención (formato libre)
-- `link`: URL de verificación del certificado
-- `image`: Ruta relativa desde `public/`
-- `cl`: 
-  - `"no-oculto"` = Se muestra en la vista inicial (destacados)
-  - `"hidden"` = Se muestra solo al expandir "Ver más"
+Usa un `id` único, `issuedOn` como fecha ISO `YYYY-MM-DD` y `expiresAt` como
+fecha y hora ISO con zona horaria, verificadas con el emisor. Conserva el
+instante exacto de vencimiento; no lo conviertas a una fecha sin hora.
+`src/components/Certifications.astro` presenta las fechas en cada idioma y
+actualiza el estado **Vigente / Active** o **Vencida / Expired** en el navegador.
+El estado cambia a vencida en el instante UTC indicado por `expiresAt`. Un
+temporizador actualiza la página al próximo vencimiento y también se revisa el
+estado cuando vuelve a mostrarse o estar visible. No requiere recompilar el
+sitio. Sin JavaScript, las fechas y el enlace de verificación siguen visibles.
+Al renovar, actualiza las fechas y el enlace; las credenciales vencidas se
+conservan.
 
-**Tips:**
-- Usa formato `.webp` para mejor compresión
-- Ordena los certificados por fecha (más recientes primero)
-- Usa `cl: "no-oculto"` para los más importantes (6-8 certificados)
+#### Cursos e insignias
+
+El array `PROJECTS` de `src/components/Projects.astro` conserva los cursos,
+diplomaturas e insignias, con sus filtros, paginación y modal. Para agregar uno,
+guarda su imagen en `public/webp_certs/`, define el proveedor en `TAGS` si es
+necesario y añade una entrada:
+
+```typescript
+{
+  title: "Nombre del curso",
+  issuer: [TAGS.GOOGLE, TAGS.COURSERA],
+  date: "1 Jan 2024",
+  link: "https://link-al-certificado.com/verify/123",
+  image: "/webp_certs/tu-certificado.webp",
+  featured: true,
+  categories: ["Cloud", "Python"],
+}
+```
+
+`featured: true` lo incluye en la vista inicial de destacados. Usa las categorías
+existentes (`Cloud`, `Backend`, `Python`, `Redes`, `Seguridad`, `Otros`) para que
+funcionen los filtros. El componente ordena las entradas por fecha; usa fechas
+con mes en inglés como en las entradas actuales. Los textos de ambos grupos se
+editan en `src/i18n/translations/es.ts` y `en.ts`.
 
 ### 🛠️ Stack Tecnológico
 
