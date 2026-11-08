@@ -14,6 +14,10 @@ import Michigan from "./icons/Michigan.astro";
 const currentLocale = (Astro.currentLocale || 'es') as Language;
 const t = useTranslations(currentLocale);
 const isEn = currentLocale === "en";
+const dateFormatter = new Intl.DateTimeFormat(isEn ? 'en-US' : 'es-AR', {
+  day: 'numeric', month: 'short', year: 'numeric', timeZone: 'UTC',
+});
+const formatDate = (date: string) => dateFormatter.format(new Date(`${date} UTC`));
 
 const TAGS = {
   GOOGLE: {
@@ -281,7 +285,7 @@ const PROJECTS = [
     title: "Data Analyst",
     issuer: [TAGS.CODERHOUSE],
     date: "17 Nov 2021",
-    link: "https://cutt.ly/mY31JRM",
+    link: "/webp_certs/coderhouse.webp",
     image: "/webp_certs/coderhouse.webp",
     categories: ["Otros"],
   },
@@ -303,7 +307,7 @@ const FILTERS = [
 ---
 
 <!-- Filtros: botones en desktop, select en móvil -->
-<div class="mb-6">
+<div id="cert-filters" class="mb-6" hidden>
   <!-- Select para móvil -->
   <div class="block sm:hidden">
     <label for="filter-select" class="sr-only">{t.projects.filterByCategory}</label>
@@ -368,12 +372,12 @@ const FILTERS = [
   {
     sortedProjects.map(({ image, title, date, link, issuer, featured, categories }) => (
       <article
-        class={`magia group ${featured ? "" : "hidden"}`}
+        class="magia group"
         data-categories={categories?.join(',') || ""}
         data-featured={featured ? "true" : "false"}
       >
         <div class="relative flex flex-col items-center w-full transition duration-500 ease-in-out transform overflow-clip rounded-xl sm:rounded-xl md:group-hover:-translate-y-1 border border-violet-100/80 hover:border-violet-400/70 dark:border-violet-800/40 dark:hover:border-violet-500/70 bg-white hover:bg-violet-50 dark:bg-gray-900/40 dark:hover:bg-violet-500/5 h-[240px] sm:h-[280px]">
-          <button type="button" class="flex flex-col h-full text-left modal-open" data-link={link} data-title={title} data-date={date} data-image={image} data-issuer={issuer.map((t)=>t.name).join(', ')} aria-haspopup="dialog" aria-controls="cert-modal">
+          <a href={link} target="_blank" rel="noopener noreferrer" class="flex flex-col h-full text-left modal-open" data-link={link} data-title={title} data-date={formatDate(date)} data-image={image} data-issuer={issuer.map((t)=>t.name).join(', ')}>
             <div class="hidden modal-issuers-data">
               {issuer.map((tag) => (
                 tag.name === 'GCP' ? <GcpChip variant="modal" /> : (
@@ -397,7 +401,7 @@ const FILTERS = [
             </div>
             <div class="flex flex-col items-center pt-6 px-2 flex-grow">
               <h4 class="text-sm font-bold text-center leading-snug min-h-[36px] text-gray-800 dark:text-white">{title}</h4>
-              <p class="text-sm text-gray-500 dark:text-gray-400">{date}</p>
+              <p class="text-sm text-gray-500 dark:text-gray-400">{formatDate(date)}</p>
             </div>
             <div class="flex justify-center">
               <ul class="flex items-center gap-2 mb-2">
@@ -446,7 +450,7 @@ const FILTERS = [
                 })()}
               </ul>
             </div>
-          </button>
+          </a>
         </div>
       </article>
     ))
@@ -497,7 +501,7 @@ const FILTERS = [
     const sourceGrid = document.getElementById("cert-grid-wrapper");
     const status = document.getElementById("cert-status");
     const controls = document.getElementById("pagination-controls");
-    if (!modal || !track || !container || !region) return;
+    if (!modal || typeof modal.showModal !== 'function' || !track || !container || !region) return;
     const isEn = region.dataset.locale === "en";
     const dialog = bindDialog(modal);
     const previousButtons = ["prev-page", "prev-page-mobile"].map(id => document.getElementById(id) as HTMLButtonElement | null);
@@ -513,8 +517,12 @@ const FILTERS = [
     const getTotalPages = () => Math.ceil(filteredArticles.length / itemsPerPage);
 
     articles.forEach((article) => {
-      const opener = article.querySelector<HTMLButtonElement>(".modal-open");
-      opener?.addEventListener("click", () => {
+      const opener = article.querySelector<HTMLAnchorElement>(".modal-open");
+      opener?.setAttribute('aria-haspopup', 'dialog');
+      opener?.setAttribute('aria-controls', 'cert-modal');
+      opener?.addEventListener("click", (event) => {
+        if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+        event.preventDefault();
         activeArticle = article;
         if (modalTitle) modalTitle.textContent = opener.dataset.title || "";
         if (modalDate) modalDate.textContent = opener.dataset.date || "";
@@ -559,7 +567,7 @@ const FILTERS = [
         page.setAttribute("aria-hidden", String(index !== currentPage));
       });
       if (focusWasInTrack && document.activeElement?.closest("[inert]")) {
-        pages[currentPage]?.querySelector<HTMLButtonElement>(".modal-open")?.focus({ preventScroll: true });
+        pages[currentPage]?.querySelector<HTMLAnchorElement>(".modal-open")?.focus({ preventScroll: true });
       }
       updatePagination();
     }
@@ -642,6 +650,7 @@ const FILTERS = [
     applyFilter("featured");
     sourceGrid?.classList.add("hidden");
     region.classList.remove("hidden");
+    document.getElementById('cert-filters')?.removeAttribute('hidden');
   }
 
   initCertifications();

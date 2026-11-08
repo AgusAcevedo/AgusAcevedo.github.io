@@ -22,7 +22,7 @@ const descriptionParagraphs = (description: string) =>
   <!-- Carousel Container -->
   <div class="relative">
     <!-- Carousel Track -->
-    <div class="overflow-hidden px-4 sm:px-0">
+    <div id="projects-window" class="overflow-x-auto px-4 sm:px-0">
       <div id="projects-carousel" class="flex transition-transform duration-500 ease-out motion-reduce:transition-none">
         {projectsData.map((project, index) => (
           <article
@@ -60,9 +60,23 @@ const descriptionParagraphs = (description: string) =>
                     ))}
                   </div>
                 )}
+
+                <details data-project-fallback class="text-sm text-gray-600 dark:text-gray-400">
+                  <summary class="cursor-pointer font-medium text-violet-700 dark:text-violet-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-violet-500 focus-visible:outline-offset-4">
+                    {isEn ? 'Read project details' : 'Ver detalles del proyecto'}
+                  </summary>
+                  <div class="mt-4 space-y-4">
+                    {descriptionParagraphs(project.description).map((paragraph) => <p>{paragraph.map((part) => part.strong ? <strong>{part.text}</strong> : part.text)}</p>)}
+                    {(project.github || project.demo) && <div class="flex flex-wrap gap-4">
+                      {project.github && <a href={project.github} target="_blank" rel="noopener noreferrer" class="underline">{t.myProjects.modal.repository}</a>}
+                      {project.demo && <a href={project.demo} target="_blank" rel="noopener noreferrer" class="underline">{t.myProjects.modal.demo}</a>}
+                    </div>}
+                  </div>
+                </details>
               </div>
 
               <button
+                hidden
                 type="button"
                 data-project-dialog={`project-modal-${project.id}`}
                 aria-labelledby={`project-card-title-${project.id}`}
@@ -81,7 +95,7 @@ const descriptionParagraphs = (description: string) =>
     </div>
 
     <!-- Navigation Controls -->
-    <nav class="flex items-center justify-center gap-4 mt-6" aria-label={isEn ? "Project pagination" : "Paginación de proyectos"}>
+    <nav id="projects-controls" hidden class="flex items-center justify-center gap-4 mt-6" aria-label={isEn ? "Project pagination" : "Paginación de proyectos"}>
       <button
         id="projects-prev"
         class="px-4 py-2 rounded-lg font-semibold border transition disabled:opacity-30 disabled:cursor-not-allowed bg-violet-100 text-violet-700 border-violet-200 hover:bg-violet-200 dark:bg-violet-600/20 dark:text-white dark:border-violet-600/40 dark:hover:bg-violet-600/30 focus:outline-none focus-visible:ring-2 focus-visible:ring-violet-500"
@@ -104,7 +118,8 @@ const descriptionParagraphs = (description: string) =>
   <p id="projects-status" class="sr-only" aria-live="polite" aria-atomic="true"></p>
 </div>
 
-<!-- Render content once; opening a project never injects HTML from JavaScript. -->
+<!-- Native details remain usable without scripts; enhanced dialogs render the
+     same escaped paragraph data rather than injecting HTML when opened. -->
 {projectsData.map((project) => (
   <dialog
     id={`project-modal-${project.id}`}
@@ -157,6 +172,8 @@ const descriptionParagraphs = (description: string) =>
   function initProjects() {
     const region = document.getElementById("projects-region");
     const carousel = document.getElementById("projects-carousel");
+    const viewport = document.getElementById("projects-window");
+    const controls = document.getElementById("projects-controls");
     const dotsContainer = document.getElementById("projects-dots");
     const prevBtn = document.getElementById("projects-prev") as HTMLButtonElement | null;
     const nextBtn = document.getElementById("projects-next") as HTMLButtonElement | null;
@@ -166,6 +183,7 @@ const descriptionParagraphs = (description: string) =>
     const cards = Array.from(carousel.querySelectorAll<HTMLElement>(".project-card"));
     let currentSlide = 0;
     let activeCard: HTMLElement | null = null;
+    const enhancedButtons: HTMLButtonElement[] = [];
     const getItemsPerView = () => window.innerWidth >= 1024 ? 3 : window.innerWidth >= 768 ? 2 : 1;
     let itemsPerView = getItemsPerView();
     const getMaxSlide = () => Math.max(0, cards.length - itemsPerView);
@@ -225,6 +243,7 @@ const descriptionParagraphs = (description: string) =>
       const dialog = document.getElementById(button.dataset.projectDialog || "");
       if (!(dialog instanceof HTMLDialogElement)) return;
       const controller = bindDialog(dialog);
+      enhancedButtons.push(button);
       button.addEventListener("click", () => {
         activeCard = button.closest<HTMLElement>(".project-card");
         controller.open(button);
@@ -256,6 +275,13 @@ const descriptionParagraphs = (description: string) =>
     });
     generateDots();
     updateCarousel();
+    viewport?.classList.replace("overflow-x-auto", "overflow-hidden");
+    if (controls) controls.hidden = false;
+    enhancedButtons.forEach((button) => {
+      button.hidden = false;
+      const fallback = button.closest(".project-card")?.querySelector<HTMLElement>("[data-project-fallback]");
+      if (fallback) fallback.hidden = true;
+    });
   }
 
   initProjects();

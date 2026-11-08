@@ -304,7 +304,7 @@ export const en = {
   // SEO
   seo: {
     title: 'Agustin Ezequiel Acevedo | Cloud Engineer',
-    description: 'Cloud & Platform Engineer specialized in DevOps, automation, and infrastructure management. +3 years of experience.',
+    description: 'Cloud & Platform Engineer specializing in DevOps, automation, and infrastructure. Cloud Engineer at Arcos Dorados since July 2024.',
     keywords: 'DevOps, SysAdmin, Cloud Computing, AWS, GCP, Kubernetes, Docker, CI/CD, Terraform, Ansible, Linux, Cloud Engineer, Platform Engineer',
     ogTitle: 'Agustin Ezequiel Acevedo - Cloud Engineer',
     ogDescription: 'Professional portfolio of Agustin Ezequiel Acevedo. Specialized in DevOps, infrastructure automation, and Cloud Computing.',

@@ -140,7 +140,8 @@ const navItems = [
     const menuIcon = document.getElementById("menu-icon");
     const closeIcon = document.getElementById("close-icon");
     const desktop = window.matchMedia("(min-width: 1024px)");
-    let previousOverflow = "";
+    let previousRootOverflow = "";
+    let previousBodyOverflow = "";
     const inertElements = new Map<HTMLElement, boolean>();
 
     function closeMenu(restoreFocus = true) {
@@ -149,7 +150,8 @@ const navItems = [
       toggle?.setAttribute("aria-expanded", "false");
       menuIcon?.classList.remove("hidden");
       closeIcon?.classList.add("hidden");
-      document.body.style.overflow = previousOverflow;
+      document.documentElement.style.overflow = previousRootOverflow;
+      document.body.style.overflow = previousBodyOverflow;
       inertElements.forEach((wasInert, element) => { element.inert = wasInert; });
       inertElements.clear();
       if (restoreFocus) toggle?.focus();
@@ -157,11 +159,13 @@ const navItems = [
     function openMenu() {
       if (!menu || !menu.hidden || desktop.matches) return;
       document.dispatchEvent(new CustomEvent("portfolio:menu-open", { detail: menu.id }));
-      previousOverflow = document.body.style.overflow;
+      previousRootOverflow = document.documentElement.style.overflow;
+      previousBodyOverflow = document.body.style.overflow;
       menu.hidden = false;
       toggle?.setAttribute("aria-expanded", "true");
       menuIcon?.classList.add("hidden");
       closeIcon?.classList.remove("hidden");
+      document.documentElement.style.overflow = "hidden";
       document.body.style.overflow = "hidden";
       Array.from(document.body.children).forEach((element) => {
         if (element instanceof HTMLElement && element !== menu && !element.contains(menu)) {

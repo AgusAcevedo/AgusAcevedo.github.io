@@ -43,7 +43,7 @@ const t = useTranslations(currentLocale);
 
   <!-- Content paragraphs -->
   <div
-    class="[&>p>strong]:text-violet-600 dark:[&>p>strong]:text-violet-300 [&>p>strong]:font-normal [&>p>strong]:font-mono text-pretty text-gray-700 dark:text-gray-300 text-justify space-y-4 px-4 sm:px-0"
+    class="[&>p>strong]:text-violet-600 dark:[&>p>strong]:text-violet-300 [&>p>strong]:font-normal [&>p>strong]:font-mono text-pretty text-gray-700 dark:text-gray-300 text-left md:text-justify space-y-4 px-4 sm:px-0"
   >
     {t.about.content.map((paragraph) => (
       <p><RichText text={paragraph} /></p>

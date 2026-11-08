@@ -132,7 +132,7 @@ const allTechs = STACK_SECTIONS.flatMap(section =>
 
 <section class="relative">
   <!-- Filtros interactivos -->
-  <div class="mb-6 pb-5 border-b border-violet-200/40 dark:border-violet-800/30">
+  <div id="stack-filters" hidden class="mb-6 pb-5 border-b border-violet-200/40 dark:border-violet-800/30">
     <!-- Filtros por categoría organizados en grid -->
     <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 gap-2">
       {STACK_SECTIONS.map((section) => (
@@ -228,6 +228,8 @@ const allTechs = STACK_SECTIONS.flatMap(section =>
         updateTechVisibility();
       });
     });
+    const filters = document.getElementById('stack-filters');
+    if (filters) filters.hidden = false;
   }
 
   initStackFilters();
@@ -243,8 +245,8 @@ const allTechs = STACK_SECTIONS.flatMap(section =>
   }
 
   .category-filter[data-active="false"] {
-    opacity: 0.5;
-    filter: grayscale(1);
+    /* An unselected filter is still interactive, so keep its text readable. */
+    border-style: dashed;
   }
 
   .tooltip::after {
@@ -267,7 +269,7 @@ const allTechs = STACK_SECTIONS.flatMap(section =>
   }
 
   .category-filter {
-    transition: opacity 0.3s ease, filter 0.3s ease, transform 0.2s ease;
+    transition: transform 0.2s ease;
   }
 
   @media (prefers-reduced-motion: reduce) {

@@ -10,10 +10,9 @@ const EDUCATION = t.education.items;
 
 <div class="grid gap-6 md:grid-cols-2 px-4 sm:px-0">
   {
-    EDUCATION.map((edu, index) => (
+    EDUCATION.map((edu) => (
       <article 
         class="edu-card group relative overflow-hidden rounded-2xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900/50 p-6 transition-all hover:border-violet-400 dark:hover:border-violet-600 hover:shadow-xl hover:shadow-violet-500/10 dark:hover:shadow-violet-500/5"
-        style={`transition-delay: ${index * 100}ms`}
       >
         <!-- Header with Icon -->
         <div class="flex items-start gap-4 mb-4">
@@ -35,7 +34,7 @@ const EDUCATION = t.education.items;
           <p class="text-sm text-gray-600 dark:text-gray-400">
             {edu.field}
           </p>
-          <div class="inline-flex items-center text-xs text-gray-500 dark:text-gray-500 bg-gray-100 dark:bg-gray-800 px-3 py-1.5 rounded-full">
+          <div class="inline-flex items-center text-xs text-gray-600 dark:text-gray-400 bg-gray-100 dark:bg-gray-800 px-3 py-1.5 rounded-full">
             {edu.date}
           </div>
         </div>
@@ -46,37 +45,3 @@ const EDUCATION = t.education.items;
     ))
   }
 </div>
-
-<style>
-  .edu-card {
-    opacity: 0;
-    transform: translateY(20px);
-    transition: opacity 0.5s ease-out, transform 0.5s ease-out, border-color 0.3s, box-shadow 0.3s;
-  }
-
-  .edu-card.revealed {
-    opacity: 1;
-    transform: translateY(0);
-  }
-</style>
-
-<script>
-  const observerOptions = {
-    root: null,
-    rootMargin: '0px',
-    threshold: 0.1,
-  };
-
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach((entry) => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('revealed');
-        observer.unobserve(entry.target);
-      }
-    });
-  }, observerOptions);
-
-  document.querySelectorAll('.edu-card').forEach((el) => {
-    observer.observe(el);
-  });
-</script>

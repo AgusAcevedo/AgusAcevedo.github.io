@@ -10,9 +10,9 @@ const EXPERIENCE = t.experience.jobs;
 
 <ol class="space-y-0">
   {
-    EXPERIENCE.map((experience, index) => (
+    EXPERIENCE.map((experience) => (
       <li>
-        <ExperienceItem {...experience} index={index} />
+        <ExperienceItem {...experience} />
       </li>
     ))
   }

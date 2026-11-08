@@ -112,8 +112,9 @@ a file in a later commit would not remove previous versions, forks, or caches.
 Do not claim that `.gitignore` removes already tracked content or Git history.
 
 Build output, dependencies, diagnostics, local credentials, environment values,
-and caches are ignored. Portable editor settings, source code, the lockfile,
-configuration, CVs, and certificate images are intentionally versioned. A pattern
+and caches are ignored. Local editor settings in `.vscode/` are untracked and
+ignored. Source code, the lockfile, shared configuration, CVs, and certificate
+images are intentionally versioned. A pattern
 scan found no credentials in the reviewed text files; image review is a separate
 privacy check, not a malware or exhaustive steganography scan.
 

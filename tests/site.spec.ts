@@ -42,16 +42,16 @@ async function requiredAttribute(locator: Locator, attribute: string): Promise<s
 /** Report actionable WCAG failures and attach the complete axe evidence. */
 async function checkAccessibility(page: Page, testInfo: TestInfo, state: string) {
   const results = await new AxeBuilder({ page })
-    .withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "wcag22aa"])
+    .withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "wcag22aa", "best-practice"])
     .analyze();
-  const violations = results.violations.filter(violation => violation.impact === "critical" || violation.impact === "serious");
+  const violations = results.violations;
   if (violations.length) await testInfo.attach(`accessibility-${state}`, {
     body: JSON.stringify(violations, null, 2), contentType: "application/json",
   });
   expect(violations.map(violation => ({
     id: violation.id, impact: violation.impact, description: violation.description,
     targets: violation.nodes.map(node => node.target),
-  })), `No serious/critical WCAG A/AA violations in ${state}`).toEqual([]);
+  })), `No automated WCAG A/AA or accessibility best-practice violations in ${state}`).toEqual([]);
 }
 
 /** Exercise forward and backward Tab navigation across a modal boundary. */
@@ -222,6 +222,18 @@ for (const locale of locales) {
       await expect(toggle).toBeFocused();
       await expect(toggle).toHaveAttribute("aria-expanded", "false");
       await expect.poll(() => page.locator("main").evaluate(element => Boolean(element.closest("[inert]")))).toBe(false);
+      await page.locator('#blog').scrollIntoViewIfNeeded();
+      const backgroundScroll = await page.evaluate(() => window.scrollY);
+      await toggle.click();
+      await expect(menu).toBeVisible();
+      await expect.poll(() => page.evaluate(() => document.documentElement.style.overflow)).toBe('hidden');
+      await page.mouse.move(10, 500);
+      await page.mouse.wheel(0, -400);
+      await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
+      await expect.poll(() => page.evaluate(() => window.scrollY)).toBe(backgroundScroll);
+      await page.keyboard.press('Escape');
+      await expect(menu).toBeHidden();
+      await expect.poll(() => page.evaluate(() => document.documentElement.style.overflow)).toBe('');
       await toggle.press("Enter");
       await menu.locator(".mobile-nav-link").first().press("Enter");
       const target = locale.code === "es" ? "sobre-mi" : "about";
@@ -297,12 +309,14 @@ for (const locale of locales) {
       await expect(dots.getByRole("button").nth(1)).toHaveAttribute("aria-pressed", "true");
       const opener = track.locator(':scope > div[aria-hidden="false"] .modal-open').first();
       const title = await requiredAttribute(opener, "data-title");
+      const date = await requiredAttribute(opener, 'data-date');
       await opener.focus();
       await opener.press("Enter");
       const dialog = page.locator("#cert-modal");
       await expect(page.getByRole("dialog", { name: title, exact: true })).toBeVisible();
       await expect.poll(() => dialog.evaluate(element => element.matches(":modal"))).toBe(true);
       await expect(dialog.locator("[data-dialog-initial-focus]")).toBeFocused();
+      await expect(dialog.locator('#modal-date')).toHaveText(date);
       await expectFocusInside(dialog, page);
       await checkAccessibility(page, testInfo, "certificate-dialog");
       await page.keyboard.press("Escape");
@@ -313,6 +327,31 @@ for (const locale of locales) {
       await dialog.locator("[data-dialog-close]").click();
       await expect(dialog).toBeHidden();
       await expect(opener).toBeFocused();
+    });
+
+    test("stack categories toggle accessibly and recover after all categories are deselected", async ({ page }, testInfo) => {
+      await page.goto(locale.path);
+      const filters = page.locator('#stack-filters');
+      await expect(filters).toBeVisible();
+      const cloud = filters.locator('[data-category="cloud"]');
+      const cloudTags = page.locator('.tech-tag[data-category="cloud"]');
+      const allTags = page.locator('.tech-tag');
+      const total = await allTags.count();
+      const cloudCount = await cloudTags.count();
+      await cloud.focus();
+      await cloud.press('Enter');
+      await expect(cloud).toHaveAttribute('aria-pressed', 'false');
+      for (const tag of await cloudTags.all()) await expect(tag).toBeHidden();
+      await expect(page.locator('.tech-tag:not([hidden])')).toHaveCount(total - cloudCount);
+      await checkAccessibility(page, testInfo, 'stack-category-unselected');
+      for (const button of await filters.locator('button').all()) {
+        if (await button.getAttribute('aria-pressed') === 'true') await button.click();
+      }
+      await expect(page.locator('.tech-tag:not([hidden])')).toHaveCount(0);
+      await cloud.press('Enter');
+      await expect(cloud).toHaveAttribute('aria-pressed', 'true');
+      await expect(page.locator('.tech-tag:not([hidden])')).toHaveCount(cloudCount);
+      await expect(page.locator('#stack-filter-status')).toContainText(String(cloudCount));
     });
 
     test("project cards expose only visible slides and native dialogs return keyboard focus", async ({ page }, testInfo) => {
@@ -377,9 +416,12 @@ for (const locale of locales) {
       await expect(page.locator("#blog-prev")).toBeDisabled();
     });
 
-    test("full page has no serious or critical WCAG A/AA findings in light and dark themes", async ({ page }, testInfo) => {
+    test("full page has no automated accessibility findings in light and dark themes", async ({ page }, testInfo) => {
       await page.goto(locale.path);
       await expect(page.locator("#cert-carousel-region")).toBeVisible();
+      for (const section of await page.locator('main section[id]').all()) {
+        await section.evaluate(element => window.scrollTo(0, element.getBoundingClientRect().top + window.scrollY - 90));
+      }
       await checkAccessibility(page, testInfo, "light-page");
       const toggle = page.locator(".theme-toggle-btn:visible");
       await toggle.press("ArrowDown");
@@ -432,6 +474,35 @@ for (const locale of locales) {
         await expect(noJsPage.getByRole("heading", { level: 1 })).toBeVisible();
         await expect(noJsPage.locator("main")).toContainText("Cloud");
         await expect(noJsPage.locator("#cert-grid-wrapper")).toBeVisible();
+        await expect(noJsPage.locator('#stack-filters')).toBeHidden();
+        for (const tag of await noJsPage.locator('.tech-tag').all()) await expect(tag).toBeVisible();
+        const experienceId = locale.code === 'es' ? '#experiencia' : '#experience';
+        const educationId = locale.code === 'es' ? '#educacion' : '#education';
+        for (const element of await noJsPage.locator(`${experienceId} .exp-content, ${educationId} .edu-card`).all()) {
+          await expect(element).toBeVisible();
+          await expect(element).toHaveCSS('opacity', '1');
+        }
+        const courseCards = noJsPage.locator('#cert-grid .magia');
+        await expect(noJsPage.locator('#cert-grid .modal-open')).toHaveCount(await courseCards.count());
+        for (const card of await courseCards.all()) await expect(card).toBeVisible();
+        await expect(noJsPage.locator('#cert-filters')).toBeHidden();
+        const certificateFallback = noJsPage.locator('#cert-grid .modal-open[data-title="Data Analyst"]');
+        await expect(certificateFallback).toHaveAttribute('href', '/webp_certs/coderhouse.webp');
+        await certificateFallback.focus();
+        const certificatePopupPromise = noJsPage.waitForEvent('popup');
+        await certificateFallback.press('Enter');
+        const certificatePopup = await certificatePopupPromise;
+        await expect(certificatePopup).toHaveURL(new URL('/webp_certs/coderhouse.webp', origin).href);
+        await certificatePopup.close();
+        await expect(noJsPage.locator('#projects-window')).toHaveClass(/overflow-x-auto/u);
+        await expect(noJsPage.locator('#projects-controls')).toBeHidden();
+        const projectFallbacks = noJsPage.locator('[data-project-fallback]');
+        await expect(projectFallbacks).toHaveCount(await noJsPage.locator('.project-card').count());
+        for (const details of await projectFallbacks.all()) {
+          await details.locator('summary').click();
+          await expect(details).toHaveAttribute('open', '');
+          await expect(details.locator('p').first()).toBeVisible();
+        }
         const certification = noJsPage.getByRole('article', { name: 'Associate Cloud Engineer Certification', exact: true });
         await expect(certification.locator('time')).toHaveCount(2);
         await expect(certification.getByRole('link', { name: locale.code === 'es' ? 'Verificar credencial' : 'Verify credential', exact: true })).toBeVisible();
