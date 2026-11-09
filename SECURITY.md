@@ -86,8 +86,8 @@ Cloudflare session; they are not activated by merging this PR.
 Public responses also contain JavaScript Detections and Web Analytics injected by
 Cloudflare. Their variable inline bootstrap and external analytics beacon are
 not authorized by the portfolio's strict CSP; analytics collection is also blocked
-by `connect-src 'none'`. This follows from the delivered scripts and policy, rather
-than a captured console error. Do not enable `unsafe-inline` to make them work.
+by `connect-src 'none'`. Live-browser audit checks confirmed these CSP errors.
+Do not enable `unsafe-inline` to make them work.
 
 Resolve this in the Cloudflare configuration: either remove optional automatic
 injections that are not needed, or deliberately integrate the wanted feature.
@@ -97,6 +97,27 @@ Analytics would require an explicit decision to allow its script and collection
 endpoint. Neither feature is enabled or reconfigured by this repository.
 See [JavaScript Detections CSP requirements](https://developers.cloudflare.com/cloudflare-challenges/challenge-types/javascript-detections/)
 and [Web Analytics collection](https://developers.cloudflare.com/web-analytics/data-metrics/data-origin-and-collection/).
+
+To remove optional automatic injections while retaining this CSP:
+
+1. In account-level Web Analytics, open **Manage site** for this hostname and
+   choose **Disable** for automatic setup if browser analytics is not needed. Keeping analytics
+   requires a deliberate script/collection-policy integration instead.
+2. In the domain's **Security → Settings**, filter **Bot traffic** and inspect
+   **Bot Fight Mode**. If it is enabled on the Free plan, JavaScript Detections
+   cannot be disabled independently: turning off Bot Fight Mode also removes that bot mitigation.
+   Retaining it requires a compatible edge/CSP integration; a nonce in the Astro
+   CSP meta element alone is not supported by JavaScript Detections. Do not add
+   `unsafe-inline` simply to suppress console errors.
+3. Reload both languages with browser cache disabled and verify the original
+   CSP errors and unwanted requests are gone. If stale HTML remains, use
+   **Caching → Configuration → Purge Cache → Custom Purge → URL** for only
+   `https://agusacevedo.com.ar/` and `https://agusacevedo.com.ar/en/`.
+
+Dashboard labels and plan restrictions are described in the official
+[Web Analytics setup](https://developers.cloudflare.com/web-analytics/get-started/)
+and [Bot Fight Mode](https://developers.cloudflare.com/bots/get-started/bot-fight-mode/)
+guides. The repository does not record whether these account switches are on.
 
 ## Public files and privacy
 
@@ -112,8 +133,9 @@ a file in a later commit would not remove previous versions, forks, or caches.
 Do not claim that `.gitignore` removes already tracked content or Git history.
 
 Build output, dependencies, diagnostics, local credentials, environment values,
-and caches are ignored. Portable editor settings, source code, the lockfile,
-configuration, CVs, and certificate images are intentionally versioned. A pattern
+and caches are ignored. Local editor settings in `.vscode/` are untracked and
+ignored. Source code, the lockfile, shared configuration, CVs, and certificate
+images are intentionally versioned. A pattern
 scan found no credentials in the reviewed text files; image review is a separate
 privacy check, not a malware or exhaustive steganography scan.
 

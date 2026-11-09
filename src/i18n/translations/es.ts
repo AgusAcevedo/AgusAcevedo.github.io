@@ -165,6 +165,15 @@ export const es = {
   stack: {
     title: 'Stack Tecnológico',
     description: 'Tecnologías y herramientas que utilizo en mi día a día',
+    filters: {
+      instructions: 'Selecciona categorías para mostrar u ocultar tecnologías.',
+      categoriesLabel: 'Categorías de tecnologías',
+      selectAll: 'Seleccionar todas',
+      clearAll: 'Limpiar selección',
+      showAll: 'Mostrar todas las tecnologías',
+      empty: 'No hay categorías seleccionadas.',
+      count: '{visible} de {total} tecnologías visibles',
+    },
     categories: {
       virtualization: 'Virtualización',
       os: 'Sist. Operativos',
@@ -302,7 +311,7 @@ export const es = {
   // SEO
   seo: {
     title: 'Agustin Ezequiel Acevedo | Cloud Engineer',
-    description: 'Cloud & Platform Engineer especializado en DevOps, automatización y administración de infraestructura. +3 años de experiencia.',
+    description: 'Cloud & Platform Engineer especializado en DevOps, automatización e infraestructura. Cloud Engineer en Arcos Dorados desde julio de 2024.',
     keywords: 'DevOps, SysAdmin, Cloud Computing, AWS, GCP, Kubernetes, Docker, CI/CD, Terraform, Ansible, Linux, Cloud Engineer, Platform Engineer',
     ogTitle: 'Agustin Ezequiel Acevedo - Cloud Engineer',
     ogDescription: 'Portfolio profesional de Agustin Ezequiel Acevedo. Especializado en DevOps, automatización de infraestructura y Cloud Computing.',
